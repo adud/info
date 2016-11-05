@@ -1,0 +1,125 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath,amsfonts,amssymb}
+
+\usepackage{geometry}
+\geometry{margin=75pt}
+
+\usepackage[upright]{fourier}
+
+\usepackage{shadethm}
+
+
+\usepackage{pgf,tikz}
+\usetikzlibrary{arrows}
+
+\usepackage{color}
+\definecolor{gris_clair}{gray}{.9}
+\definecolor{gris}{gray}{.35}
+\definecolor{vert}{rgb}{0,0.5,0}
+\definecolor{rouge}{rgb}{0.5,0,0}
+\definecolor{turquoise}{rgb}{0,0.5,0.5}
+
+\usepackage{paralist}
+\usepackage{listings}           
+\lstset{
+language=Bash,
+backgroundcolor=\color{gris_clair},
+frame=single,
+basicstyle=\footnotesize\ttfamily\color{gris},
+identifierstyle=\color{black},
+keywordstyle=\color{vert},
+stringstyle=\color{rouge}, showstringspaces=false,
+commentstyle=\itshape\color{turquoise},
+numbers=left, numbersep=5pt, numberstyle=\color{gris}\tiny,stepnumber=5,
+breaklines=true,
+literate=
+  {é}{{\'e}}1 {É}{{\'E}}1 {à}{{\`a}}1 {è}{{\`e}}1% 
+  {À}{{\`A}}1 {È}{{\'E}}1 {ë}{{\"e}}1 {ï}{{\"i}}1%
+  {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1% 
+  {û}{{\^u}}1 {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1%
+  {Ô}{{\^O}}1 {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1%
+  {Æ}{{\AE}}1 {ç}{{\c c}}1 {Ç}{{\c C}}1 {€}{{\EUR}}1 ,
+morekeywords={len,input,range,conffile,mklink}}
+
+\newcommand{\ttt}[1]{\texttt{#1}}
+\newcommand{\envrc}[0]{\ttt{envrc}~}
+\newcommand{\xsessionrc}[0]{\ttt{xsessionrc}~}
+\newcommand{\tld}[0]{\textasciitilde}
+
+\title{Configurer sa session sur le serveur du lycée}
+\date{5 juillet 2016}
+\author{}
+
+\begin{document}
+
+\newshadetheorem{defin}{Définition}
+\newshadetheorem{theo}{Théorème}
+
+\maketitle
+
+\section{Un problème}
+
+On aimerait bien pouvoir utiliser des fichiers de configuration (du type \ttt{.emacs}) ou encore des variables générales (du type \ttt{UNISONLOCALHOSTNAME}) un problème se pose : les fichiers se trouvant directement dans le répertoire courant ne sont pas accessibles à partir de toutes les machines. Une solution : les liens symboliques. \par
+Pour résoudre ce problème, il suffirait d'enregistrer les fichiers de configuration dans Documents, puis créer des liens symboliques dans le répertoire courant à chaque ouverture de session à l'aide d'un script \xsessionrc à stocker\dots ~ dans le répertoire courant. 
+Le principe de la solution proposée est simple : \xsessionrc ne fait qu'une chose : appeler un script \envrc  qui, lui, contient les actions à effectuer à l'ouverture de session. Ainsi, toute modification de ce script affectera l'ensemble des machines.
+Notons cependant qu'à la première connexion à la session sur une machine, il faut assurer manuellement le lien symbolique de \xsessionrc (ce qu'on peut faire en une ligne dans \envrc .
+\lstinputlisting[firstline=24,lastline=24]{envrc}
+
+\section{Implémentation}
+
+	\subsection{Préliminaire}
+
+On commencera tout d'abord par créer dans \ttt{\tld/Documents} un dossier \ttt{config-linux}, contenant tous les fichiers de configuration ainsi que les deux fichiers exécutables \envrc  et \xsessionrc  qui serviront à construire les liens symboliques des fichiers de configuration. Tout simplement :
+\begin{lstlisting}
+mkdir ./config-linux
+\end{lstlisting}
+
+	\subsection{Un script un peu creux : \xsessionrc}
+
+Le fonctionnement de ce script est simple : s'il existe un fichier \ttt{\tld/Documents/config-linux/envrc}, l'exécuter. C'est ce fichier qui, placé dans le répertoire courant, sera exécuté à chaque ouverture de session X.
+
+\lstinputlisting{xsessionrc}
+
+	\subsection{Configurer la session avec \envrc}
+
+		\subsubsection{deux fonctions pour les liens symboliques}
+
+\ttt{mklink} est une fonction à deux arguments (fichier ou répertoire source et fichier cible). Si le fichier source n'est pas identique au fichier cible, supprime un éventuel fichier cible puis crée un lien du fichier source vers le fichier cible. 
+
+\lstinputlisting[firstline = 6,lastline=10]{envrc}
+
+\ttt{conffile} est une fonction à un argument créant avec \ttt{mklink} un lien symbolique d'un fichier de configuration contenu dans \ttt{config-linux} vers le répertoire \ttt{HOME}
+
+\lstinputlisting[firstline = 2,lastline =4]{envrc}
+
+Pour importer un fichier de configuration :
+
+\lstinputlisting[firstline = 23,lastline =23]{envrc}
+
+Pour créer un lien symbolique :
+
+\lstinputlisting[firstline = 14,lastline = 14]{envrc}
+
+\subsubsection{variables globales}
+
+Pour obtenir une variable globale, la définir localement puis l'exporter à l'aide d'\ttt{export}
+
+\lstinputlisting[firstline=11,lastline=12]{envrc}
+
+\section{Usage}
+
+Si c'est la première fois que vous vous connectez à l'ordinateur, exécutez \envrc pour placer \xsessionrc dans le répertoire \ttt{HOME}. Pour vérifier que tout fonctionne, on a défini la variable globale \ttt{MONENV} à la fin d'\envrc :
+\lstinputlisting[firstline=32,lastline=33]{envrc}
+Ainsi, si tout s'est bien passé, \ttt{MONENV} vaut \ttt{true}
+
+\end{document}

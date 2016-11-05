@@ -1,0 +1,93 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath,amsfonts,amssymb}
+
+\usepackage{geometry}
+\geometry{margin=75pt}
+
+\usepackage[upright]{fourier}
+
+\usepackage{shadethm}
+
+\usepackage{color}
+\definecolor{gris_clair}{gray}{.9}
+\definecolor{gris}{gray}{.35}
+\definecolor{vert}{rgb}{0,0.5,0}
+\definecolor{rouge}{rgb}{0.5,0,0}
+\definecolor{turquoise}{rgb}{0,0.5,0.5}
+
+\usepackage{listings}
+\usepackage{paralist}
+\usepackage{stmaryrd}
+
+\lstset{
+language=Python,
+backgroundcolor=\color{gris_clair},
+frame=single,
+basicstyle=\footnotesize\ttfamily\color{gris},
+identifierstyle=\color{black},
+keywordstyle=\color{vert},
+stringstyle=\color{rouge}, showstringspaces=false,
+commentstyle=\itshape\color{turquoise},
+%numbers=left, numbersep=5pt, numberstyle=\color{gris}\tiny,stepnumber=5,
+breaklines=true,
+literate=
+  {é}{{\'e}}1 {É}{{\'E}}1 {à}{{\`a}}1 {è}{{\`e}}1% 
+  {À}{{\`A}}1 {È}{{\'E}}1 {ë}{{\"e}}1 {ï}{{\"i}}1%
+  {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1% 
+  {û}{{\^u}}1 {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1%
+  {Ô}{{\^O}}1 {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1%
+  {Æ}{{\AE}}1 {ç}{{\c c}}1 {Ç}{{\c C}}1 {€}{{\EUR}}1 ,
+morekeywords={len,input,range}}         
+
+
+\title{Correction de l'exercice 5.13}
+\date{}
+\author{Antonin Dudermel \and Ambroise Poulet \and Mathias Goffette}
+
+\begin{document}
+
+\newshadetheorem{defin}{Définition}
+\newshadetheorem{theo}{Théorème}
+
+\maketitle
+
+\begin{it}
+Il serait intéressant (avant de lire la correction) de calculer \;$\mathtt{f91}$ pour quelques valeurs non-triviales et de se poser la question subsidiaire : pourquoi cette fonction s'appelle-t-elle \;$\mathtt{f91}$ ?
+\end{it}
+\par
+On propose de démontrer la terminaison de la fonction suivante :
+
+\begin{lstlisting}
+def f91(n):
+    if n <= 100:
+        return f91(f91(n + 11))
+    else:
+        return n - 10
+\end{lstlisting}
+
+\par
+Le cas des entiers strictement supérieurs à $100$ ne pose aucun problème, reste à démontrer la terminaison pour des entiers inférieurs à $100$.
+Faisons-le en démontrant un résultat plus fort : $\forall n \in \mathbb{Z}, n\leq 101$ soit $P_n$ la propriété : \og{} $\mathtt{f91(n)}$ termine et renvoie $91$ \fg{}
+\par
+Par récurrence forte descendante :\\
+\begin{description}
+\item[Initialisation] \quad On a directement $P_{101}$
+\item[Hérédité] \quad Soit $n\in \llbracket 0;100\rrbracket ,~ \forall k \in \llbracket n+1;101\rrbracket$ ; par disjonction de cas : 
+\begin{itemize}[\textbullet]
+	\item {\itshape Si $n\geqslant 91$ } alors $\mathtt{f91(n)}$ calcule et retourne, si possible $\mathtt{f91(f91(n+11))}$. Or $n+11 > 100$. Ainsi $\mathtt{f91(n+11)}$ renvoie $n+11-10$ soit $n+1$. Par hypothèse de récurrence : $\mathtt{f91(n+1)}$ termine et renvoie 91. Donc $\mathtt{f91(n)}$ termine et renvoie $91$.
+	\item {\itshape Sinon, $n < 91$}, alors $\mathtt{f91(n)}$ calcule et retourne si possible $\mathtt{f91(f91(n+11))}$. Or $n+11\in \llbracket n+1;101 \rrbracket$ donc $\mathtt{f91(n+11)}$ termine et retourne $91$. Or $91 \in \llbracket n+1;101 \rrbracket$, donc $\mathtt{f91(f91(n+11))}$ termine et retourne, donc $\mathtt{f91(n)}$ termine et retourne 91.
+\end{itemize}
+\end{description}
+Par récurrence : $\forall n \in \llbracket 0;101 \rrbracket$, donc $\forall n \in \mathbb{N}$, $\mathtt{f91(n)}$ termine.
+
+\end{document}
