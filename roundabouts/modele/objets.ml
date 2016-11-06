@@ -2,19 +2,17 @@
 
 let p = 0.
 
-type entree =
-  |Spawn
-  |Ret of intersection
- and sortie =
-   |Quit of string
-   |Goto of intersection
- and intersection = {mutable ent:entree list;mutable sor: sortie list
- 					mutable queue:voiture list}
- and voiture = {mutable spd:int;mutable dir:sortie list}
-;;
+type distr = 
+	|Spawn
+	|Quit
+	|Int of intersection
+
+ and intersection = {mutable ent:section list;mutable sor:section list;
+ 					mutable qu:voiture list}
+ and voiture = {mutable spd:int;mutable dir:distr list}
   
-type section = {pre:entree;data:voiture option array;
-			   maxspd:int;post:sortie}
+ and section = {pre:distr;data:voiture option array;
+			   maxspd:int;post:distr}
 ;;
 
   (*iterations de l'automate*)
