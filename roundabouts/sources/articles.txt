@@ -1,3 +1,0 @@
-www.cbrd.co.uk
-https://www.youtube.com/watch?v=D22BOOGbpFM
-Boids algorithm : Craig Reynolds, 1986
