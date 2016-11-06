@@ -4,7 +4,7 @@ let p = 0.
 
 type distr = 
 	|Spawn
-	|Quit
+	|Quit of string
 	|Int of intersection
 
  and intersection = {mutable ent:section list;mutable sor:section list;
@@ -39,6 +39,25 @@ let move p sec =
 	sec.data.(d) <- Some(c);
 	sec.data.(p) <- None;	 
       end
+;;
+
+(*lier : distr -> distr ->  -> -> unit
+lier d1 d2 s vm fait le lien de la distribution d1 à la distribution
+d2 en creant une route vide de longueur s et de taille vm *)
+
+let lier d1 d2 s vm =
+	let vide = Array.make s None in
+	let sec = {pre=d1;post=d2;maxspd=vm;
+			   data=vide} in
+	match d1 with
+	|Spawn -> ()
+	|Quit(_) -> failwith "lier : entrer par une sortie"
+	|Int(i1) -> i1.sor <- sec::i1.sor
+	;
+	match d2 with
+	|Spawn -> failwith "lier : sortir par une entree"
+	|Quit(_) -> ()
+	|Int(i2) -> i2.ent <- sec::i2.sor
 ;;
   
 	     
