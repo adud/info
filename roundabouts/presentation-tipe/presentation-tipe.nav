@@ -41,11 +41,13 @@
 \headcommand {\beamer@framepages {14}{14}}
 \headcommand {\slideentry {3}{1}{5}{15/15}{ Mod\IeC {\'e}liser une section de route}{0}}
 \headcommand {\beamer@framepages {15}{15}}
-\headcommand {\beamer@subsectionentry {0}{3}{2}{16}{Validit\IeC {\'e}}}\headcommand {\beamer@subsectionpages {11}{15}}
-\headcommand {\slideentry {3}{2}{1}{16/16}{Validit\IeC {\'e}}{0}}
+\headcommand {\slideentry {3}{1}{6}{16/16}{ Mod\IeC {\'e}liser une section de route}{0}}
 \headcommand {\beamer@framepages {16}{16}}
-\headcommand {\beamer@partpages {1}{16}}
-\headcommand {\beamer@subsectionpages {16}{16}}
-\headcommand {\beamer@sectionpages {11}{16}}
-\headcommand {\beamer@documentpages {16}}
-\headcommand {\def \inserttotalframenumber {16}}
+\headcommand {\beamer@subsectionentry {0}{3}{2}{17}{Intersections}}\headcommand {\beamer@subsectionpages {11}{16}}
+\headcommand {\slideentry {3}{2}{1}{17/17}{Intersections}{0}}
+\headcommand {\beamer@framepages {17}{17}}
+\headcommand {\beamer@partpages {1}{17}}
+\headcommand {\beamer@subsectionpages {17}{17}}
+\headcommand {\beamer@sectionpages {11}{17}}
+\headcommand {\beamer@documentpages {17}}
+\headcommand {\def \inserttotalframenumber {17}}
