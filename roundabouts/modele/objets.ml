@@ -12,7 +12,8 @@ type entree =
  and voiture = {mutable spd:int;mutable dir:sortie list}
 ;;
   
-type section = {ent:entree;data:voiture option array;maxspd:int}
+type section = {pre:entree;data:voiture option array;
+			   maxspd:int;post:sortie}
 ;;
 
   (*iterations de l'automate*)
@@ -80,3 +81,13 @@ let increment sec =
 	end
     end
 ;;
+
+(*tentative sur un circuit*)
+let cond_init = Array.make 10 None
+;;
+cond_init.(0) <- Some {spd=3;dir=[]};;
+let rec boucle  = {pre=depart;post=arrivee;maxspd=5;data=cond_init}
+and depart = Ret(checkpoint)
+and arrivee = Goto(checkpoint)
+and checkpoint = {ent=[];sor=[arrivee]};;
+
