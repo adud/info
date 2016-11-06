@@ -8,7 +8,8 @@ type entree =
  and sortie =
    |Quit of string
    |Goto of intersection
- and intersection = {mutable ent:voiture list;mutable sor: sortie list}
+ and intersection = {mutable ent:entree list;mutable sor: sortie list
+ 					mutable queue:voiture list}
  and voiture = {mutable spd:int;mutable dir:sortie list}
 ;;
   
@@ -90,4 +91,6 @@ let rec boucle  = {pre=depart;post=arrivee;maxspd=5;data=cond_init}
 and depart = Ret(checkpoint)
 and arrivee = Goto(checkpoint)
 and checkpoint = {ent=[];sor=[arrivee]};;
+
+
 
