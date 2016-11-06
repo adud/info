@@ -11,8 +11,8 @@ type distr =
  					mutable qu:voiture list}
  and voiture = {mutable spd:int;mutable dir:distr list}
   
- and section = {pre:distr;data:voiture option array;
-			   maxspd:int;post:distr}
+ and section = {mutable pre:distr;data:voiture option array;
+			   maxspd:int;mutable post:distr}
 ;;
 
   (*iterations de l'automate*)
@@ -41,14 +41,13 @@ let move p sec =
       end
 ;;
 
-(*lier : distr -> distr -> int -> int -> unit
-lier d1 d2 s vm fait le lien de la distribution d1 à la distribution
-d2 en creant une route vide de longueur s et de taille vm *)
+(*lier : distr -> distr -> section -> unit
+lier d1 d2 sec fait le lien de la distribution d1 à la distribution
+d2 par la route sec*)
 
-let lier d1 d2 s vm =
-	let vide = Array.make s None in
-	let sec = {pre=d1;post=d2;maxspd=vm;
-			   data=vide} in
+let lier d1 d2 sec =
+	sec.pre <- d1;
+	sec.post <- d2;
 	match d1 with
 	|Spawn -> ()
 	|Quit(_) -> failwith "lier : entrer par une sortie"
@@ -102,8 +101,5 @@ let increment sec =
 
 (*tentative sur un circuit*)
 
-let checkpoint = Int({ent=[];sor=[];qu=[]});;
-lier checkpoint checkpoint 50 5;;
-match checkpoint with Int(i) -> 
-match i.sor with x::r -> x.data.(0) <- Some {spd=5;dir=[]};;
+
 
