@@ -9,7 +9,7 @@ type distr =
 
  and intersection = {mutable ent:section list;mutable sor:section list;
  					mutable qu:voiture list}
- and voiture = {mutable spd:int;mutable dir:distr list}
+ and voiture = {mutable spd:int}(*;mutable dir:distr list}*)
   
  and section = {mutable pre:distr;data:voiture option array;
 			   maxspd:int;mutable post:distr}
@@ -101,5 +101,17 @@ let increment sec =
 
 (*tentative sur un circuit*)
 
+let circuit = {pre=Spawn;post=Quit("");maxspd=5;
+			  data=Array.make 10 None}
+;;
 
+let checkpoint = Int({ent=[];sor=[];qu=[]})
+;;
+
+lier checkpoint checkpoint circuit
+;;
+
+circuit.data.(0) <- Some({spd=4});;
+increment circuit;;
+circuit.data;;
 
