@@ -1,9 +1,0 @@
-\beamer@endinputifotherversion {3.36pt}
-\select@language {french}
-\beamer@sectionintoc {1}{Le Man\IeC {\`e}ge enchant\IeC {\'e}}{4}{0}{1}
-\beamer@sectionintoc {2}{Caract\IeC {\'e}riser le trafic}{7}{0}{2}
-\beamer@subsectionintoc {2}{1}{Mesures}{7}{0}{2}
-\beamer@subsectionintoc {2}{2}{Diff\IeC {\'e}rents trafics}{10}{0}{2}
-\beamer@sectionintoc {3}{Mod\IeC {\'e}liser un rond-point}{11}{0}{3}
-\beamer@subsectionintoc {3}{1}{ Mod\IeC {\'e}liser une section de route}{11}{0}{3}
-\beamer@subsectionintoc {3}{2}{Intersections}{17}{0}{3}
