@@ -41,7 +41,7 @@ let move p sec =
       end
 ;;
 
-(*lier : distr -> distr ->  -> -> unit
+(*lier : distr -> distr -> int -> int -> unit
 lier d1 d2 s vm fait le lien de la distribution d1 à la distribution
 d2 en creant une route vide de longueur s et de taille vm *)
 
@@ -57,7 +57,7 @@ let lier d1 d2 s vm =
 	match d2 with
 	|Spawn -> failwith "lier : sortir par une entree"
 	|Quit(_) -> ()
-	|Int(i2) -> i2.ent <- sec::i2.sor
+	|Int(i2) -> i2.ent <- sec::i2.ent
 ;;
   
 	     
@@ -101,13 +101,9 @@ let increment sec =
 ;;
 
 (*tentative sur un circuit*)
-let cond_init = Array.make 10 None
-;;
-cond_init.(0) <- Some {spd=3;dir=[]};;
-let rec boucle  = {pre=depart;post=arrivee;maxspd=5;data=cond_init}
-and depart = Ret(checkpoint)
-and arrivee = Goto(checkpoint)
-and checkpoint = {ent=[];sor=[arrivee]};;
 
-
+let checkpoint = Int({ent=[];sor=[];qu=[]});;
+lier checkpoint checkpoint 50 5;;
+match checkpoint with Int(i) -> 
+match i.sor with x::r -> x.data.(0) <- Some {spd=5;dir=[]};;
 
