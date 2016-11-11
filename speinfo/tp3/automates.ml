@@ -181,4 +181,46 @@ let produit aut1 aut2 =
 ;;
 
 
+(*acces_aux : ('a * 'b * 'c) list -> 'c list -> 'c list
+acces_aux [(q1,a,q'1);(q2,b,q'2)...;(qn,k,q'n)] s retourne 
+[q'1;...q'n]@s
+i.e. acces_aux trans s retourne tous les états ciblés par les transitions
+de la liste trans, concaténé à s*)
+
+let rec acces_aux trans s = match trans with
+	|[] -> s
+	|(q1,a,q2)::r -> q2::acces_aux r s
+;;
+	
+(*acces : automate -> int -> int list -> int list
+acces aut l1 retourne tous les états accessibles de aut en une étape à
+partir de l'etat q, le tout concaténé à s*)
+
+let acces aut q s =
+	let trans = filter (fun (q1,a,q2) -> q1=q) aut.transitions in
+	acces_aux trans s
+;;
+
+(*accessibles_aux : automate -> int list -> int list -> int list
+accessibles_aux aut etats s retourne tous les états de aut accessibles en
+une étape à partir de etats, le tout concaténé à s*)
+
+let rec accessibles_aux aut etats s = match etats with
+	|[] -> s
+	|q::r -> let s2 = accessibles_aux aut r s in
+		acces aut q s2
+;;
+
+(*accessibles_it : automate -> int list -> int list
+accessibles_it aut etats retourne tous les états accessibles à partir des
+états etats*)
+
+let rec accessibles_it aut etats =
+	let etats_it = accessibles_aux aut etats etats in
+	if etats_it = etats then etats
+	else accessibles_it aut etats_it
+;;
+
+let accessibles aut = accessibles_it aut [aut.q0]
+;;
 
