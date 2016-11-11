@@ -275,3 +275,22 @@ accessibles acc_test
 coaccessibles acc_test
 ;;
 
+
+(*inter_list 'a list -> 'a list -> 'a list
+inter l1 l2 retourne une liste contenant les éléments présents dans
+l1 et l2 sans garantie sur la multiplicité *)
+let inter_list l1 l2 =
+	filter (fun x -> mem x l2) l1
+;;
+
+let emonde aut = 
+	let Q = inter_list (accessibles aut) (coaccessibles aut) in
+	let F = inter_list Q aut.finaux in
+	let delta = 
+	filter (fun (q1,a,q2) -> mem q1 Q && mem q2 Q) aut.transitions in
+	{etats=Q;q0=aut.q0;finaux=F;transitions=delta}
+	
+;;
+
+emonde acc_test;;
+
