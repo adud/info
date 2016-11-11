@@ -211,16 +211,30 @@ let rec accessibles_aux aut etats s = match etats with
 		acces aut q s2
 ;;
 
+
+let inclus l1 l2 = for_all (fun x -> mem x l2) l1
+;;
+
 (*accessibles_it : automate -> int list -> int list
 accessibles_it aut etats retourne tous les états accessibles à partir des
 états etats*)
 
 let rec accessibles_it aut etats =
-	let etats_it = accessibles_aux aut etats etats in
-	if etats_it = etats then etats
-	else accessibles_it aut etats_it
+	let etats_it = accessibles_aux aut etats [] in
+	if inclus etats_it etats then etats
+	else accessibles_it aut (accessibles_aux aut etats etats)
 ;;
 
 let accessibles aut = accessibles_it aut [aut.q0]
+;;
+
+let acc_test = 
+let Q = [1;2;3;4] in
+let q = 1 in
+let F = [3] in
+let trans = [(1,`a`,3);(4,`a`,3);(1,`b`,2);(2,`a`,2)] in
+{etats=Q;q0=q;finaux=F;transitions=trans}
+;;
+accessibles acc_test
 ;;
 
