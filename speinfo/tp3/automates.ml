@@ -101,10 +101,12 @@ let rec cartesian_aux s l1 l2 = match l1,l2 with
 ;;
 (* cartesian : '_a list -> '_b list -> ('_a * '_b) list 
 cartesian l1 l2 retourne l1 x l2 *)
-let cartesian = cartesian_aux []
+let cartesian a b = cartesian_aux [] a b
 ;;
 
 cartesian [1;2;3] [4;5;6]
+;;
+cartesian
 ;;
 
 (*
@@ -136,6 +138,47 @@ let alph = [`a`;`b`;`c`;`d`] in
 est_complet alph (complete alph recon_a)
 ;;
 
+(* bijection grace a la division euclidienne *)
+
+let code p q (i,j) = q*i+j
+;;
+let decode p q n = n/q,n mod q
+;;
+
+let p,q=3,4 in
+decode p q (code p q (3,0));;
+
+
+(*filter ('a -> bool) -> 'a list -> 'a list
+filter f l retourne la liste des éléments de l vérifiant f*)
+let rec filter f l = match l with
+	|[]->[]
+	|r::q -> if f r 
+			 then r::filter f q
+			 else filter f q
+;;
+
+let produit aut1 aut2 =
+	let Q1,Q2 = aut1.etats,aut2.etats in
+	let codage = code (list_length Q1) (list_length Q2) in
+	let codlist = map codage in
+	let Q = codlist (cartesian Q1 Q2) in
+	let initiaux = codage (aut1.q0, aut2.q0) in
+	let F = codlist (cartesian aut1.finaux aut2.finaux) in
+	
+	(*le plus délicat : faire le produit des fonctions de transition
+	ici : faire violament un produit cartésien puis choisir seulement
+	les couples d'états ayant la même lettre*)
+	let trans1,trans2 = aut1.transitions,aut2.transitions in
+	let fi ((q1,a1,q1'),(q2,a2,q2')) = a1 = a2 in
+	let filtrat = filter fi (cartesian trans1 trans2) in
+	(*purification du filtrat : codage de chacune des valeurs*)
+	let codtrans ((q1,a1,q1'),(q2,a2,q2')) =
+		(codage (q1,q2),a1,codage (q1',q2')) in
+	let delta = map codtrans filtrat in
+	(*l'automate, enfin*)
+	{etats=Q;q0=initiaux;finaux=F;transitions=delta}
+;;
 
 
 
