@@ -83,30 +83,59 @@ let maxlist li = it_list max (hd li) li
 ;;
   maxlist [0;1;2;3;4]
 ;;
-(*accoupler : 'a -> 'b list -> ('a * 'b) list -> ('a * 'b) list*)
+(*accoupler : 'a -> 'b list -> ('a * 'b) list -> ('a * 'b) list
+accoupler s a [b1;...;bn] retourne [(a,b1);...;(a,bn)]@s *)
 
 let rec accoupler s a l = match l with
 	|[] -> s
 	|b::r -> (a,b)::accoupler s a r 
 ;;
 
+(*cartesian_aux:('a * 'b) list -> 'a list -> 'b list -> ('a * 'b) list
+cartesian_aux s l1 l2 retourne (l1 x l2)@s *)
+
 let rec cartesian_aux s l1 l2 = match l1,l2 with
 	|[],_|_,[] -> s
 	|a::q,l -> let s2 = cartesian_aux s q l in
 		accoupler s2 a l 
 ;;
-
+(* cartesian : '_a list -> '_b list -> ('_a * '_b) list 
+cartesian l1 l2 retourne l1 x l2 *)
 let cartesian = cartesian_aux []
 ;;
 
 cartesian [1;2;3] [4;5;6]
 ;;
-  
+
+(*
+etendre:('a * 'b * 'c) list -> 'a -> 'b * 'c -> 'a * 'b * 'c
+etendre trans puits (q,c) retourne (q,c,q') si (q,c,q') est dans trans
+ou (q,c,puits) sinon
+i.e. si q.c est défini dans les transitions trans, alors retourne la transition q -(c)-> q' 
+sinon, retourne la transition q -(c)-> puits*)
+
+let etendre trans puits (q,c) =
+	try
+		let q' = assoc3 trans q c in
+		(q,c,q')
+	with
+	|Blocage -> (q,c,puits)
+;;
+	
 let complete alph aut =
   if est_complet alph aut then aut
   else
     let puits = maxlist aut.etats + 1 in
-    failwith "pas fini"
+    let Q = puits::aut.etats in
+    let ens_dep = cartesian Q alph in
+    let trans = map (etendre aut.transitions puits) ens_dep
+    in {etats=Q;q0=aut.q0;finaux=aut.finaux;transitions=trans}
 ;;
+
+let alph = [`a`;`b`;`c`;`d`] in
+est_complet alph (complete alph recon_a)
+;;
+
+
 
 
