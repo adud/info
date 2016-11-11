@@ -8,6 +8,13 @@ type automate = {
 };;
 exception Blocage;;
 
+
+(*Avant toute chose, je souhaiterais signaler que l'usage d'ensembles
+(set) me semble beaucoup plus approprié que les listes, et que je
+perds une complexité folle à chaque fois qu'il faut éviter des doublons*)
+
+
+
 (*assoc3 : ('a*'b*'c) list -> 'a -> 'b -> 'c
 assoc3 li a b retourne c' du premier triplet 
 (a',b',c') de li tq a'=a et b'=b et soulÃ¨ve
@@ -189,9 +196,19 @@ de la liste trans, concaténé à s*)
 
 let rec acces_aux trans s = match trans with
 	|[] -> s
-	|(q1,a,q2)::r -> q2::acces_aux r s
+	|(q1,a,q2)::r -> let s2 = acces_aux r s in 
+		if not mem q2 s2 then q2::s2
+		else s2
 ;;
-	
+
+let rec coacces_aux trans s = match trans with
+	|[] -> s
+	|(q1,a,q2)::r -> let s2 = coacces_aux r s in 
+		if not mem q1 s2 then q1::s2
+		else s2
+;;
+
+
 (*acces : automate -> int -> int list -> int list
 acces aut l1 retourne tous les états accessibles de aut en une étape à
 partir de l'etat q, le tout concaténé à s*)
@@ -199,6 +216,11 @@ partir de l'etat q, le tout concaténé à s*)
 let acces aut q s =
 	let trans = filter (fun (q1,a,q2) -> q1=q) aut.transitions in
 	acces_aux trans s
+;;
+
+let coacces aut q s =
+	let trans = filter (fun (q1,a,q2) -> q2=q) aut.transitions in
+	coacces_aux trans s
 ;;
 
 (*accessibles_aux : automate -> int list -> int list -> int list
@@ -211,30 +233,45 @@ let rec accessibles_aux aut etats s = match etats with
 		acces aut q s2
 ;;
 
-
-let inclus l1 l2 = for_all (fun x -> mem x l2) l1
+let rec coaccessibles_aux aut etats s = match etats with
+	|[] -> s
+	|q::r -> let s2 = coaccessibles_aux aut r s in
+		coacces aut q s2
 ;;
+
 
 (*accessibles_it : automate -> int list -> int list
 accessibles_it aut etats retourne tous les états accessibles à partir des
 états etats*)
 
 let rec accessibles_it aut etats =
-	let etats_it = accessibles_aux aut etats [] in
-	if inclus etats_it etats then etats
-	else accessibles_it aut (accessibles_aux aut etats etats)
+	let etats_it = accessibles_aux aut etats etats in
+	if etats_it = etats then etats
+	else accessibles_it aut etats_it
 ;;
 
+let rec coaccessibles_it aut etats =
+	let etats_it = coaccessibles_aux aut etats etats in
+	if etats_it = etats then etats
+	else coaccessibles_it aut etats_it
+;;
+
+
 let accessibles aut = accessibles_it aut [aut.q0]
+;;
+
+let coaccessibles aut = coaccessibles_it aut aut.finaux
 ;;
 
 let acc_test = 
 let Q = [1;2;3;4] in
 let q = 1 in
 let F = [3] in
-let trans = [(1,`a`,3);(4,`a`,3);(1,`b`,2);(2,`a`,2)] in
+let trans = [(1,`b`,1);(1,`a`,3);(4,`a`,3);(1,`b`,2);(2,`a`,2);(3,`a`,3)] in
 {etats=Q;q0=q;finaux=F;transitions=trans}
 ;;
 accessibles acc_test
+;;
+coaccessibles acc_test
 ;;
 
