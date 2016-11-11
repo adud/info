@@ -81,12 +81,32 @@ let est_complet alph aut =
 maxlist li retourne le maximum de la liste li non-vide*)
 let maxlist li = it_list max (hd li) li
 ;;
-  maxlist [0;1;2;3;4];;  
+  maxlist [0;1;2;3;4]
+;;
+(*accoupler : 'a -> 'b list -> ('a * 'b) list -> ('a * 'b) list*)
+
+let rec accoupler s a l = match l with
+	|[] -> s
+	|b::r -> (a,b)::accoupler s a r 
+;;
+
+let rec cartesian_aux s l1 l2 = match l1,l2 with
+	|[],_|_,[] -> s
+	|a::q,l -> let s2 = cartesian_aux s q l in
+		accoupler s2 a l 
+;;
+
+let cartesian = cartesian_aux []
+;;
+
+cartesian [1;2;3] [4;5;6]
+;;
   
 let complete alph aut =
   if est_complet alph aut then aut
   else
-    let qf = maxlist aut.etats + 1 in
-    
+    let puits = maxlist aut.etats + 1 in
     failwith "pas fini"
 ;;
+
+
