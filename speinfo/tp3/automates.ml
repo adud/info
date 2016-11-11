@@ -37,7 +37,7 @@ bloque pas, soulÃ¨ve Blocage sinon *)
 let rec execute_aux aut mot q = match mot with
   |[] -> q
   |c::r -> let q2 = assoc3 aut.transitions q c in
-	   execute_aux aut r q
+	   execute_aux aut r q2
 ;;
 
 let execute aut mot = execute_aux aut mot aut.q0
@@ -197,8 +197,8 @@ de la liste trans, concaténé à s*)
 let rec acces_aux trans s = match trans with
 	|[] -> s
 	|(q1,a,q2)::r -> let s2 = acces_aux r s in 
-		if not mem q2 s2 then q2::s2
-		else s2
+		if mem q2 s2 then s2
+		else q2::s2
 ;;
 
 let rec coacces_aux trans s = match trans with
@@ -267,7 +267,7 @@ let acc_test =
 let Q = [1;2;3;4] in
 let q = 1 in
 let F = [3] in
-let trans = [(1,`b`,1);(1,`a`,3);(4,`a`,3);(1,`b`,2);(2,`a`,2);(3,`a`,3)] in
+let trans = [(1,`c`,1);(1,`a`,3);(4,`a`,3);(1,`b`,2);(2,`a`,2);(3,`a`,3)] in
 {etats=Q;q0=q;finaux=F;transitions=trans}
 ;;
 accessibles acc_test
@@ -283,6 +283,9 @@ let inter_list l1 l2 =
 	filter (fun x -> mem x l2) l1
 ;;
 
+(*emonde : automate -> automate
+retourne la version émondée d'un automate*)
+
 let emonde aut = 
 	let Q = inter_list (accessibles aut) (coaccessibles aut) in
 	let F = inter_list Q aut.finaux in
@@ -293,4 +296,56 @@ let emonde aut =
 ;;
 
 emonde acc_test;;
+	
+
+(*parce que la programmation fonctionnelle ca va bien quelques heures
+mais la plus, une idée fonctionelle est la bienvenue
+
+afd_local char list -> char list -> (char*char) list *)
+
+let afd_local p1 s1 f2 =
+	(*crée une table associant à chaque caractère une valeur entière
+	l'état i sera l'état du caractère c tq (c,i) dans table
+	l'automate étant local, pour toute transition (q,c,q'),
+	q' = i*)
+	let table = ref [] in
+	let compt = ref 1 in
+	let qinit = 0 in
+	let delta = ref [] in
+	(*assoc_reco*)
+	let assoc_reco a =
+	 	if mem_assoc a !table
+		then assoc a !table
+		else begin
+			table := (a,!compt)::!table;
+			incr compt;
+			!compt - 1;
+		end
+	in
+	
+	let ajouter_init a =
+		let i = assoc_reco a in
+		delta := (0,a,i)::!delta
+	in
+	
+	let ajouter_inter (a,b) =
+		let i = assoc_reco a in
+		let j = assoc_reco b in
+		delta := (i,b,j)::!delta
+	in
+	
+	do_list ajouter_init p1;
+	do_list ajouter_inter f2;
+	
+	let F = map (fun x -> assoc_reco x) s1 in
+	let Q = map (fun (a,b) -> b) !table in
+	
+	{etats=0::Q;q0=qinit;finaux=F;transitions=(!delta)}
+;;
+
+let child = afd_local [`m`;`p`] [`a`;`n`] [(`m`,`a`);(`a`,`m`);(`a`,`n`);(`p`,`a`);(`a`,`p`)];;
+
+reconnait child [`p`;`a`;`p`;`a`]
+;;
+
 
