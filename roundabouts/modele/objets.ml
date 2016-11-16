@@ -8,8 +8,8 @@ type distr =
 	|Int of intersection
 
  and intersection = {mutable ent:section list;mutable sor:section list;
- 					mutable qu:voiture list}
- and voiture = {mutable spd:int}(*;mutable dir:distr list}*)
+ 		     mutable qu:(voiture*int*section*section) list}
+ and voiture = {mutable spd:int;mutable dir:section list}
   
  and section = {mutable pre:distr;data:voiture option array;
 			   maxspd:int;mutable post:distr}
@@ -94,7 +94,15 @@ let increment sec =
 	  accel c sec.maxspd;
 	  if !act + c.spd < n
 	  then move !act sec
-	  else print_string "bye"
+	  else
+	    match c.dir,sec.post
+	    with
+	    |[],_ -> failwith "increment : lost car"
+	    |_,Spawn -> failwith "increment : arriver sur un depart"
+	    |_,Quit(s) -> print_string s
+	    |q::r,Int(inter) ->
+	      let pat = c,n-(!act),sec,q in
+	      inter.qu <- pat::inter.qu	    
 	end
     end
 ;;
@@ -111,7 +119,7 @@ let checkpoint = Int({ent=[];sor=[];qu=[]})
 lier checkpoint checkpoint circuit
 ;;
 
-circuit.data.(0) <- Some({spd=4});;
+circuit.data.(0) <- Some({spd=4;dir=[]});;
 increment circuit;;
 circuit.data;;
 
