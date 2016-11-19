@@ -1,21 +1,19 @@
-value p : float (*la probabilite de ralentissement de la voiture*);;
+val p : float (*la probabilite de ralentissement de la voiture*);;
 
-type entree (*les entrees de route*);;
-
-type sortie (*les sorties de route*);;
+type distr (*une entree, une sortie ou une intersection*);;
 
 type intersection (*une intersection entre deux sections d'autoroute*);;
 
 type voiture (*une voiture*);;
 
-type section (*un fragment de route*)
-;;
-  value accel : voiture -> int -> unit
-;;
-  value desc : voiture -> unit
-;;
-  value descrand : voiture -> float -> unit
-;;
-  value increment : section -> unit
-;;
-  
+type section (*un fragment de route*);;
+
+val accel : voiture -> int -> unit;;
+
+val desc : voiture -> int -> unit;;
+
+val descrand : voiture -> float -> unit;;
+
+val increment : section -> unit;;
+
+val lier : distr -> distr -> section -> unit;;

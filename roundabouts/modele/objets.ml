@@ -3,7 +3,7 @@
 let p = 0.
 
 type distr = 
-	|Spawn
+ 	|Spawn
 	|Quit of string
 	|Int of intersection
 
@@ -120,12 +120,6 @@ let increment sec =
 
 let passif (c,d,e,s) = ()
 
-;;
-
-let oneone (c,d,e,s) = 
-	accel c;
-	desc c;
-	descrand c;
 ;;
 
 (*tentative sur un circuit*)
