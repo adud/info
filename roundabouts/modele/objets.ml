@@ -66,7 +66,7 @@ let increment sec =
   let next = ref 0 in
   let act = ref 0 in
   let n = Array.length sec.data in
-  while sec.data.(!act) = None && !act < n do
+  while !act < n && sec.data.(!act) = None do
     incr act;
   done;
   if !act < n then (*la section n'est pas vide*)
@@ -122,4 +122,8 @@ lier checkpoint checkpoint circuit
 circuit.data.(0) <- Some({spd=4;dir=[]});;
 increment circuit;;
 circuit.data;;
+match checkpoint with
+	|Int(i) -> i.qu
+	|_ -> failwith "niet"
+;;
 
