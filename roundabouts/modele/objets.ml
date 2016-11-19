@@ -8,11 +8,20 @@ type distr =
 	|Int of intersection
 
  and intersection = {mutable ent:section list;mutable sor:section list;
- 		     mutable qu:(voiture*int*section*section) list}
+ 		     mutable qu:(voiture*int*section*section) list; transf: (voiture*int*section*section)-> unit}
  and voiture = {mutable spd:int;mutable dir:section list}
   
  and section = {mutable pre:distr;data:voiture option array;
 			   maxspd:int;mutable post:distr}
+;;
+
+let firstcar sec =
+	let n = Array.length sec.data in
+	let act = ref 0 in
+	while !act < n && sec.data.(!act) = None do
+		incr act
+	done;
+	!act
 ;;
 
   (*iterations de l'automate*)
@@ -97,7 +106,7 @@ let increment sec =
 	  else
 	    match c.dir,sec.post
 	    with
-	    |[],_ -> failwith "increment : lost car"
+	    |[],_ -> failwith "increment : objectiveless car"
 	    |_,Spawn -> failwith "increment : arriver sur un depart"
 	    |_,Quit(s) -> print_string s
 	    |q::r,Int(inter) ->
@@ -107,19 +116,32 @@ let increment sec =
     end
 ;;
 
+(*comportements possibles de voitures*)
+
+let passif (c,d,e,s) = ()
+
+;;
+
+let oneone (c,d,e,s) = 
+	accel c;
+	desc c;
+	descrand c;
+;;
+
 (*tentative sur un circuit*)
 
 let circuit = {pre=Spawn;post=Quit("");maxspd=5;
 			  data=Array.make 10 None}
 ;;
+firstcar circuit;;
 
-let checkpoint = Int({ent=[];sor=[];qu=[]})
+let checkpoint = Int({ent=[];sor=[];qu=[];transf=passif})
 ;;
 
 lier checkpoint checkpoint circuit
 ;;
 
-circuit.data.(0) <- Some({spd=4;dir=[]});;
+circuit.data.(0) <- Some({spd=4;dir=[circuit]});;
 increment circuit;;
 circuit.data;;
 match checkpoint with
