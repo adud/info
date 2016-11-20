@@ -8,17 +8,38 @@ type voiture (*une voiture*);;
 
 type section (*un fragment de route*);;
 
+(*creer les objets*)
+
 val creer_section : int -> int -> section;;
 
 val creer_inter : (voiture * int * section * section -> unit) -> distr;;
 
 val creer_spawn : unit -> distr;;
 
-val creer sortie : string -> distr;;
+val creer_sortie : string -> distr;;
+
+val creer_voiture : int -> section list -> voiture;;
+
+(*questionner les objets*)
 
 val observer : section -> voiture option array (*etudie une section de route*);;
 
 val radar : voiture -> int (*simule un radar donne la vitesse de la voiture*);;
+
+val firstcar : section -> int ;;
+(*regarde ou est la premiere voiture d'une section*)
+
+(*manipuler les objets*)
+
+val lier : distr -> distr -> section -> unit;;
+(*lier d1 d2 sec fait le lien de la distribution d1 a la distribution
+d2 par la route sec*)
+val ajcar : section -> voiture -> int -> unit;;
+(*ajcar s c p ajoute la voiture c dans s a la position p s'il n'y en a pas
+deja une*)
+
+
+(*iterations de l'automate*)
 
 val accel : voiture -> int -> unit;;
 
@@ -28,9 +49,9 @@ val descrand : voiture -> float -> unit;;
 
 val increment : section -> unit;;
 
-val lier : distr -> distr -> section -> unit;;
-
 val traverser : intersection -> unit;;
+
+(*test simple*)
 
 val checkpoint : distr;;
 

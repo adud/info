@@ -16,6 +16,28 @@ type distr =
 			   maxspd:int;mutable post:distr}
 ;;
 
+
+(*creer les objets*)
+
+let creer_section sz ms = 
+	let d = Array.make sz None in
+	{pre=Spawn;post=Quit("");data=d;maxspd=ms}
+;;
+
+let creer_inter f = Int({ent=[];sor=[];qu=[];transf=f})
+;;
+
+let creer_spawn () = Spawn
+;;
+
+let creer_sortie s = Quit(s)
+;;
+
+let creer_voiture s d = {spd=s;dir=d}
+;;
+
+(*questionner les objets*)
+
 let observer sec = sec.data
 ;;
 
@@ -32,8 +54,36 @@ let firstcar sec =
 	!act
 ;;
 
-  (*iterations de l'automate*)
-(*accel : *)
+
+
+(*manipuler les objets*)
+
+(*lier : distr -> distr -> section -> unit
+lier d1 d2 sec fait le lien de la distribution d1 à la distribution
+d2 par la route sec*)
+
+let lier d1 d2 sec =
+	sec.pre <- d1;
+	sec.post <- d2;
+	match d1 with
+	|Spawn -> ()
+	|Quit(_) -> failwith "lier : entrer par une sortie"
+	|Int(i1) -> i1.sor <- sec::i1.sor
+	;
+	match d2 with
+	|Spawn -> failwith "lier : sortir par une entree"
+	|Quit(_) -> ()
+	|Int(i2) -> i2.ent <- sec::i2.ent
+;;
+  
+let ajcar sec c pos =
+	match sec.data.(pos) with
+	|Some(_) -> failwith "ajcar : apparition d'une voiture sur une autre"
+	|None -> sec.data.(pos) <- Some(c)
+
+;;
+(*iterations de l'automate*)
+
 let accel c vmax =
   c.spd <- min (c.spd + 1) vmax
 ;;
@@ -58,34 +108,8 @@ let move p sec =
       end
 ;;
 
-let creer_section sz ms = 
-	let d = Array.make sz None in
-	{pre=Spawn;post=Spawn;data=d;maxspd=ms}
-;;
-
-let creer_inter f = Int({ent=[];sor=[];qu=[];transf=f})
-;;
-
-(*lier : distr -> distr -> section -> unit
-lier d1 d2 sec fait le lien de la distribution d1 à la distribution
-d2 par la route sec*)
-
-let lier d1 d2 sec =
-	sec.pre <- d1;
-	sec.post <- d2;
-	match d1 with
-	|Spawn -> ()
-	|Quit(_) -> failwith "lier : entrer par une sortie"
-	|Int(i1) -> i1.sor <- sec::i1.sor
-	;
-	match d2 with
-	|Spawn -> failwith "lier : sortir par une entree"
-	|Quit(_) -> ()
-	|Int(i2) -> i2.ent <- sec::i2.ent
-;;
-  
-	     
-(*increment: section -> unit *)
+(*increment: section -> unit 
+met a jour la section avec les regles de l'automate cellulaire*)
   
 let increment sec =
   let next = ref 0 in
@@ -148,18 +172,18 @@ let passif (c,d,e,s) = ()
 
 (*tentative sur un circuit*)
 
-let circuit = {pre=Spawn;post=Quit("");maxspd=5;
-			  data=Array.make 10 None}
+let circuit = creer_section 10 5
 ;;
 firstcar circuit;;
 
-let checkpoint = Int({ent=[];sor=[];qu=[];transf=passif})
+let checkpoint = creer_inter passif
 ;;
 
 lier checkpoint checkpoint circuit
 ;;
 
-circuit.data.(0) <- Some({spd=4;dir=[circuit]});;
+ajcar circuit (creer_voiture 4 [circuit]) 0;;
+
 (*increment circuit;;
 circuit.data;;
 match checkpoint with
