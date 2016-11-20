@@ -58,6 +58,14 @@ let move p sec =
       end
 ;;
 
+let creer_section sz ms = 
+	let d = Array.make sz None in
+	{pre=Spawn;post=Spawn;data=d;maxspd=ms}
+;;
+
+let creer_inter f = Int({ent=[];sor=[];qu=[];transf=f})
+;;
+
 (*lier : distr -> distr -> section -> unit
 lier d1 d2 sec fait le lien de la distribution d1 à la distribution
 d2 par la route sec*)
@@ -124,7 +132,15 @@ let increment sec =
     end
 ;;
 
-(*comportements possibles de voitures*)
+let traverser dst =
+	match dst with
+	|Int(isec) -> 
+		List.iter isec.transf isec.qu
+	|_-> failwith "traverser : passer a travers d'un debut ou d'une fin"
+;;
+	
+
+(*comportements possibles aux intersections*)
 
 let passif (c,d,e,s) = ()
 
@@ -152,3 +168,5 @@ match checkpoint with
 ;;
 
 *)
+
+
