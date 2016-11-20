@@ -1,7 +1,8 @@
 (*les divers objets qui seront necessaires pour le programme*)
 
-let p = 0.
 
+let p = 0.
+;;
 type distr = 
  	|Spawn
 	|Quit of string
@@ -14,6 +15,13 @@ type distr =
  and section = {mutable pre:distr;data:voiture option array;
 			   maxspd:int;mutable post:distr}
 ;;
+
+let observer sec = sec.data
+;;
+
+let radar c = c.spd
+;;
+
 
 let firstcar sec =
 	let n = Array.length sec.data in
@@ -136,10 +144,11 @@ lier checkpoint checkpoint circuit
 ;;
 
 circuit.data.(0) <- Some({spd=4;dir=[circuit]});;
-increment circuit;;
+(*increment circuit;;
 circuit.data;;
 match checkpoint with
 	|Int(i) -> i.qu
 	|_ -> failwith "niet"
 ;;
 
+*)
