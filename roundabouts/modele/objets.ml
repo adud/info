@@ -38,6 +38,12 @@ let creer_voiture s d = {spd=s;dir=d}
 
 (*questionner les objets*)
 
+let panneau sec = sec.maxspd
+;;
+
+let tsec sec = Array.length sec.data
+;;
+
 let observer sec = sec.data
 ;;
 
@@ -151,7 +157,8 @@ let increment sec =
 	    |_,Quit(s) -> print_string s
 	    |q::r,Int(inter) ->
 	      let pat = c,n-(!act),sec,q in
-	      inter.qu <- pat::inter.qu	    
+	      inter.qu <- pat::inter.qu;
+	      sec.data.(!act) <- None
 	end
     end
 ;;
@@ -159,7 +166,8 @@ let increment sec =
 let traverser dst =
 	match dst with
 	|Int(isec) -> 
-		List.iter isec.transf isec.qu
+		List.iter isec.transf isec.qu;
+		isec.qu <- [];
 	|_-> failwith "traverser : passer a travers d'un debut ou d'une fin"
 ;;
 	

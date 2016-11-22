@@ -22,6 +22,10 @@ val creer_voiture : int -> section list -> voiture;;
 
 (*questionner les objets*)
 
+val panneau : section -> int (*un panneau indicateur de vitesse pour la section*);;
+
+val tsec : section -> int (*la taille de la section*);;
+
 val observer : section -> voiture option array (*etudie une section de route*);;
 
 val radar : voiture -> int (*simule un radar donne la vitesse de la voiture*);;
@@ -49,10 +53,10 @@ val descrand : voiture -> float -> unit;;
 
 val increment : section -> unit;;
 
-val traverser : intersection -> unit;;
+val traverser : distr -> unit;;
 
 (*test simple*)
 
-val checkpoint : distr;;
+(*val checkpoint : distr;;
 
-val circuit : section;;
+val circuit : section;;*)

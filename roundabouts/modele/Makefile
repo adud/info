@@ -16,5 +16,6 @@ test: objets.cmo affichage.cmo
 
 objets.cmo: objets.ml objets.cmi
 
-affichage.cmo: objets.cmo objets.cmi affichage.ml
+affichage.cmo: objets.cmo objets.cmi affichage.ml affichage.cmi
 
+affichage.cmi: affichage.mli objets.cmo objets.cmi
