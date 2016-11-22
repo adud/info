@@ -32,7 +32,7 @@ let creer_spawn () = Spawn
 
 let creer_sortie s = Quit(s)
 ;;
-
+  
 let creer_voiture s d = {spd=s;dir=d}
 ;;
 
