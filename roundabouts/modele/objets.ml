@@ -60,8 +60,13 @@ let firstcar sec =
 	!act
 ;;
 
-
-
+let patients d = 
+  match
+    d
+  with
+  |Int(isec) -> isec.qu
+  |_ -> failwith "personne ne patiente pour entrer (patients)"
+;;
 (*manipuler les objets*)
 
 (*lier : distr -> distr -> section -> unit
@@ -94,7 +99,7 @@ let accel c vmax =
   c.spd <- min (c.spd + 1) vmax
 ;;
 let desc c dsec =
-  c.spd <- min c.spd dsec
+  c.spd <- max 0 ( min c.spd (dsec - 1))
 ;;
 let descrand c p =
   if Random.float 1. <= p
@@ -121,9 +126,7 @@ let increment sec =
   let next = ref 0 in
   let act = ref 0 in
   let n = Array.length sec.data in
-  while !act < n && sec.data.(!act) = None do
-    incr act;
-  done;
+  act := firstcar sec;
   if !act < n then (*la section n'est pas vide*)
     begin
       next := !act+1;
@@ -139,6 +142,10 @@ let increment sec =
 	    desc vder (!next - !act);
 	    descrand vder p;
 	    move !act sec;
+	    (*la voiture suivante devient voiture actuelle*)
+	    act := !next;
+	    next := !act + 1;
+
       done;
     (*sec.data.(!act) contient la derniere voiture de la section qui peut 
      quitter cette derinere lors de l'iteration*)
@@ -196,7 +203,8 @@ ajcar circuit (creer_voiture 4 [circuit]) 0;;
 circuit.data;;
 match checkpoint with
 	|Int(i) -> i.qu
-	|_ -> failwith "niet"
+	|_ -> failwith
+ "niet"
 ;;
 
 *)

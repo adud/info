@@ -35,9 +35,9 @@ let checkpoint =  creer_inter oneone
 let circuit =  creer_section 40 5
 ;;
 
-for i=0 to 0 do
+for i=0 to 12 do
   
-  ajcar circuit (creer_voiture 0 [circuit]) (2*i)
+  ajcar circuit (creer_voiture 0 [circuit]) (3*i)
 
 done
 ;;
@@ -52,4 +52,8 @@ let () =
     traverser checkpoint;
     print_section circuit;
   done;
+  increment circuit;
+print_section circuit;
+traverser checkpoint;
+print_section circuit;
 ;;
