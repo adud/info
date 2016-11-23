@@ -4,6 +4,7 @@ open Objets
 open Affichage
 ;;
 
+
  
 let oneone (c,d,e,s) = 
   accel c ( panneau s);
@@ -24,12 +25,12 @@ let passif (c,d,e,s) = ()
 let checkpoint =  creer_inter oneone
 ;; 
 
-let circuit =  creer_section 40 5
+let circuit =  creer_section 80 6
 ;;
 
-for i=0 to 12 do
+for i=0 to 10 do
   
-  ajcar circuit (creer_voiture 0 [circuit]) (3*i)
+  ajcar circuit (creer_voiture 0 [circuit]) (i)
 
 done
 ;;
@@ -39,10 +40,10 @@ lier checkpoint checkpoint circuit
 
 let () =
   print_section circuit;
-  for i=0 to 20 do
+  for i=0 to 100 do
     increment circuit;
     traverser checkpoint;
-    print_section circuit;
+    draw_section circuit;
   done;
   increment circuit;
 print_section circuit;

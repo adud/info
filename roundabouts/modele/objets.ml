@@ -1,7 +1,7 @@
 (*les divers objets qui seront necessaires pour le programme*)
 
 
-let p = 0.
+let p = 0.19
 ;;
 type distr = 
  	|Spawn
@@ -109,14 +109,20 @@ let move p sec =
   match sec.data.(p) with
   |None -> failwith "move :trying to move no car"
   |Some(c) ->
-    let d = p + c.spd in
-    match sec.data.(d) with
-    |Some(_) -> failwith "move : collision"
-    |None ->
+    if
+      c.spd > 0
+    then
       begin
-	sec.data.(d) <- Some(c);
-	sec.data.(p) <- None;	 
+	let d = p + c.spd in
+	match sec.data.(d) with
+	|Some(_) -> failwith "move : collision"
+	|None ->
+	  begin
+	    sec.data.(d) <- Some(c);
+	    sec.data.(p) <- None;	 
+	  end
       end
+    else ()
 ;;
 
 (*increment: section -> unit 
