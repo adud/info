@@ -97,7 +97,7 @@ let accel c vmax =
   c.spd <- min (c.spd + 1) vmax
 ;;
 let desc c dsec =
-  c.spd <- max 0 ( min c.spd (dsec - 1))
+  c.spd <- min c.spd (dsec - 1)
 ;;
 let descrand c p =
   if Random.float 1. <= p

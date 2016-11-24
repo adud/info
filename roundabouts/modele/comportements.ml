@@ -3,17 +3,12 @@ open Objets
 ;;
 
 let oneone (c,d,e,s) = 
-  let check c = 
-    print_int (radar c);
-    print_string " ";
-  in
+  print_string "circuit enre : ";
+  Affichage.print_section s;
   accel c ( panneau s);
-  check c;
-  desc c ( firstcar s - d);
-  check c;
+  desc c ( firstcar s + d);
   descrand c p;
-  check c;
-  print_newline ();
+
   let pos = radar c - d in
   if
     pos < 0

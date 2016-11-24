@@ -9,7 +9,7 @@ open Comportements
 let checkpoint =  creer_inter oneone
 ;; 
 
-let circuit =  creer_section 80 6
+let circuit =  creer_section 40 6
 ;;
 
 for i=0 to 10 do
@@ -23,14 +23,17 @@ lier checkpoint checkpoint circuit
 ;;
 
 let () =
-  for i=0 to 15 do
+  for i=0 to (-1) do
     increment circuit;
     traverser checkpoint;
   done;
-  for i=0 to 10 do
-    print_section circuit;
+  for i=0 to 50 do
     increment circuit;
+    print_string "circuit reel : ";
+    print_section circuit;
+    print_string "traversant   : ";
     print_inter checkpoint;
     traverser checkpoint;
+    print_newline ();
   done;
 ;;
