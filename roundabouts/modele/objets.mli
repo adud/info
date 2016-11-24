@@ -33,6 +33,10 @@ val radar : voiture -> int (*simule un radar donne la vitesse de la voiture*);;
 val firstcar : section -> int ;;
 (*regarde ou est la premiere voiture d'une section*)
 
+val patients : distr -> (voiture * int * section * section) list ;;
+(*affiche vitesse et distance de la voiture qui patiente dans l'intersection
+en entree (souleve une erreur sinon)*)
+
 (*manipuler les objets*)
 
 val lier : distr -> distr -> section -> unit;;

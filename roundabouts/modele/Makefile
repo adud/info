@@ -5,8 +5,8 @@ hello: test
 #hello: amodule.cmo bmodule.cmo
 #	ocamlc -o hello amodule.cmo bmodule.cmo
 
-test: test.cmo objets.cmo affichage.cmo
-	ocamlc -o test objets.cmo affichage.cmo test.cmo
+test: objets.cmo affichage.cmo comportements.cmo test.cmo
+	ocamlc -o test objets.cmo affichage.cmo comportements.cmo test.cmo
 
 %.cmo: %.ml
 	ocamlc -c $<
@@ -20,4 +20,8 @@ affichage.cmo: objets.cmi affichage.ml affichage.cmi
 
 affichage.cmi: affichage.mli objets.cmi
 
-test.cmo: test.ml objets.cmi affichage.cmi
+comportements.cmo : comportements.cmi objets.cmi comportements.ml
+
+comportements.cmi : comportements.mli objets.cmi
+
+test.cmo: test.ml objets.cmi affichage.cmi comportements.cmi

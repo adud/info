@@ -21,4 +21,21 @@ let draw_section sec =
     with
     |None -> print_string " "
     |Some(c) -> print_string "."
-  done
+  done;
+  print_newline ();
+;;
+
+let print_car c =
+  print_int (radar c)
+
+
+let print_inter dis =
+  let affd (v,d,e,s) =
+    print_int (radar v);
+    print_string " ";
+    print_int d;
+  in
+  let a = patients dis in
+  List.iter affd a;
+  print_newline ();
+;;

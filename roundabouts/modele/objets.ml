@@ -1,7 +1,7 @@
 (*les divers objets qui seront necessaires pour le programme*)
 
 
-let p = 0.19
+let p = 0.
 ;;
 type distr = 
  	|Spawn
@@ -49,8 +49,6 @@ let observer sec = sec.data
 
 let radar c = c.spd
 ;;
-
-
 let firstcar sec =
 	let n = Array.length sec.data in
 	let act = ref 0 in
@@ -65,7 +63,7 @@ let patients d =
     d
   with
   |Int(isec) -> isec.qu
-  |_ -> failwith "personne ne patiente pour entrer (patients)"
+  |_ -> failwith "patients : personne ne patiente pour entrer/sortir"
 ;;
 (*manipuler les objets*)
 
@@ -183,36 +181,3 @@ let traverser dst =
 		isec.qu <- [];
 	|_-> failwith "traverser : passer a travers d'un debut ou d'une fin"
 ;;
-	
-
-(*comportements possibles aux intersections*)
-
-let passif (c,d,e,s) = ()
-
-;;
-
-(*tentative sur un circuit*)
-
-let circuit = creer_section 10 5
-;;
-firstcar circuit;;
-
-let checkpoint = creer_inter passif
-;;
-
-lier checkpoint checkpoint circuit
-;;
-
-ajcar circuit (creer_voiture 4 [circuit]) 0;;
-
-(*increment circuit;;
-circuit.data;;
-match checkpoint with
-	|Int(i) -> i.qu
-	|_ -> failwith
- "niet"
-;;
-
-*)
-
-
