@@ -9,10 +9,10 @@ open Comportements
 let checkpoint =  creer_inter oneone
 ;; 
 
-let circuit =  creer_section 40 6
+let circuit =  creer_section 10 6
 ;;
 
-for i=0 to 10 do
+for i=0 to 9 do
   
   ajcar circuit (creer_voiture 0 [circuit]) (i)
 

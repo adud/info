@@ -10,6 +10,10 @@ type distr =
 
  and intersection = {mutable ent:section list;mutable sor:section list;
  		     mutable qu:(voiture*int*section*section) list; transf: (voiture*int*section*section)-> unit}
+
+(*si qu contient (v,d,e,s) c'est qu'une voiture v se trouvant a d (d>0 
+de l'intersection, venant de e, allant vers s*)
+
  and voiture = {mutable spd:int;mutable dir:section list}
   
  and section = {mutable pre:distr;data:voiture option array;

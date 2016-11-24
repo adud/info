@@ -3,8 +3,8 @@ open Objets
 ;;
 
 let oneone (c,d,e,s) = 
-  print_string "circuit enre : ";
-  Affichage.print_section s;
+  (*print_string "circuit enre : ";
+  Affichage.print_section s;*)
   accel c ( panneau s);
   desc c ( firstcar s + d);
   descrand c p;
