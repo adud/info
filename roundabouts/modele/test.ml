@@ -6,7 +6,7 @@ open Affichage
 open Comportements
 
 
-let checkpoint =  creer_inter oneone
+let checkpoint =  creer_inter 1 1 oneone
 ;; 
 
 let circuit =  creer_section 70 6
@@ -21,7 +21,8 @@ for i=0 to 10 do
 done
 ;;
 
-lier checkpoint checkpoint circuit
+  lier checkpoint 0 checkpoint 0
+       circuit
 ;;
 
 let () =

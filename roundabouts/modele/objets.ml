@@ -8,7 +8,7 @@ type distr =
 	|Quit of string
 	|Int of intersection
 
- and intersection = {mutable ent:section list;mutable sor:section list;
+ and intersection = {mutable ent:section array;mutable sor:section array;
  		     mutable qu:(voiture*int*section*section) list; transf: (voiture*int*section*section)-> unit}
 
 (*si qu contient (v,d,e,s) c'est qu'une voiture v se trouvant a d (d>0 
@@ -28,7 +28,11 @@ let creer_section sz ms =
 	{pre=Spawn;post=Quit("");data=d;maxspd=ms}
 ;;
 
-let creer_inter f = Int({ent=[];sor=[];qu=[];transf=f})
+let dums = creer_section 0 0
+;;
+ 
+
+let creer_inter e s f = Int({ent=Array.make e dums;sor=Array.make s dums;qu=[];transf=f})
 ;;
 
 let creer_spawn () = Spawn
@@ -75,18 +79,18 @@ let patients d =
 lier d1 d2 sec fait le lien de la distribution d1 à la distribution
 d2 par la route sec*)
 
-let lier d1 d2 sec =
+let lier d1 p1 d2 p2 sec =
 	sec.pre <- d1;
 	sec.post <- d2;
 	match d1 with
 	|Spawn -> ()
 	|Quit(_) -> failwith "lier : entrer par une sortie"
-	|Int(i1) -> i1.sor <- sec::i1.sor
+	|Int(i1) -> i1.sor.(p1) <- sec
 	;
 	match d2 with
 	|Spawn -> failwith "lier : sortir par une entree"
 	|Quit(_) -> ()
-	|Int(i2) -> i2.ent <- sec::i2.ent
+	|Int(i2) -> i2.ent.(p2) <- sec
 ;;
   
 let ajcar sec c pos =
@@ -185,4 +189,20 @@ let traverser dst =
 		List.iter isec.transf isec.qu;
 		isec.qu <- [];
 	|_-> failwith "traverser : passer a travers d'un debut ou d'une fin"
+;;
+(*useless ?*)
+let faire_sorties d n = 
+  match
+    d
+  with
+  |Spawn|Quit(_) -> failwith "ajouter_sorties : debut ou fin n'en a pas"
+  |Int(isec) -> isec.sor <- Array.make n dums 
+;;
+
+let faire_entrees d n =
+  match
+    d
+  with
+  |Spawn|Quit(_) -> failwith "ajouter_sorties : debut ou fin n'en a pas"
+  |Int(isec) -> isec.ent <- Array.make n dums
 ;;

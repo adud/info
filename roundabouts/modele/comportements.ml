@@ -1,7 +1,7 @@
 (*divers comportements aux intersections*)
 open Objets
 ;;
-
+  
 let oneone (c,d,e,s) = 
   (*print_string "circuit enre : ";
   Affichage.print_section s;*)

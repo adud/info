@@ -11,15 +11,22 @@ type section (*un fragment de route*);;
 (*creer les objets*)
 
 val creer_section : int -> int -> section;;
-
-val creer_inter : (voiture * int * section * section -> unit) -> distr;;
-
+(*creer_section sz ms cree une section vide de taille sz et de vitesse max ms*)
+  
+val creer_inter : int -> int -> (voiture * int * section * section -> unit) -> distr;;
+(*creer_inter e s f cree une intersection a e entrees, s sorties, 
+dont le comportement est decrit par la fonction *)
+  
 val creer_spawn : unit -> distr;;
-
+(*cree une distribution Spawn*)
+  
 val creer_sortie : string -> distr;;
-
+(*creer_sortie st cree une sortie de nom st*)
+  
 val creer_voiture : int -> section list -> voiture;;
+(*creer_voiture s d cree une voiture de vitesse s et d'itineraire d*)
 
+  
 (*questionner les objets*)
 
 val panneau : section -> int (*un panneau indicateur de vitesse pour la section*);;
@@ -39,9 +46,11 @@ en entree (souleve une erreur sinon)*)
 
 (*manipuler les objets*)
 
-val lier : distr -> distr -> section -> unit;;
-(*lier d1 d2 sec fait le lien de la distribution d1 a la distribution
-d2 par la route sec*)
+val lier : distr -> int -> distr -> int -> section -> unit;;
+(*lier d1 p1 d2 p2 sec fait le lien de la distribution d1 a la distribution
+d2 par la route sec en positionant sec comme sortie no p1 de d1 et comme entree no p2
+de d2*)
+  
 val ajcar : section -> voiture -> int -> unit;;
 (*ajcar s c p ajoute la voiture c dans s a la position p s'il n'y en a pas
 deja une*)
@@ -50,17 +59,17 @@ deja une*)
 (*iterations de l'automate*)
 
 val accel : voiture -> int -> unit;;
-
+(*accel c vmax fait accelerer la voiture, dans la limite de vmax*)
+    
 val desc : voiture -> int -> unit;;
+(*desc c dsec fait ralentir la voiture c en-dessous de dsec
+eviter les collisions*)
 
 val descrand : voiture -> float -> unit;;
-
+(*descrand c p fait ralentir la voiture c avec une proba p*)
+  
 val increment : section -> unit;;
-
+(*increment s itere s selon Nagel-Schreckenberg*)
+  
 val traverser : distr -> unit;;
-
-(*test simple*)
-
-(*val checkpoint : distr;;
-
-val circuit : section;;*)
+  (*traverser d itere d selon sa fonction de comportement*)
