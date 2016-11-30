@@ -82,12 +82,13 @@ Faisons-le en démontrant un résultat plus fort : $\forall n \in \mathbb{Z}, n\
 Par récurrence forte descendante :\\
 \begin{description}
 \item[Initialisation] \quad On a directement $P_{101}$
-\item[Hérédité] \quad Soit $n\in \llbracket 0;100\rrbracket ,~ \forall k \in \llbracket n+1;101\rrbracket$ ; par disjonction de cas : 
+\item[Hérédité] \quad Soit $n\in \llbracket 0;100\rrbracket$ tel que $ ~ \forall k \in \llbracket n+1;101\rrbracket$ on ait $P_{k}$; par disjonction de cas : 
 \begin{itemize}[\textbullet]
 	\item {\itshape Si $n\geqslant 91$ } alors $\mathtt{f91(n)}$ calcule et retourne, si possible $\mathtt{f91(f91(n+11))}$. Or $n+11 > 100$. Ainsi $\mathtt{f91(n+11)}$ renvoie $n+11-10$ soit $n+1$. Par hypothèse de récurrence : $\mathtt{f91(n+1)}$ termine et renvoie 91. Donc $\mathtt{f91(n)}$ termine et renvoie $91$.
 	\item {\itshape Sinon, $n < 91$}, alors $\mathtt{f91(n)}$ calcule et retourne si possible $\mathtt{f91(f91(n+11))}$. Or $n+11\in \llbracket n+1;101 \rrbracket$ donc $\mathtt{f91(n+11)}$ termine et retourne $91$. Or $91 \in \llbracket n+1;101 \rrbracket$, donc $\mathtt{f91(f91(n+11))}$ termine et retourne, donc $\mathtt{f91(n)}$ termine et retourne 91.
 \end{itemize}
 \end{description}
-Par récurrence : $\forall n \in \llbracket 0;101 \rrbracket$, donc $\forall n \in \mathbb{N}$, $\mathtt{f91(n)}$ termine.
+Par récurrence : $\forall n \in \llbracket 0;101 \rrbracket$, $\mathtt{f91(n)}$ termine.
+Donc $\forall n \in \mathbb{N}$ , $\mathtt{f91(n)}$ termine.
 
 \end{document}
