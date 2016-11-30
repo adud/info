@@ -9,12 +9,14 @@ open Comportements
 let checkpoint =  creer_inter oneone
 ;; 
 
-let circuit =  creer_section 10 6
+let circuit =  creer_section 70 6
 ;;
 
-for i=0 to 9 do
+let rec tour = circuit::tour in
   
-  ajcar circuit (creer_voiture 0 [circuit]) (i)
+for i=0 to 10 do
+  
+  ajcar circuit (creer_voiture 0 tour) (i)
 
 done
 ;;
@@ -28,12 +30,7 @@ let () =
     traverser checkpoint;
   done;
   for i=0 to 50 do
-    increment circuit;
-    print_string "circuit reel : ";
     print_section circuit;
-    print_string "traversant   : ";
-    print_inter checkpoint;
     traverser checkpoint;
-    print_newline ();
-  done;
+    increment circuit;  done;
 ;;

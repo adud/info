@@ -173,6 +173,7 @@ let increment sec =
 	    |q::r,Int(inter) ->
 	      let pat = c,n-(!act),sec,q in
 	      inter.qu <- pat::inter.qu;
+	      c.dir <- r;
 	      sec.data.(!act) <- None
 	end
     end
