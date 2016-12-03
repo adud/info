@@ -65,7 +65,7 @@ morekeywords={len,input,range}}
 \maketitle
 
 \begin{it}
-Nous avons ici un algorithme créant un labyrinthe parfait de dimension $n$. Nous voulons le modifier, d'abord pour enegistrer le labyrinthe en une image, puis pour construire le chemin entre les cases $(0,0)$ et $(n-1,n-1)$.
+Nous avons ici un algorithme créant un labyrinthe parfait de dimension $n$. Nous voulons le modifier, d'abord pour enregistrer le labyrinthe en une image, puis pour construire le chemin entre les cases $(0,0)$ et $(n-1,n-1)$.
 \end{it}
 \par
 Les fonctions originales sont les suivantes :
@@ -118,9 +118,9 @@ def labyrinthe():
 atteinte = [[False] * n for i in range(n)]
 \end{lstlisting}
 \par
-Tout d'abord, nous allons réaliser l'enregistrement du labyrinthe au format PGM. Ce format permet d'enegistrer facilement des images en nivau de gris. Pour ce faire, nous avons besoin de plusieurs modifications :
+Tout d'abord, nous allons réaliser l'enregistrement du labyrinthe au format PGM. Ce format permet d'enregistrer facilement des images en nivau de gris. Pour ce faire, nous avons besoin de plusieurs modifications :
 \begin{itemize}
-	\item En premier lieu, il faut compléter la fonction labyrinthe, en ajoutant un tableau $\mathtt{lislab}$, de dimension $(2n+1) \times (2n+1)$ qui contiendra la représentation du labyrinthe. Il est initialisé de manière à ce que chaque case soit isolée des autres.
+	\item En premier lieu, il faut compléter la fonction labyrinthe, en ajoutant un tableau $\mathtt{lislab}$, de dimensions $(2n+1) \times (2n+1)$ qui contiendra la représentation du labyrinthe. Il est initialisé de manière à ce que chaque case soit isolée des autres.
 	\item Ensuite, la fonction $\mathtt{save\_lab}$ permet de sauvegarder le labyrinthe au format désiré. Le tableau $\mathtt{lislab}$ est d'abord traité de manière à ce que tous les éléments soient du type $\mathtt{str}$. Puis viens l'enregistrement proprement dit. Un premier $\mathtt{f.write}$ permet d'écrire l'en-tête de l'image, dans laquelle il faut indiquer $\mathtt{P2}$, puis les dimensions et enfin la valeur codant le blanc, ici $\mathtt{cb}$.
 \end{itemize}
 \begin{lstlisting}
@@ -204,7 +204,7 @@ alors, le chemin allant de c0 a cn est [c0,c1,...,cn] Or $C_0 = (0,0)$, donc pou
 \begin{itemize}
 	\item Là aussi, nous avons besoin d'une fonction auxilliaire, $\mathtt{revdup}$. Elle prend en argument une pile et retourne une pile contenant les mêmes éléments, mais retournés.
 	\item Nous introduisons une nouvelle variable pour le labyrinthe : $\mathtt{chemin}$. Elle est initialisée à $\mathtt{False}$, mais contiendra la liste des cases du chemin à la fin. Lors de l'exécution du $\mathtt{while}$ principal, un premier cas se présente. En effet, si la case $(n-1,n-1)$ est atteinte, c'est alors qu'un chemin a été construit. Nous vérifions alors que $\mathtt{chemin}$ est encore vide, puis la valeur du chemin est stocké dans $\mathtt{chemin}$ sous forme de pile.
-	\item En sortie du $\mathtt{while}$, le code suivan permet de modifier $\mathtt{lislab}$ pour changer la couleur du chemin.
+	\item En sortie du $\mathtt{while}$, le code suivant permet de modifier $\mathtt{lislab}$ pour changer la couleur du chemin.
 \begin{lstlisting}
 	xp,yp = depiler(chemin)
     lislab[2*xp+1][2*yp+1] = cc
