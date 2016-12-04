@@ -140,6 +140,9 @@ let rec filext ens f g =
     else
       filext r f g
 ;;
+
+let filter ens f = filext ens f (fun x -> x)
+;;
 let execute_lettre aut et ch =
   let trois (a,b,c) = c in
   let dxidem a' b' (a,b,c) = (a=a') & (b=b') in
@@ -153,10 +156,62 @@ let rec execute aut ets mot =
   |[] -> ets
   |ch::r -> 
     let nets = union_fun ets (fun et -> execute_lettre aut et ch) in
-    execute aut nets mot
+    execute aut nets r
+;;
+
+let nondisj a b = [] <> inter a b
 ;;
 
 let est_reconnu aut mot =
-  [] <> inter aut.finaux (execute aut aut.initiaux mot)
+  nondisj aut.finaux (execute aut aut.initiaux mot)
 ;;
 
+(*accoupler : 'a -> 'b list -> ('a * 'b) list -> ('a * 'b) list
+accoupler s a [b1;...;bn] retourne [(a,b1);...;(a,bn)]@s *)
+
+let rec accoupler s a l = match l with
+	|[] -> s
+	|b::r -> (a,b)::accoupler s a r 
+;;
+
+(*cartesian_aux:('a * 'b) list -> 'a list -> 'b list -> ('a * 'b) list
+cartesian_aux s l1 l2 retourne (l1 x l2)@s *)
+
+let rec cartesian_aux s l1 l2 = match l1,l2 with
+	|[],_|_,[] -> s
+	|a::q,l -> let s2 = cartesian_aux s q l in
+		accoupler s2 a l 
+;;
+(* cartesian : '_a list -> '_b list -> ('_a * '_b) list 
+cartesian l1 l2 retourne l1 x l2 *)
+let cartesian a b = cartesian_aux [] a b
+;;
+
+
+let determinise aut =
+  let alph = aut.alphabet in
+  let ets = parties aut.etats in
+  let init = [aut.initiaux] in
+  let fin = filter ets (nondisj aut.finaux) in
+  let transf (qe,c) = (qe,c,execute aut qe [c]) in
+  let trans = map transf (cartesian ets aut.alphabet) in
+  {alphabet=alph;
+   etats=ets;
+   initiaux=init;
+   finaux=fin;
+   transitions=trans;
+  }
+;;
+
+let recon_beta = 
+  {alphabet=[`a`;`b`];
+   etats = ["wait";"ok"];
+   initiaux = ["wait"];
+   finaux = ["ok"];
+   transitions = [("wait",`a`,"ok");("wait",`b`,"wait")];
+  }
+;;
+est_reconnu recon_beta [`b`;`b`;`a`]
+;;
+determinise recon_beta
+;;
