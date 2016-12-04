@@ -19,6 +19,14 @@ type 'a expr =
   | Plus of 'a expr * 'a expr
 ;;
 
+let rec appartient x ens =
+  match
+    ens
+  with
+  |[] -> false
+  |a::r -> a=x || appartient x r
+;;
+
 let rec inter li1 li2 =
   match
     li1,li2
@@ -215,3 +223,148 @@ est_reconnu recon_beta [`b`;`b`;`a`]
 ;;
 determinise recon_beta
 ;;
+(*alph_aux 'a expr -> 'a set -> 'a set
+alph_aux exp r retourne (alphabet exp) @ r*)
+
+let rec alph_aux exp r =
+  match
+    exp
+  with
+  |Zero|Un -> []
+  |Lettre(le) -> le::r
+  |Conc(e1,e2) -> alph_aux e1 (alph_aux e2 r)
+  |Etoile(ex) -> alph_aux ex r
+  |Plus(e1,e2) -> alph_aux e1 (alph_aux e2 r)
+;;
+
+let alphabet exp = ensemble (alph_aux exp [])
+;;
+
+let beta = Conc (Etoile(Lettre `b`),(Lettre `a`))
+;;
+let rec contient_epsilon exp =
+  match
+    exp
+  with
+  |Zero|Lettre(_) -> false
+  |Un|Etoile(_) -> true
+  |Conc(e1,e2) -> contient_epsilon e1 && contient_epsilon e2
+  |Plus(e1,e2) -> contient_epsilon e1 || contient_epsilon e2
+;;
+
+let rec pref1_aux exp r = 
+  match exp with
+  |Zero|Un -> []
+  |Lettre(le) -> le::r
+  |Etoile(e) -> pref1_aux e r
+  |Plus(e1,e2) -> pref1_aux e1 (pref1_aux e2 r)
+  |Conc(e1,e2) -> 
+    if
+      contient_epsilon e1
+    then
+      pref1_aux e1 (pref1_aux e2 r)
+    else
+      pref1_aux e1 r
+;;
+let pref1 exp = ensemble (pref1_aux exp [])
+;;
+
+let rec suf1_aux exp r =
+  match
+    exp
+  with
+  |Zero|Un -> r
+  |Lettre(le) -> le::r
+  |Etoile(e) -> suf1_aux e r
+  |Plus(e1,e2) -> suf1_aux e1 (suf1_aux e2 r)
+  |Conc(e1,e2) ->
+    if
+      contient_epsilon e2
+    then
+      suf1_aux e1 (suf1_aux e2 r)
+    else
+      suf1_aux e2 r
+;;
+
+let suf1 exp = ensemble (suf1_aux exp [])
+;;
+
+let rec succ_aux exp le r =
+  match
+    exp
+  with
+  |Zero|Un|Lettre(_) -> r
+  |Plus(e1,e2) -> succ_aux e1 le (succ_aux e2 le r)
+  |Conc(e1,e2) -> 
+    let sa = succ_aux e1 le (succ_aux e2 le r) in
+    if 
+      appartient le (suf1 e1)
+    then
+     (pref1 e2)@sa
+    else sa
+  |Etoile(e) ->
+    let sa = succ_aux e le r in
+    if
+      appartient le (suf1 e)
+    then
+      (pref1 e)@sa
+    else
+      sa
+;;
+
+let succ exp le = ensemble (succ_aux exp le [])
+;;
+
+let aut_local exp = 
+  let alph = alphabet exp in
+  let etats = ajoute None (ensemble (map (fun x -> Some(x)) alph)) in
+  let init = [None] in
+  let f = ensemble (map (fun x -> Some x) (suf1 exp)) in
+  let fin = 
+    if
+      contient_epsilon exp
+    then
+      ajoute None f
+    else
+      f
+  in
+  let treps = ensemble (map (fun a -> (None,a,Some a)) (pref1 exp)) in
+  (*trsuc le toutes les transitions de l'automate local partant de Q_a *)
+  let trsuc a = 
+    ensemble (map (fun b -> (Some a, b, Some b)) (succ exp a)) in
+  let trtr = union_fun alph trsuc (*ttes les transitions sauf celles d'eps*) in
+  let trans = union trtr treps in
+  {alphabet=alph;
+   etats = etats;
+   initiaux = init;
+   finaux = fin;
+   transitions = trans;
+  }
+;;
+
+let rec lin_aux exp c = 
+  match
+    exp
+  with
+  |Zero -> Zero,c
+  |Un -> Un,c
+  |Lettre(k) -> (Lettre (k,c)),(c+1) 
+  |Conc(e1,e2) ->
+     let e'1,c1 = lin_aux e1 c in
+     let e'2,c2 = lin_aux e2 c1 in
+     Conc(e'1,e'2), c2
+  |Etoile(e) ->
+     let e',c' = lin_aux e c in
+     Etoile(e'),c'
+  |Plus(e1,e2) ->
+     let e'1,c1 = lin_aux e1 c in
+     let e'2,c2 = lin_aux e2 c1 in
+     Plus(e'1,e'2), c2
+;;
+
+let linearise exp = 
+  let exp',_ = lin_aux exp 0 in
+  exp'
+;;
+
+linearise (Conc (Etoile(Lettre(`a`)),Lettre(`a`)));;
