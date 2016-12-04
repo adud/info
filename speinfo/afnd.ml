@@ -368,3 +368,25 @@ let linearise exp =
 ;;
 
 linearise (Conc (Etoile(Lettre(`a`)),Lettre(`a`)));;
+
+let applique_morphisme aut f =
+  let alph = ensemble (map f aut.alphabet) in
+  let etats = aut.etats in
+  let init = aut.initiaux in
+  let fin = aut.finaux in
+  let trans = ensemble (map (fun (q1,c,q2) -> (q1,f c,q2)) aut.transitions) in
+  {alphabet=alph;
+   etats=etats;
+   initiaux=init;
+   finaux=fin;
+   transitions=trans;}
+;;
+
+let glushkov exp = 
+  let explin = linearise exp in
+  let autloc = aut_local explin in
+  applique_morphisme autloc (fun (c,v) -> c)
+;;
+
+let afd exp = determinise (glushkov exp)
+;;
