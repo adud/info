@@ -9,7 +9,7 @@ type distr =
 	|Int of intersection
 
  and intersection = {mutable ent:section array;mutable sor:section array;
- 		     mutable qu:(voiture*int*section*section) list; transf: (voiture*int*section*section)-> unit}
+ 		     mutable qu:(voiture*int*section*section) list; transf: (voiture*int*section*section) -> section array -> section array -> unit}
 
 (*si qu contient (v,d,e,s) c'est qu'une voiture v se trouvant a d (d>0 
 de l'intersection, venant de e, allant vers s*)
@@ -186,10 +186,13 @@ let increment sec =
 let traverser dst =
 	match dst with
 	|Int(isec) -> 
-		List.iter isec.transf isec.qu;
+		List.iter (fun (c,d,e,s) -> isec.transf (c,d,e,s) isec.ent isec.sor) isec.qu;
 		isec.qu <- [];
 	|_-> failwith "traverser : passer a travers d'un debut ou d'une fin"
 ;;
+
+
+  
 (*useless ?*)
 let faire_sorties d n = 
   match

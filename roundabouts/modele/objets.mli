@@ -13,7 +13,7 @@ type section (*un fragment de route*);;
 val creer_section : int -> int -> section;;
 (*creer_section sz ms cree une section vide de taille sz et de vitesse max ms*)
   
-val creer_inter : int -> int -> (voiture * int * section * section -> unit) -> distr;;
+val creer_inter : int -> int -> (voiture * int * section * section -> section array -> section array -> unit) -> distr;;
 (*creer_inter e s f cree une intersection a e entrees, s sorties, 
 dont le comportement est decrit par la fonction *)
   
