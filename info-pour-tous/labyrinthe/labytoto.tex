@@ -28,7 +28,7 @@
 
 \usepackage{listings}
 \usepackage{paralist}
-%\usepackage{stmaryrd} % bug à la compilation chez moi[Matthias]
+\usepackage{stmaryrd} % bug à la compilation chez moi[Matthias]
 \usepackage{tikz}
 \usetikzlibrary{shapes.multipart}
 \usetikzlibrary{calc}
@@ -71,47 +71,64 @@ On propose un algorithme créant un labyrinthe parfait de dimension $n$. Nous vo
 
 \section{Création de l'image}
 
-On peut représenter une case du labyrinthe par un carré de $3\times3$ pixels (\ref{case}) : la case elle-même se trouve au pixel $5$. Les pixels $2$,$4$,$6$ et $8$ servent à faire le lien entre la case et les cases adjacentes. Un tableau de $(2*n)+1$ pixels est nécessaire. Les pixels $1$,$3$,$7$ et $9$ sont alors toujours noirs, le pixel $5$ toujours blanc, et les pixels $2$,$4$,$6$ et $8$ sont noirs ou blancs, selon la possibitité de déplacement d'une case à l'autre (\ref{caser}). Par exemple, à partir de la case représentée en \ref{expl}, on peut se déplacer vers le haut ou vers la gauche, mais pas vers le bas ou vers la droite.
+On va représenter le labyrinthe de taille $n\times n$ par une image de $(2n+1)\times (2n+1)$ pixels. Les zones praticables seront représentées en blanc, les zones non-praticables en noir. Alors :
+\begin{itemize}
+	\item Une case du labyrinthe $\mathtt{atteinte[i,j]}, ~ (i,j) \in \llbracket 0,n \llbracket ^2$, est représentée par le pixel $(2i+1,2j+1)$, ce pixel est toujours blanc. Par exemple, sur la figure \ref{qc}, la case b $(1,0)$ est représentée par le pixel de coordonnées $(3,1)$. De même pour les cases a,b et d
+	\item Comme on ne peut pas se déplacer en diagonale, les pixels diagonaux, de coordonnées $(2k,2l), ~ (k,l) \in \llbracket 0,n \llbracket ^2 $, sont toujours noirs.
+	\item 
+		Soient deux cases adjacentes $p$ et $q$. Remarquons tout d'abord que le pixel se trouvant entre celui représentant $p$ et celui représentant $q$ a pour coordonnées $(\dfrac{x_p+x_q}{2},\dfrac{y_p+y_q}{2})$ (1,2,3 et 4 sur la figure \ref{qc}). 
+	\begin{itemize}
+		\item {\itshape Si} on peut se déplacer de $p$ à $q$, par exemple entre a et b dans la figure \ref{expl}, 
+
+	\end{itemize}
+\end{itemize}
+
+
 \begin{figure}[h]
 \begin{center}
+
 \hfill
-\subfloat[une case]{
-\label{case}
+\subfloat[quatre cases]{
+\label{qc}
 \begin{tikzpicture}[scale=0.67]
-	\draw (0,0) grid (3,3);	
-	\draw (0,0) ++ (0.5,0.5) node {1};
-	\draw (1,0) ++ (0.5,0.5) node {2};
-	\draw (2,0) ++ (0.5,0.5) node {3};
-	\draw (0,1) ++ (0.5,0.5) node {4};
-	\draw (1,1) ++ (0.5,0.5) node {5};
-	\draw (2,1) ++ (0.5,0.5) node {6};
-	\draw (0,2) ++ (0.5,0.5) node {7};
-	\draw (1,2) ++ (0.5,0.5) node {8};
-	\draw (2,2) ++ (0.5,0.5) node {9};
-\end{tikzpicture}
-}
-\hfill
-\subfloat[case remplie]{
-\label{caser}
-\begin{tikzpicture}[scale=0.67]
-	\draw (0,0) grid (3,3);
-	\foreach \i in {0,2}
-		{\foreach \j in {0,2}
+	\draw (0,0) grid (5,5);
+	\foreach \i in {0,2,4}
+		{\foreach \j in {0,2,4}
 			{\draw[color=black,fill=gray] (\i,\j)--++(0,1)--++(1,0)--++(0,-1)--cycle;};
 	};
+	\draw (1,3) ++ (0.5,0.5) node {a};
+	\draw (3,3) ++ (0.5,0.5) node {b};
+	\draw (1,1) ++ (0.5,0.5) node {c};
+	\draw (3,1) ++ (0.5,0.5) node {d};
+	\draw (2,3) ++ (0.5,0.5) node {1};
+	\draw (1,2) ++ (0.5,0.5) node {2};
+	\draw (3,2) ++ (0.5,0.5) node {3};
+	\draw (2,1) ++ (0.5,0.5) node {4};	
 \end{tikzpicture}
 }
 \hfill
 \subfloat[exemple]{
 \label{expl}
 \begin{tikzpicture}[scale=0.67]
-	\draw (0,0) grid (3,3);
-	\foreach \i in {0,2}
-		{\foreach \j in {0,2}
+	\draw (0,0) grid (5,5);
+	\foreach \i in {0,2,4}
+		{\foreach \j in {0,2,4}
 			{\draw[color=black,fill=gray] (\i,\j)--++(0,1)--++(1,0)--++(0,-1)--cycle;};
 	};
-	\draw[color=black,fill=gray] (1,0)--++(0,1)--++(1,0)--++(0,-1)--cycle;
-	\draw[color=black,fill=gray] (2,1)--++(0,1)--++(1,0)--++(0,-1)--cycle;
+	\draw (1,3) ++ (0.5,0.5) node {a};
+	\draw (3,3) ++ (0.5,0.5) node {b};
+	\draw (1,1) ++ (0.5,0.5) node {c};
+	\draw (3,1) ++ (0.5,0.5) node {d};
+	%\draw (2,3) ++ (0.5,0.5) node {1};
+	\draw[color=black,fill=gray] (1,2)--++(0,1)--++(1,0)--++(0,-1)--cycle;
+	%\draw (3,2) ++ (0.5,0.5) node {3};
+	%\draw[color=black,fill=gray] (2,1)--++(0,1)--++(1,0)--++(0,-1)--cycle;
+	\foreach \i in {1,3}
+		{\foreach \j in {0,4}
+			{\draw[color=black,fill=gray] (\i,\j)--++(0,1)--++(1,0)--++(0,-1)--cycle;
+			 \draw[color=black,fill=gray] (\j,\i)--++(0,1)--++(1,0)--++(0,-1)--cycle;
+			};
+	};
 \end{tikzpicture}
 }
 \hfill \hbox{}
@@ -119,6 +136,7 @@ On peut représenter une case du labyrinthe par un carré de $3\times3$ pixels (
 
 \end{center}
 \end{figure}
+
 
 \subsection{dessin du labyrinthe}
 

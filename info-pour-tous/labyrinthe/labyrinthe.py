@@ -29,7 +29,7 @@ def est_vide(p):
 
 def revdup(p):
     """prend en argument la pile p retourne une pile contenant
-    p retournee"""
+    p retournee sans modifier p"""
     n = taille(p)
     s,t = creer_pile(n),creer_pile(n)
     for i in range(n):
@@ -78,7 +78,7 @@ def labyrinthe():
     
     for i in range(n):
         for j in range(n):
-            lislab[2*i+1][2*j+1] = cb
+            lislab[2*i+1][2*j+1] = blanc
             
     pile = creer_pile(n*n)
     chemin = creer_pile(n*n)
@@ -101,7 +101,7 @@ def labyrinthe():
             # Lie les deux cases
             xc,yc = cellule
             xs,ys = suivante
-            lislab[xc+xs+1][yc+ys+1]=cb
+            lislab[xc+xs+1][yc+ys+1]=blanc
             visiter(suivante)
             ## grace aux deux lignes suivantes :
             ## si l'etat de la pile est
@@ -125,11 +125,11 @@ def labyrinthe():
     #ajout du chemin a lislab
             
     xp,yp = depiler(chemin)
-    lislab[2*xp+1][2*yp+1] = cc
+    lislab[2*xp+1][2*yp+1] = gris
     while not est_vide(chemin):
         (x,y) = depiler(chemin)
-        lislab[2*x+1][2*y+1] = cc
-        lislab[x+xp+1][y+yp+1] = cc
+        lislab[2*x+1][2*y+1] = gris
+        lislab[x+xp+1][y+yp+1] = gris
         xp,yp = x,y
     return lislab
 
@@ -137,8 +137,8 @@ def labyrinthe():
 
 n = 20
 
-cc = 12 #quelques couleurs...
-cb = 15
+gris = 12 #quelques couleurs...
+blanc = 15
 
 atteinte = [[False] * n for i in range(n)]
 
@@ -150,7 +150,7 @@ def save_lab(fichier, lislab):
         for j in range(long):
             lislab[i][j] = str(lislab[i][j])
     with open(fichier, "w") as f:
-        f.write("P2\n"+str(long)+' '+str(long)+'\n'+str(cb)+'\n')
+        f.write("P2\n"+str(long)+' '+str(long)+'\n'+str(blanc)+'\n')
         for i in lislab:
             f.write(' '.join(i)+'\n')
 
