@@ -28,7 +28,7 @@
 
 \usepackage{listings}
 \usepackage{paralist}
-\usepackage{stmaryrd} % bug à la compilation chez moi[Matthias]
+%\usepackage{stmaryrd} % bug à la compilation chez moi[Matthias]
 \usepackage{tikz}
 \usetikzlibrary{shapes.multipart}
 \usetikzlibrary{calc}
@@ -66,7 +66,7 @@ morekeywords={len,input,range}}
 \maketitle
 
 \begin{it}
-On propose un algorithme créant un labyrinthe parfait de dimension $n$. Nous voulons le modifier, d'abord pour enegistrer le labyrinthe en une image, puis pour construire le chemin entre les cases $(0,0)$ et $(n-1,n-1)$.
+On propose un algorithme créant un labyrinthe parfait de dimension $n$. Nous voulons le modifier, d'abord pour enregistrer le labyrinthe en une image, puis pour construire le chemin entre les cases $(0,0)$ et $(n-1,n-1)$.
 \end{it}
 
 \section{Création de l'image}
@@ -74,13 +74,15 @@ On propose un algorithme créant un labyrinthe parfait de dimension $n$. Nous vo
 On va représenter le labyrinthe de taille $n\times n$ par une image de $(2n+1)\times (2n+1)$ pixels. Les zones praticables seront représentées en blanc, les zones non-praticables en noir. Alors :
 \begin{itemize}
 	\item Une case du labyrinthe $\mathtt{atteinte[i,j]}, ~ (i,j) \in \llbracket 0,n \llbracket ^2$, est représentée par le pixel $(2i+1,2j+1)$, ce pixel est toujours blanc. Par exemple, sur la figure \ref{qc}, la case b $(1,0)$ est représentée par le pixel de coordonnées $(3,1)$. De même pour les cases a,b et d
-	\item Comme on ne peut pas se déplacer en diagonale, les pixels diagonaux, de coordonnées $(2k,2l), ~ (k,l) \in \llbracket 0,n \llbracket ^2 $, sont toujours noirs.
+	\item Comme on ne peut pas se déplacer en diagonale, les pixels diagonaux, de coordonnées $(2k,2l), ~ (k,l) \in \llbracket 0,n \llbracket ^2 $, sont toujours noirs (par exemple le pixel du milieu dans la figure \ref{qc}).
 	\item 
-		Soient deux cases adjacentes $p$ et $q$. Remarquons tout d'abord que le pixel se trouvant entre celui représentant $p$ et celui représentant $q$ a pour coordonnées $(\dfrac{x_p+x_q}{2},\dfrac{y_p+y_q}{2})$ (1,2,3 et 4 sur la figure \ref{qc}). 
+		Soient deux cases adjacentes $p$ et $q$. Remarquons tout d'abord que le pixel se trouvant entre celui représentant $p$ et celui représentant $q$ a pour coordonnées $(\dfrac{x_p+x_q}{2},\dfrac{y_p+y_q}{2})$. Sur la figure \ref{qc}, le pixel $1$ entre $a(1,1)$ et $b(3,1)$ se trouve en $(2,1)$ .
 	\begin{itemize}
-		\item {\itshape Si} on peut se déplacer de $p$ à $q$, par exemple entre a et b dans la figure \ref{expl}, 
-
+		\item {\itshape Si} on peut se déplacer de $p$ à $q$, alors ce pixel représente un chemin praticable, il est donc blanc.
+		\item {\itshape Sinon}, on ne peut pas se déplacer de $p$ à $q$, et alors ce pixel représente un mur, il est donc noir.
 	\end{itemize}
+	On peut voir sur la figure \ref{expl}, qu'on peut se déplacer entre $a$ et $b$ : le pixel $1$ est blanc. On ne peut pas se déplacer entre $a$ et $c$ : le pixel $2$ est noir.
+	\item Enfin, les cases en marge sont les murs extérieurs du labyrinthe, elles sont donc toujours noires.
 \end{itemize}
 
 
@@ -140,16 +142,16 @@ On va représenter le labyrinthe de taille $n\times n$ par une image de $(2n+1)\
 
 \subsection{dessin du labyrinthe}
 
-Nous allons réaliser l'enregistrement du labyrinthe au format PGM. Ce format permet d'enegistrer facilement des images en nivau de gris. Définissons donc les couleurs des pixels :
+Nous allons réaliser l'enregistrement du labyrinthe au format PGM. Ce format permet d'enregistrer facilement des images en niveau de gris. Définissons donc les couleurs des pixels :
 
 \lstinputlisting[firstline=140,lastline=141]{labyrinthe.py}
 
 \par
-En premier lieu, il faut compléter la fonction labyrinthe, en ajoutant un tableau $\mathtt{lislab}$, de dimension $(2n+1) \times (2n+1)$ qui contiendra la représentation du labyrinthe. Le tableau étant par défaut tout noir, on commence par le préremplir en blanchissant les pixels représentant les cases.
+En premier lieu, il faut compléter la fonction labyrinthe, en ajoutant un tableau $\mathtt{lislab}$, de dimension $(2n+1) \times (2n+1)$ qui contiendra la représentation du labyrinthe. Le tableau étant par défaut tout noir, on commence par le pré-remplir en blanchissant les pixels représentant les cases.
 
 \lstinputlisting[firstline=77,lastline=81]{labyrinthe.py}
 
-Il faut ensuite lier les cases entre elles lors de la création du labyrinthe. On remarque de manière astucieuse, que pour deux cases $(x,y)$ et $(x',y')$ adjacentes, le pixel entre les pixels les représentant a pour coordonnées $(x+x'+1,y+y'+1)$. Le code suivant permet donc de faire ce lien.
+Il faut ensuite lier les cases entre elles lors de la création du labyrinthe. On a remarqué que pour deux cases $(x,y)$ et $(x',y')$ adjacentes, le pixel entre les pixels les représentant a pour coordonnées $(x+x'+1,y+y'+1)$. Le code suivant permet donc de faire ce lien.
 
 \lstinputlisting[firstline=102,lastline=104]{labyrinthe.py}
 
