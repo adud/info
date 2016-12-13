@@ -46,6 +46,8 @@ let creer_voiture s d = {spd=s;dir=d}
 
 (*questionner les objets*)
 
+
+
 let panneau sec = sec.maxspd
 ;;
 
@@ -82,17 +84,22 @@ d2 par la route sec*)
 let lier d1 p1 d2 p2 sec =
 	sec.pre <- d1;
 	sec.post <- d2;
-	match d1 with
-	|Spawn -> ()
-	|Quit(_) -> failwith "lier : entrer par une sortie"
-	|Int(i1) -> i1.sor.(p1) <- sec
+	begin
+	  match d1 with
+	  |Spawn -> ()
+	  |Quit(_) -> failwith "lier : entrer par une sortie"
+	  |Int(i1) -> i1.sor.(p1) <- sec
+	end
 	;
-	match d2 with
-	|Spawn -> failwith "lier : sortir par une entree"
-	|Quit(_) -> ()
-	|Int(i2) -> i2.ent.(p2) <- sec
+	begin
+	  match d2 with
+	  |Spawn -> failwith "lier : sortir par une entree"
+	  |Quit(_) -> ()
+	  |Int(i2) -> i2.ent.(p2) <- sec
+	end
 ;;
   
+
 let ajcar sec c pos =
 	match sec.data.(pos) with
 	|Some(_) -> failwith "ajcar : apparition d'une voiture sur une autre"
@@ -173,12 +180,19 @@ let increment sec =
 	    with
 	    |[],_ -> failwith "increment : objectiveless car"
 	    |_,Spawn -> failwith "increment : arriver sur un depart"
-	    |_,Quit(s) -> print_string s
+	    |_,Quit(s) -> 
+	      begin
+		print_string s;
+		print_newline ();
+		sec.data.(!act) <- None;
+	      end
 	    |q::r,Int(inter) ->
-	      let pat = c,n-(!act),sec,q in
-	      inter.qu <- pat::inter.qu;
-	      c.dir <- r;
-	      sec.data.(!act) <- None
+	      begin
+		let pat = c,n-(!act),sec,q in
+		inter.qu <- pat::inter.qu;
+		c.dir <- r;
+		sec.data.(!act) <- None;
+	      end
 	end
     end
 ;;

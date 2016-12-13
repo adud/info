@@ -10,6 +10,8 @@ type section (*un fragment de route*);;
 
 (*creer les objets*)
 
+val dums : section;;
+
 val creer_section : int -> int -> section;;
 (*creer_section sz ms cree une section vide de taille sz et de vitesse max ms*)
   
