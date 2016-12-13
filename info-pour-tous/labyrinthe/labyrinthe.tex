@@ -118,7 +118,7 @@ def labyrinthe():
 atteinte = [[False] * n for i in range(n)]
 \end{lstlisting}
 \par
-Tout d'abord, nous allons réaliser l'enregistrement du labyrinthe au format PGM. Ce format permet d'enregistrer facilement des images en nivau de gris. Pour ce faire, nous avons besoin de plusieurs modifications :
+Tout d'abord, nous allons réaliser l'enregistrement du labyrinthe au format PGM. Ce format permet d'enregistrer facilement des images en niveau de gris. Pour ce faire, nous avons besoin de plusieurs modifications :
 \begin{itemize}
 	\item En premier lieu, il faut compléter la fonction labyrinthe, en ajoutant un tableau $\mathtt{lislab}$, de dimensions $(2n+1) \times (2n+1)$ qui contiendra la représentation du labyrinthe. Il est initialisé de manière à ce que chaque case soit isolée des autres.
 	\item Ensuite, la fonction $\mathtt{save\_lab}$ permet de sauvegarder le labyrinthe au format désiré. Le tableau $\mathtt{lislab}$ est d'abord traité de manière à ce que tous les éléments soient du type $\mathtt{str}$. Puis viens l'enregistrement proprement dit. Un premier $\mathtt{f.write}$ permet d'écrire l'en-tête de l'image, dans laquelle il faut indiquer $\mathtt{P2}$, puis les dimensions et enfin la valeur codant le blanc, ici $\mathtt{cb}$.
