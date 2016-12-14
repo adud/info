@@ -9,10 +9,10 @@ type distr =
 	|Int of intersection
 
  and intersection = {mutable ent:section array;mutable sor:section array;
- 		     mutable qu:(voiture*int*section*section) list; transf: (voiture*int*section*section) -> section array -> section array -> unit}
+ 		     mutable att:(voiture*int*section*section) option array; transf: (voiture*int*section*section) option array-> section array -> section array -> unit}
 
-(*si qu contient (v,d,e,s) c'est qu'une voiture v se trouvant a d (d>0 
-de l'intersection, venant de e, allant vers s*)
+(*si att.(x) contient (v,d,e,s) c'est qu'une voiture v se trouvant a d (d>0 
+de l'intersection, venant de e, allant vers s ou x est la case de att reservee a e*)
 
  and voiture = {mutable spd:int;mutable dir:section list}
   
@@ -20,7 +20,7 @@ de l'intersection, venant de e, allant vers s*)
 			   maxspd:int;mutable post:distr}
 ;;
 
-
+  
 (*creer les objets*)
 
 let creer_section sz ms = 
@@ -32,7 +32,7 @@ let dums = creer_section 0 0
 ;;
  
 
-let creer_inter e s f = Int({ent=Array.make e dums;sor=Array.make s dums;qu=[];transf=f})
+let creer_inter e s f = Int({ent=Array.make e dums;sor=Array.make s dums;att=Array.make e None;transf=f})
 ;;
 
 let creer_spawn () = Spawn
@@ -72,7 +72,7 @@ let patients d =
   match
     d
   with
-  |Int(isec) -> isec.qu
+  |Int(isec) -> isec.att
   |_ -> failwith "patients : personne ne patiente pour entrer/sortir"
 ;;
 (*manipuler les objets*)
@@ -138,6 +138,19 @@ let move p sec =
     else ()
 ;;
 
+let indexq x ar =
+  let n = Array.length ar in
+  let r = ref 0 in
+  while !r < n && ar.(!r) != x
+  do incr r
+  done;
+  if !r = n
+  then raise Not_found
+  else !r
+;;
+  
+      
+  
 (*increment: section -> unit 
 met a jour la section avec les regles de l'automate cellulaire*)
   
@@ -178,7 +191,6 @@ let increment sec =
 	  else
 	    match c.dir,sec.post
 	    with
-	    |[],_ -> failwith "increment : objectiveless car"
 	    |_,Spawn -> failwith "increment : arriver sur un depart"
 	    |_,Quit(s) -> 
 	      begin
@@ -186,10 +198,12 @@ let increment sec =
 		print_newline ();
 		sec.data.(!act) <- None;
 	      end
+	    |[],_ -> failwith "increment : objectiveless car"
 	    |q::r,Int(inter) ->
 	      begin
 		let pat = c,n-(!act),sec,q in
-		inter.qu <- pat::inter.qu;
+		let v = indexq sec inter.ent in
+		inter.att.(v) <- Some(pat);
 		c.dir <- r;
 		sec.data.(!act) <- None;
 	      end
@@ -200,8 +214,8 @@ let increment sec =
 let traverser dst =
 	match dst with
 	|Int(isec) -> 
-		List.iter (fun (c,d,e,s) -> isec.transf (c,d,e,s) isec.ent isec.sor) isec.qu;
-		isec.qu <- [];
+	  isec.transf isec.att isec.ent isec.sor;
+	  Array.fill isec.att 0 (Array.length isec.att) None;
 	|_-> failwith "traverser : passer a travers d'un debut ou d'une fin"
 ;;
 

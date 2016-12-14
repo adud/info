@@ -15,7 +15,7 @@ val dums : section;;
 val creer_section : int -> int -> section;;
 (*creer_section sz ms cree une section vide de taille sz et de vitesse max ms*)
   
-val creer_inter : int -> int -> (voiture * int * section * section -> section array -> section array -> unit) -> distr;;
+val creer_inter : int -> int -> ( (voiture * int * section * section) option array -> section array -> section array -> unit) -> distr;;
 (*creer_inter e s f cree une intersection a e entrees, s sorties, 
 dont le comportement est decrit par la fonction *)
   
@@ -42,7 +42,7 @@ val radar : voiture -> int (*simule un radar donne la vitesse de la voiture*);;
 val firstcar : section -> int ;;
 (*regarde ou est la premiere voiture d'une section*)
 
-val patients : distr -> (voiture * int * section * section) list ;;
+val patients : distr -> (voiture * int * section * section) option array ;;
 (*affiche vitesse et distance de la voiture qui patiente dans l'intersection
 en entree (souleve une erreur sinon)*)
 

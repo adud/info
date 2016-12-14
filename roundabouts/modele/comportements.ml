@@ -21,23 +21,19 @@ let internasch c d e s =
     ajcar s c pos
 ;;
   
-let oneone (c,d,e,s) ent sor = 
-  (*print_string "circuit enre : ";
-  Affichage.print_section s;*)
-  if not (ent.(0) == e && sor.(0) == s)
-  then
-    failwith "oneone_error : entrees ou sorties non correspondantes"
-  ;
-  internasch c d e s
-;;
+let onemany att ent sor =
+  match
+    att.(0)
+  with
+  |Some(c,d,e,s) ->
+    if
+      memq s sor && ent.(0) == e
+    then
+      internasch c d e s 
+    else
+      failwith "onemany_error : sorties non correspondantes"
+  |None -> ()
 
-let onemany (c,d,e,s) ent sor =
-  if not (ent.(0) == e && memq s sor)
-  then 
-    failwith "onetwo_error : entrees non correspondantes"
-  else      
-    internasch c d e s
 ;;
-
-let passif (c,d,e,s) ent sor = ()
+let passif att ent sor = ()
 ;;

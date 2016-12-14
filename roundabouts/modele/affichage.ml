@@ -28,7 +28,7 @@ let draw_section sec =
 let print_car c =
   print_int (radar c)
 
-
+(*
 let print_inter dis =
   let affd (v,d,e,s) =
     print_int (radar v);
@@ -36,6 +36,7 @@ let print_inter dis =
     print_int d;
   in
   let a = patients dis in
-  List.iter affd a;
+  Array.iter affd a;
   print_newline ();
 ;;
+*)

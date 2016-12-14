@@ -6,7 +6,7 @@ open Affichage
 open Comportements
 
 
-let checkpoint =  creer_inter 1 1 oneone
+let checkpoint =  creer_inter 1 1 onemany
 ;; 
 
 let circuit =  creer_section 166 6
@@ -40,9 +40,9 @@ let () =
     increment circuit;  
   done;
 
-  let entr = creer_section 10 6 in
-  let sor1 = creer_section 10 6 in
-  let sor2 = creer_section 10 6 in
+  let entr = creer_section 10 3 in
+  let sor1 = creer_section 20 3 in
+  let sor2 = creer_section 20 3 in
   let a = creer_spawn () in
 
   let trio = creer_inter 1 2 onemany in
@@ -58,7 +58,7 @@ let () =
   ajcar entr (creer_voiture 0 itin2) 1;
   
   let s = [entr;sor1;sor2] in
-  for i = 0 to 20 do
+  for i = 0 to 10 do
     List.iter print_section s;
     print_newline ();
     List.iter increment s;
