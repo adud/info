@@ -28,7 +28,7 @@ done
 
   lier checkpoint 0 checkpoint 0 circuit
 ;;
-
+(*test circuit*)
 let () =
   for i=0 to (-1) do
     increment circuit;
@@ -39,6 +39,8 @@ let () =
     traverser checkpoint;
     increment circuit;  
   done;
+
+(*test one_many*)
 
   let entr = creer_section 10 3 in
   let sor1 = creer_section 20 3 in
@@ -58,10 +60,35 @@ let () =
   ajcar entr (creer_voiture 0 itin2) 1;
   
   let s = [entr;sor1;sor2] in
-  for i = 0 to 10 do
+  for i = 0 to (-10) do
     List.iter print_section s;
     print_newline ();
     List.iter increment s;
     traverser trio;
+  done;
+
+(*test two_one*)
+  let ent0 = creer_section 10 3 in
+  let ent1 = creer_section 10 3 in
+  let sor = creer_section 20 3 in
+  let a = creer_spawn () in
+
+  let bottle = creer_inter 2 1 prioabs in
+  
+  let itin = [sor;sor] in
+  
+  lier a 0 bottle 0 ent0;
+  lier a 0 bottle 1 ent1;
+  lier bottle 0 (creer_sortie "s") 0 sor;
+
+  ajcar ent0 (creer_voiture 0 itin) 0;
+  ajcar ent1 (creer_voiture 0 itin) 0;
+
+  let s = [ent0;ent1;sor] in
+  for i = 0 to 10 do
+    List.iter print_section s;
+    print_newline ();
+    List.iter increment s;
+    traverser bottle;
   done;
 ;;

@@ -11,3 +11,8 @@ val passif : (voiture * int * section * section) option array -> section array -
 val onemany : (voiture * int * section * section) option array -> section array -> section array -> unit;;
 
 (*les comportements faciles : une voiture en entree, une ou plusieurs en sortie*)
+
+val prioabs : (voiture * int * section * section) option array -> section array -> section array -> unit;;
+
+(*comportement twomany : deux entrees plusieurs sorties, l'entree 0 a la priorite absolue sur l'entree 0 :
+s'il y a une voiture de 0 qui veut passer alors la voiture de 1 ne bouge pas et la laisse passer*)
