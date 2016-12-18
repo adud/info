@@ -9,7 +9,7 @@ type distr =
 	|Int of intersection
 
  and intersection = {mutable ent:section array;mutable sor:section array;
- 		     mutable att:(voiture*int*section*section) option array; transf: (voiture*int*section*section) option array-> section array -> section array -> unit}
+ 		     mutable att:(voiture*int*section*section) option array; transf: (voiture*int*section*section) option array-> section array -> section array -> int -> unit}
 
 (*si att.(x) contient (v,d,e,s) c'est qu'une voiture v se trouvant a d (d>0 
 de l'intersection, venant de e, allant vers s ou x est la case de att reservee a e*)
@@ -108,6 +108,9 @@ let ajcar sec c pos =
 ;;
 (*iterations de l'automate*)
 
+let brake c =
+  c.spd <- 0
+;;
 let accel c vmax =
   c.spd <- min (c.spd + 1) vmax
 ;;
@@ -136,6 +139,10 @@ let move p sec =
 	  end
       end
     else ()
+;;
+
+let ajdir c s =
+  c.dir <- s::c.dir
 ;;
 
 let indexq x ar =
@@ -211,10 +218,10 @@ let increment sec =
     end
 ;;
 
-let traverser dst =
+let traverser dst t =
 	match dst with
 	|Int(isec) -> 
-	  isec.transf isec.att isec.ent isec.sor;
+	  isec.transf isec.att isec.ent isec.sor t;
 	  Array.fill isec.att 0 (Array.length isec.att) None;
 	|_-> failwith "traverser : passer a travers d'un debut ou d'une fin"
 ;;

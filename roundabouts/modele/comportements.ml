@@ -7,6 +7,13 @@ let memq x t = Array.fold_left (fun b a -> (a == x)||b) false t
 
 (*modelise Nagel-Schreckenberg pour un carrefour*)
 
+let refuse c e s =
+  brake c;
+  ajdir c s;
+  ajcar e c (tsec e - 1);
+
+;;
+
 let internasch c d e s =
   accel c ( panneau s);
   desc c ( firstcar s + d);
@@ -16,12 +23,12 @@ let internasch c d e s =
   if
     pos < 0
   then
-    ajcar e c (tsec e - 1)
+    refuse c e s
   else
     ajcar s c pos
 ;;
   
-let onemany att ent sor =
+let onemany att ent sor t =
   match
     att.(0)
   with
@@ -36,7 +43,7 @@ let onemany att ent sor =
 
 ;;
 
-let twomany cpm att ent sor = 
+let twomany cpm att ent sor t = 
   match
     att.(0), att.(1)
   with
@@ -59,7 +66,7 @@ let twomany cpm att ent sor =
 
 let absolu cp dp ep sp cl dl el sl = 
   internasch cp dp ep sp;
-  ajcar el cl (tsec el -1);
+  refuse cl el sl;
 ;;
 
 let dynamique cp dp ep sp cl dl el sl =
@@ -83,11 +90,37 @@ let dynamique cp dp ep sp cl dl el sl =
       internasch cp dp ep sp
     end
 ;;
-let prioabs att ent sor = twomany absolu att ent sor
+let prioabs att ent sor t = twomany absolu att ent sor t
 ;;
 
-let priodyn att ent sor = twomany dynamique att ent sor
+let priodyn att ent sor t = twomany dynamique att ent sor t
 ;;
 
-let passif att ent sor = ()
+let feux dur1 dur2 ph att ent sor t =
+  let t' = (t - ph) mod (dur1 + dur2) in
+  let passer vert i =
+    match
+      att.(i)
+    with
+    |None -> ()
+    |Some(c,d,e,s) ->
+      if
+	memq s sor && ent.(i) == e
+      then
+	if
+	  vert
+	then
+	  internasch c d e s
+	else
+	  refuse c e s
+      else
+	failwith "feux error : I/O"
+  in
+
+  passer (t' < dur1) 0;
+  passer (t' >= dur1) 1;
+  
+;;
+
+let passif att ent sor t= ()
 ;;

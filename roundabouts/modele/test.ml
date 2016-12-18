@@ -32,11 +32,11 @@ done
 let () =
   for i=0 to (-1) do
     increment circuit;
-    traverser checkpoint;
+    traverser checkpoint i;
   done;
   for i=0 to (-1) do
     print_section circuit;
-    traverser checkpoint;
+    traverser checkpoint i;
     increment circuit;  
   done;
 
@@ -64,7 +64,7 @@ let () =
     List.iter print_section s;
     print_newline ();
     List.iter increment s;
-    traverser trio;
+    traverser trio i;
   done;
 
 (*test two_one*)
@@ -73,7 +73,7 @@ let () =
   let sor = creer_section 20 3 in
   let a = creer_spawn () in
 
-  let bottle = creer_inter 2 1 priodyn in
+  let bottle = creer_inter 2 1 (feux 6 6 0) in
   
   let itin = [sor;sor] in
   
@@ -88,13 +88,15 @@ let () =
     if i mod 3 = 0
     then
       begin
-	ajcar ent0 (creer_voiture 0 itin) 0;
-	ajcar ent1 (creer_voiture 0 itin) 0;	
+	match (observer ent0).(0)
+	with
+	|None -> ajcar ent0 (creer_voiture 0 itin) 0
+	|Some(_) -> ()
       end
     ;
     List.iter print_section s;
     print_newline ();
     List.iter increment s;
-    traverser bottle;
+    traverser bottle i;
   done;
 ;;

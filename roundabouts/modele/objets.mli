@@ -15,7 +15,7 @@ val dums : section;;
 val creer_section : int -> int -> section;;
 (*creer_section sz ms cree une section vide de taille sz et de vitesse max ms*)
   
-val creer_inter : int -> int -> ( (voiture * int * section * section) option array -> section array -> section array -> unit) -> distr;;
+val creer_inter : int -> int -> ( (voiture * int * section * section) option array -> section array -> section array -> int -> unit) -> distr;;
 (*creer_inter e s f cree une intersection a e entrees, s sorties, 
 dont le comportement est decrit par la fonction *)
   
@@ -60,6 +60,9 @@ deja une*)
 
 (*iterations de l'automate*)
 
+val brake : voiture -> unit;;
+(*brake c : fait freiner la voiture*)
+
 val accel : voiture -> int -> unit;;
 (*accel c vmax fait accelerer la voiture, dans la limite de vmax*)
     
@@ -70,8 +73,15 @@ eviter les collisions*)
 val descrand : voiture -> float -> unit;;
 (*descrand c p fait ralentir la voiture c avec une proba p*)
   
+val move : int -> section -> unit;;
+(*si une voiture se trouve dans la section s a la position k,
+fait avancer dans s la voiture s.(k)*)
+
+val ajdir : voiture -> section -> unit;;
+(*ajdir v s ajoute la direction s a la voiture v *)
+
 val increment : section -> unit;;
 (*increment s itere s selon Nagel-Schreckenberg*)
   
-val traverser : distr -> unit;;
-  (*traverser d itere d selon sa fonction de comportement*)
+val traverser : distr -> int -> unit;;
+  (*traverser d t itere d selon sa fonction de comportement au temps t*)
