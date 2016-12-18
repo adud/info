@@ -36,29 +36,35 @@ let onemany att ent sor =
 
 ;;
 
-let prioabs att ent sor = 
+let twomany cpm att ent sor = 
   match
-    att.(0),att.(1)
+    att.(0), att.(1)
   with
   |None,None -> ()
   |Some(c,d,e,s),None -> 
     if memq s sor && ent.(0) == e
     then internasch c d e s
-    else failwith "prioabs_error 1: I/O non correspondantes"
+    else failwith "twomany_error 1: I/O non correspondantes"
   |None,Some(c,d,e,s) ->
     if memq s sor && ent.(1) == e
     then internasch c d e s
-    else failwith "prioabs_error 2: I/O"
+    else failwith "twomany_error 2: I/O"
 (*le cas interessant : deux voitures cherchent a traverser en meme temps*)
   |Some(cp,dp,ep,sp),Some(cl,dl,el,sl) ->
     if memq sp sor && ent.(0) == ep && memq sl sor && ent.(1) == el
     then 
-      begin
-	internasch cp dp ep sp;
-	ajcar el cl (tsec el - 1);
-      end
+      cpm cp dp ep sp cl dl el sl
     else failwith "prioabs_error 3 :I/O"
+
+
+let absolu cp dp ep sp cl dl el sl = 
+  internasch cp dp ep sp;
+  ajcar el cl (tsec el -1);
 ;;
+
+let prioabs att ent sor = twomany absolu att ent sor
+;;
+
 
   
 
