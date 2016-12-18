@@ -62,11 +62,32 @@ let absolu cp dp ep sp cl dl el sl =
   ajcar el cl (tsec el -1);
 ;;
 
+let dynamique cp dp ep sp cl dl el sl =
+  let temps c d s = (*le temps necessaire pour arriver a l'intersection*)
+    (*denominateur : estimation du resultat Nasch sans alea*)
+    float_of_int d /. float_of_int (min (panneau s) (min (d + firstcar s) (radar c +1)))
+  in
+  let priop cp dp sp cl dl sl = 
+    let tp,tl = (temps cp dp sp),(temps cl dl sl) in 
+    tp < tl || (tp = tl && dp <= dl)
+  in
+  if priop cp dp sp cl dl sl 
+  then
+    begin
+      internasch cp dp ep sp;
+      internasch cl dl el sl;
+    end
+  else
+    begin
+      internasch cl dl el sl;
+      internasch cp dp ep sp
+    end
+;;
 let prioabs att ent sor = twomany absolu att ent sor
 ;;
 
-
-  
+let priodyn att ent sor = twomany dynamique att ent sor
+;;
 
 let passif att ent sor = ()
 ;;

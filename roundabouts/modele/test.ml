@@ -73,7 +73,7 @@ let () =
   let sor = creer_section 20 3 in
   let a = creer_spawn () in
 
-  let bottle = creer_inter 2 1 prioabs in
+  let bottle = creer_inter 2 1 priodyn in
   
   let itin = [sor;sor] in
   
@@ -81,11 +81,17 @@ let () =
   lier a 0 bottle 1 ent1;
   lier bottle 0 (creer_sortie "s") 0 sor;
 
-  ajcar ent0 (creer_voiture 0 itin) 0;
-  ajcar ent1 (creer_voiture 0 itin) 0;
-
+  
   let s = [ent0;ent1;sor] in
-  for i = 0 to 10 do
+
+  for i = 0 to 100 do
+    if i mod 3 = 0
+    then
+      begin
+	ajcar ent0 (creer_voiture 0 itin) 0;
+	ajcar ent1 (creer_voiture 0 itin) 0;	
+      end
+    ;
     List.iter print_section s;
     print_newline ();
     List.iter increment s;
