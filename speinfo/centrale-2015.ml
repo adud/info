@@ -17,7 +17,10 @@ let construit_graphe lin =
 	a
 ;;
 
-construit_graphe [|(0,3);(1,3);(2,5);(4,7);(6,10);(8,9);(11,12)|]
+let somm = [|(0,3);(1,3);(2,5);(4,7);(6,10);(8,9);(11,12)|]
+;;
+
+let arr = construit_graphe somm
 ;;
 
 let rec appartient l x =
@@ -36,7 +39,7 @@ let plus_petit_absent l =
 
 plus_petit_absent [0;1;2;3;4];;
 
-let iter_succ f ar n =
+let itere_voisins f ar n =
 	do_list f ar.(n)
 ;;
 
@@ -47,7 +50,7 @@ let couleurs_voisins aretes couleurs i =
 		if c <> (-1) && not (appartient !cvois c)
 		then cvois := c::!cvois
 	in
-	iter_succ ajout_coul aretes i;
+	itere_voisins ajout_coul aretes i;
 	!cvois
 ;;
 
@@ -57,8 +60,10 @@ let couleur_disponible aretes couleurs i =
 
 
 let est_clique aretes xs =
-	for_all (fun x -> for_all (fun y ->  appartient aretes.(x) y ) xs) xs
+	for_all (fun x -> for_all (fun y -> x=y || appartient aretes.(x) y ) xs) xs
 ;;
+
+
 
 let coloration segments aretes = 
 	let n = vect_length segments in
@@ -68,4 +73,15 @@ let coloration segments aretes =
 	done;
 	couleurs
 ;;
+
+let voisins_inferieurs aretes x =
+	let r = ref [] in
+	let voisinf v = if v<x then r:=v::!r
+	in
+	iter_vois voisinf aretes x;
+	!r
+;;
+
+voisins_inferieurs arr 4;;
+
 
