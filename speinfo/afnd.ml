@@ -9,7 +9,7 @@ type ('a, 'b) automate = {
 }
 ;;
 
-type 'a mot = 'a list;;
+type 'a mot == 'a list;;
 type 'a expr =
   | Zero
   | Un
@@ -390,3 +390,5 @@ let glushkov exp =
 
 let afd exp = determinise (glushkov exp)
 ;;
+
+
