@@ -78,10 +78,72 @@ let voisins_inferieurs aretes x =
 	let r = ref [] in
 	let voisinf v = if v<x then r:=v::!r
 	in
-	iter_vois voisinf aretes x;
+	itere_voisins voisinf aretes x;
 	!r
 ;;
 
 voisins_inferieurs arr 4;;
 
+let rec intervalle a b =
+  if
+    a >= b
+  then
+    []
+  else
+    a::intervalle (a+1) b
+;;
+  
+  intervalle 0 10
+;;
+  
+let est_ordre_parfait aretes =
+  let n = vect_length aretes in
+  for_all (fun x -> est_clique aretes (voisins_inferieurs aretes x)) (intervalle 0 n)
+;;
 
+let colore aretes = 
+	let n = vect_length aretes in
+	let couleurs = make_vect n (-1) in
+	for i=0 to n-1 do
+		couleurs.(i) <- couleur_disponible aretes couleurs i
+	done;
+	couleurs
+;;
+  
+
+let voisins_sous aretes sg k =
+  let r = ref [] in
+  let voissous v = if sg.(v) then r:= v::!r
+  in
+  itere_voisins voissous aretes k;
+  !r
+;;
+
+let simplicial (aretes,sg) k =
+  est_clique aretes (voisins_sous aretes sg k)
+;;
+
+let trouver_simplicial (aretes,sg) =
+  let n = vect_length aretes in
+  let r = ref 0 in
+  while !r < n && ((not sg.(!r)) || not (simplicial (aretes,sg) !r)) do
+    incr r
+  done;
+  !r
+;;
+
+
+let ordre_parfait aretes =
+  let n = vect_length aretes in
+  let sg = make_vect n true in
+  let ordre = ref [] in
+  for i=0 to n-1 do
+    let k = trouver_simplicial (aretes,sg) in
+    ordre := k::!ordre;
+    sg.(k) <- false;
+  done;
+  !ordre
+;;
+  
+    
+                
