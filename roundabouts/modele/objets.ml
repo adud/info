@@ -44,9 +44,24 @@ let creer_sortie s = Quit(s)
 let creer_voiture s d = {spd=s;dir=d}
 ;;
 
+let itere_voitures f sec =
+  let g sc =
+    match
+      sc
+    with
+    |Some(c) -> f c;
+    |None -> ();
+  in
+  Array.iter g sec.data
+;;
+  
 (*questionner les objets*)
 
-
+let rec somme f ls =
+  match ls with
+  |[] -> 0
+  |x::r -> (f x) + somme f r
+;;
 
 let panneau sec = sec.maxspd
 ;;
@@ -75,6 +90,36 @@ let patients d =
   |Int(isec) -> isec.att
   |_ -> failwith "patients : personne ne patiente pour entrer/sortir"
 ;;
+(*etudier les objets : outils de mesure*)
+
+let nombre_voitures sec =
+  let co = ref 0 in
+  let f sc =
+    match
+      sc
+    with
+    |Some(c) -> incr co
+    |None -> ()
+  in
+  Array.iter f sec.data;
+  !co
+;;
+
+let nombre_voitures sec =
+  let c = ref 0 in
+  let f x = incr c in
+  itere_voitures f sec;
+  !c
+;;
+
+  
+let densite lsec =
+  let nb = somme nombre_voitures lsec in
+  let taille = somme tsec lsec in
+  (float_of_int nb) /. (float_of_int taille)
+;;
+
+
 (*manipuler les objets*)
 
 (*lier : distr -> distr -> section -> unit

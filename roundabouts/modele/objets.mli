@@ -28,6 +28,8 @@ val creer_sortie : string -> distr;;
 val creer_voiture : int -> section list -> voiture;;
 (*creer_voiture s d cree une voiture de vitesse s et d'itineraire d*)
 
+val itere_voitures : (voiture -> unit) -> section -> unit;;
+(*itere_voitures f s : itere f sur l'ensemble des voitures de s*)
   
 (*questionner les objets*)
 
@@ -43,9 +45,16 @@ val firstcar : section -> int ;;
 (*regarde ou est la premiere voiture d'une section*)
 
 val patients : distr -> (voiture * int * section * section) option array ;;
-(*affiche vitesse et distance de la voiture qui patiente dans l'intersection
+(*retourne vitesse et distance de la voiture qui patiente dans l'intersection
 en entree (souleve une erreur sinon)*)
 
+val nombre_voitures : section -> int ;;
+(*retourne le nombre de voitures presentes dans la section en entree*)
+
+val densite : section list -> float;;
+(*retourne la densite de l'ensemble des sections en entree*)
+  
+  
 (*manipuler les objets*)
 
 val lier : distr -> int -> distr -> int -> section -> unit;;
