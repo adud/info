@@ -53,7 +53,12 @@ val nombre_voitures : section -> int ;;
 
 val densite : section list -> float;;
 (*retourne la densite de l'ensemble des sections en entree*)
-  
+
+val vitesse_moy : section list -> float;;
+(*retourne la vitesse moyenne des voitures de l'ensemble des sections en entree*)
+
+val flot_moy : section list -> float;;
+(*retourne le flot moyen de voitures dans l'ensemble des sections en entree*)
   
 (*manipuler les objets*)
 

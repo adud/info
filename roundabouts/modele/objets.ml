@@ -112,6 +112,11 @@ let nombre_voitures sec =
   !c
 ;;
 
+let somme_vitesses sec =
+  let c = ref 0 in
+  let f x = c:= radar x + !c in
+  itere_voitures f sec;
+  !c
   
 let densite lsec =
   let nb = somme nombre_voitures lsec in
@@ -119,6 +124,16 @@ let densite lsec =
   (float_of_int nb) /. (float_of_int taille)
 ;;
 
+let vitesse_moy lsec =
+  let nb = somme nombre_voitures lsec in
+  let vts = somme somme_vitesses lsec in
+  (float_of_int vts) /. (float_of_int nb)
+;;
+  
+let flot_moy lsec =
+  (densite lsec) *. (vitesse_moy lsec)
+;;
+  
 
 (*manipuler les objets*)
 

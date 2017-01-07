@@ -1,6 +1,9 @@
 open Objets
 ;;
 
+let print_car c =
+  print_int (radar c)
+
 let print_section sec = 
   let d =  observer sec in
   for i = 0 to (Array.length d) - 1 do
@@ -13,6 +16,14 @@ let print_section sec =
   print_newline ();
 ;;
 
+let info_fdmal lsec =
+  let d = densite lsec in
+  let v = vitesse_moy lsec in
+  List.iter (fun x -> (print_float x;print_newline ()))
+            [d;v;d*.v]
+;;
+  
+  
 let draw_section sec =
   let d = observer sec in
   for i=0 to (Array.length d) - 1 do
@@ -25,8 +36,6 @@ let draw_section sec =
   print_newline ();
 ;;
 
-let print_car c =
-  print_int (radar c)
 
 (*
 let print_inter dis =

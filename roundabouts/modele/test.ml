@@ -73,7 +73,7 @@ let () =
   let sor = creer_section 20 3 in
   let a = creer_spawn () in
 
-  let bottle = creer_inter 2 1 (feux 6 6 0) in
+  let bottle = creer_inter 2 1 (feux 6 10 0) in
   
   let itin = [sor;sor] in
   
@@ -84,7 +84,7 @@ let () =
   
   let s = [ent0;ent1;sor] in
 
-  for i = 0 to 100 do
+  for i = 0 to 20 do
     if i mod 3 = 0
     then
       begin
@@ -93,10 +93,12 @@ let () =
 	|None -> ajcar ent0 (creer_voiture 0 itin) 0
 	|Some(_) -> ()
       end
-    ;
+    else ()
+  ;
     List.iter print_section s;
-    print_newline ();
-    List.iter increment s;
-    traverser bottle i;
+  info_fdmal [ent0];
+  print_newline ();
+  List.iter increment s;
+  traverser bottle i;
   done;
 ;;
