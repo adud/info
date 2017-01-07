@@ -4,7 +4,7 @@ open Objets
 open Affichage
 ;;
 open Comportements
-
+;;
 
 let checkpoint =  creer_inter 1 1 onemany
 ;; 
@@ -30,15 +30,20 @@ done
 ;;
 (*test circuit*)
 let () =
-  for i=0 to (-1) do
+  for i=0 to (-20) do
     increment circuit;
     traverser checkpoint i;
   done;
-  for i=0 to (-1) do
+  for i=0 to (-20) do
     print_section circuit;
+    print_newline ();
     traverser checkpoint i;
     increment circuit;  
   done;
+
+  let p = Plateau.construire [circuit] [checkpoint] [] in
+  Plateau.jouer p 0 20
+  ;
 
 (*test one_many*)
 
@@ -83,8 +88,13 @@ let () =
 
   
   let s = [ent0;ent1;sor] in
+  let sp = Plateau.spawn_car 3 0 0 0 ent0 itin in
+  let p = Plateau.construire s [bottle] [sp] in
 
-  for i = 0 to 20 do
+  (*Plateau.jouer p 0 20;*)
+  
+  for i = 0 to (-20) do
+    List.iter print_section s;
     if i mod 3 = 0
     then
       begin
@@ -95,10 +105,10 @@ let () =
       end
     else ()
   ;
-    List.iter print_section s;
-  info_fdmal [ent0];
-  print_newline ();
+  (*info_fdmal [ent0];*)
+
   List.iter increment s;
   traverser bottle i;
+    print_newline ();
   done;
 ;;

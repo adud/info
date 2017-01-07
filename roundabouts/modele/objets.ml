@@ -166,6 +166,13 @@ let ajcar sec c pos =
 	|None -> sec.data.(pos) <- Some(c)
 
 ;;
+
+let ajcar_sil sec c pos =
+  try
+    ajcar sec c pos
+  with
+  |Failure "ajcar : apparition d'ue voiture sur une autre"
+   -> ()
 (*iterations de l'automate*)
 
 let brake c =

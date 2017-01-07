@@ -70,7 +70,9 @@ de d2*)
 val ajcar : section -> voiture -> int -> unit;;
 (*ajcar s c p ajoute la voiture c dans s a la position p s'il n'y en a pas
 deja une*)
-
+val ajcar_sil : section -> voiture -> int -> unit;;
+(*une version moins verbeuse de ajcar : ne souleve pas d'echec si
+on met une voiture sur une autre, ne fait rien a la place*)
 
 (*iterations de l'automate*)
 

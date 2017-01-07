@@ -18,6 +18,8 @@ roundabouts/modele/comportements.cmo
 roundabouts/modele/comportements.ml~
 roundabouts/modele/objets.cmi
 roundabouts/modele/objets.cmo
+roundabouts/modele/plateau.cmi
+roundabouts/modele/plateau.cmo
 roundabouts/modele/test
 roundabouts/modele/test.cmi
 roundabouts/modele/test.cmo
