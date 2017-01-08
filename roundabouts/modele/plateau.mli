@@ -17,6 +17,8 @@ val iterer : plateau -> int -> unit;;
 val afficher : plateau -> unit;;
   (*affiche toutes les sections du plateau*)
 
+val imager : plateau -> (Objets.section*((int*int)*float*Graphics.color)) list -> unit;;
+   
 val spawn_car : int -> int -> int -> int -> Objets.section -> Objets.section list ->int -> unit
 (*spawn_car per ph v pos sec itin t 
 fait apparaitre une voiture dans sec a la vitesse v position pos 
@@ -27,3 +29,6 @@ val jouer : plateau -> int -> int -> unit;;
   (*jouer p i f joue (f-i) iterations de l'automate
    en les affichant a chaque tour, l'horloge
 commencant a i inclus et finissant a f exclus*)
+
+val animer : plateau -> int -> int -> (Objets.section*((int*int)*float*Graphics.color)) list -> unit;;
+  (*anime a l'aide du module Graphics*)

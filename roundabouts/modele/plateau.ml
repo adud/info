@@ -23,8 +23,17 @@ let iterer p t =
 ;;
 let afficher p =
   List.iter print_section p.sects;
-
 ;;
+
+let imager p grcr =
+  let f sec =
+    try
+      let (x,y),th,col = List.assoc sec grcr in
+      draw_section sec (x,y) th col
+    with
+    |Not_found -> ()
+  in
+  List.iter f p.sects
 
 let spawn_car per ph v pos sec itin t =
   if
@@ -38,10 +47,24 @@ let spawn_car per ph v pos sec itin t =
 ;;
 
 let jouer p i f =
-  for t = i to f do
+  for t = i to (f-1) do
     afficher p;
     iterer p t;
     print_newline ();
   done;
     afficher p;
+;;
+    
+let rec animer p i f grcr =
+  if i <> f then
+    begin
+      Graphics.clear_graph ();
+      imager p grcr;
+      Graphics.synchronize ();
+      iterer p i;
+      Graphics.wait_next_event [Graphics.Key_pressed];
+      animer p (i+1) f grcr;
+    end
+  else
+    ()
 ;;

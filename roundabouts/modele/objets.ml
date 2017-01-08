@@ -71,7 +71,18 @@ let tsec sec = Array.length sec.data
 
 let observer sec = sec.data
 ;;
-
+let survoler sec =
+  let f x =
+    match
+      x
+    with
+    |Some(_) -> true
+    |None -> false
+  in
+  Array.map f sec.data
+;;
+  
+    
 let radar c = c.spd
 ;;
 let firstcar sec =
@@ -171,7 +182,7 @@ let ajcar_sil sec c pos =
   try
     ajcar sec c pos
   with
-  |Failure "ajcar : apparition d'ue voiture sur une autre"
+  |Failure "ajcar : apparition d'une voiture sur une autre"
    -> ()
 (*iterations de l'automate*)
 

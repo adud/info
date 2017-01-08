@@ -39,6 +39,9 @@ val tsec : section -> int (*la taille de la section*);;
 
 val observer : section -> voiture option array (*etudie une section de route*);;
 
+val survoler : section -> bool array;;
+(*un tableau representant la section : true s'il y a une voiture*)
+  
 val radar : voiture -> int (*simule un radar donne la vitesse de la voiture*);;
 
 val firstcar : section -> int ;;

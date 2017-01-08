@@ -5,8 +5,7 @@ open Affichage
 ;;
 open Comportements
 ;;
-
-
+  
 (*test two_one*)
 let () = 
   let ent0 = creer_section 10 3 in
@@ -14,7 +13,11 @@ let () =
   let sor = creer_section 20 3 in
   let a = creer_spawn () in
 
-  let bottle = creer_inter 2 1 (feux 6 10 0) in
+  let bottle = creer_inter 2 1 (feux 10 10 0) in
+
+  let grcr = [ent0,((20,480),-.pi/.2.,Graphics.red);
+              ent1,((20,60),pi/.2.,Graphics.blue);
+              sor, ((20,270),0.,Graphics.black)] in
   
   let itin = [sor;sor] in
   
@@ -24,8 +27,14 @@ let () =
 
   
   let s = [ent0;ent1;sor] in
-  let sp = Plateau.spawn_car 3 0 0 0 ent0 itin in
-  let p = Plateau.construire s [bottle] [sp] in
+  let sp0 = Plateau.spawn_car 3 2 0 0 ent0 itin in
+  let sp1 = Plateau.spawn_car 3 1 0 0 ent1 itin in
+  let p = Plateau.construire s [bottle] [sp0;sp1] in
 
-  Plateau.jouer p 0 20
+  (*Plateau.jouer p 0 20;*)
+
+  init 500 500;
+
+  Plateau.animer p 0 100 grcr;
+
 ;;
