@@ -71,7 +71,18 @@ let tsec sec = Array.length sec.data
 
 let observer sec = sec.data
 ;;
-
+let survoler sec =
+  let f x =
+    match
+      x
+    with
+    |Some(_) -> true
+    |None -> false
+  in
+  Array.map f sec.data
+;;
+  
+    
 let radar c = c.spd
 ;;
 let firstcar sec =
@@ -112,6 +123,11 @@ let nombre_voitures sec =
   !c
 ;;
 
+let somme_vitesses sec =
+  let c = ref 0 in
+  let f x = c:= radar x + !c in
+  itere_voitures f sec;
+  !c
   
 let densite lsec =
   let nb = somme nombre_voitures lsec in
@@ -119,6 +135,16 @@ let densite lsec =
   (float_of_int nb) /. (float_of_int taille)
 ;;
 
+let vitesse_moy lsec =
+  let nb = somme nombre_voitures lsec in
+  let vts = somme somme_vitesses lsec in
+  (float_of_int vts) /. (float_of_int nb)
+;;
+  
+let flot_moy lsec =
+  (densite lsec) *. (vitesse_moy lsec)
+;;
+  
 
 (*manipuler les objets*)
 
@@ -151,6 +177,13 @@ let ajcar sec c pos =
 	|None -> sec.data.(pos) <- Some(c)
 
 ;;
+
+let ajcar_sil sec c pos =
+  try
+    ajcar sec c pos
+  with
+  |Failure "ajcar : apparition d'une voiture sur une autre"
+   -> ()
 (*iterations de l'automate*)
 
 let brake c =

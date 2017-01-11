@@ -39,6 +39,9 @@ val tsec : section -> int (*la taille de la section*);;
 
 val observer : section -> voiture option array (*etudie une section de route*);;
 
+val survoler : section -> bool array;;
+(*un tableau representant la section : true s'il y a une voiture*)
+  
 val radar : voiture -> int (*simule un radar donne la vitesse de la voiture*);;
 
 val firstcar : section -> int ;;
@@ -53,7 +56,12 @@ val nombre_voitures : section -> int ;;
 
 val densite : section list -> float;;
 (*retourne la densite de l'ensemble des sections en entree*)
-  
+
+val vitesse_moy : section list -> float;;
+(*retourne la vitesse moyenne des voitures de l'ensemble des sections en entree*)
+
+val flot_moy : section list -> float;;
+(*retourne le flot moyen de voitures dans l'ensemble des sections en entree*)
   
 (*manipuler les objets*)
 
@@ -65,7 +73,9 @@ de d2*)
 val ajcar : section -> voiture -> int -> unit;;
 (*ajcar s c p ajoute la voiture c dans s a la position p s'il n'y en a pas
 deja une*)
-
+val ajcar_sil : section -> voiture -> int -> unit;;
+(*une version moins verbeuse de ajcar : ne souleve pas d'echec si
+on met une voiture sur une autre, ne fait rien a la place*)
 
 (*iterations de l'automate*)
 
