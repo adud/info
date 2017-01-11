@@ -25,13 +25,15 @@ val creer_spawn : unit -> distr;;
 val creer_sortie : string -> distr;;
 (*creer_sortie st cree une sortie de nom st*)
   
-val creer_voiture : int -> section list -> voiture;;
-(*creer_voiture s d cree une voiture de vitesse s et d'itineraire d*)
+val creer_voiture : int -> section list -> string -> voiture;;
+(*creer_voiture s d ncree une voiture de vitesse s et d'itineraire d nommee n*)
 
 val itere_voitures : (voiture -> unit) -> section -> unit;;
 (*itere_voitures f s : itere f sur l'ensemble des voitures de s*)
   
 (*questionner les objets*)
+
+val who : voiture -> string;;
 
 val panneau : section -> int (*un panneau indicateur de vitesse pour la section*);;
 

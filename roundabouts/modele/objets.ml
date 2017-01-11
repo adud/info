@@ -14,7 +14,7 @@ type distr =
 (*si att.(x) contient (v,d,e,s) c'est qu'une voiture v se trouvant a d (d>0 
 de l'intersection, venant de e, allant vers s ou x est la case de att reservee a e*)
 
- and voiture = {mutable spd:int;mutable dir:section list}
+ and voiture = {mutable spd:int;mutable dir:section list;nom:string}
   
  and section = {mutable pre:distr;data:voiture option array;
 			   maxspd:int;mutable post:distr}
@@ -41,7 +41,7 @@ let creer_spawn () = Spawn
 let creer_sortie s = Quit(s)
 ;;
   
-let creer_voiture s d = {spd=s;dir=d}
+let creer_voiture s d n = {spd=s;dir=d;nom=n}
 ;;
 
 let itere_voitures f sec =
@@ -56,7 +56,9 @@ let itere_voitures f sec =
 ;;
   
 (*questionner les objets*)
-
+let who c = c.nom
+;;
+  
 let rec somme f ls =
   match ls with
   |[] -> 0

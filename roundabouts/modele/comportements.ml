@@ -62,7 +62,7 @@ let twomany cpm att ent sor t =
 (*le cas interessant : deux voitures cherchent a traverser en meme temps*)
   |Some(cp,dp,ep,sp),Some(cl,dl,el,sl) ->
     if  corresp ep sp ent sor 0 && corresp el sl ent sor 1
-    then 
+    then
       cpm cp dp ep sp cl dl el sl
     else failwith "prioabs_error 3 :I/O"
 
@@ -107,12 +107,16 @@ let feux dur1 dur2 ph att ent sor t =
     with
     |None -> ()
     |Some(c,d,e,s) ->
-      if
-	vert
+      if corresp e s ent sor i
       then
-	internasch c d e s
+	if
+	  vert
+	then
+	  internasch c d e s
+	else
+	  refuse c e s
       else
-	refuse c e s
+	failwith "feux error : I/O"
   in
   passer (t' < dur1) 0;
   passer (t' >= dur1) 1;

@@ -40,7 +40,8 @@ let spawn_car per ph v pos sec itin t =
     (t-ph) mod per = 0
   then
     begin
-      ajcar_sil sec (creer_voiture v itin) pos
+      let n = [|"jacques";"jules";"jim"|] in
+      ajcar_sil sec (creer_voiture v itin n.(t mod 3)) pos
     end
   else
     ()

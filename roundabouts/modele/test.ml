@@ -29,7 +29,7 @@ let () =
   let s = [ent0;ent1;sor] in
   let sp0 = Plateau.spawn_car 3 2 0 0 ent0 itin in
   let sp1 = Plateau.spawn_car 3 1 0 0 ent1 itin in
-  let p = Plateau.construire s [bottle] [sp0;sp1] in
+  let p = Plateau.construire s [bottle] [sp0] in
 
   (*Plateau.jouer p 0 20;*)
 
