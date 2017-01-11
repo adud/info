@@ -2,9 +2,12 @@
 (*divers comportements aux intersections*)
 open Objets
 ;;
-let memq x t = Array.fold_left (fun b a -> (a == x)||b) false t
+let amemq x t = Array.fold_left (fun b a -> (a == x)||b) false t
 ;;
 
+let corresp e s ent sor i =
+  List.memq s sor.(i) && ent.(i) == e
+  
 (*modelise Nagel-Schreckenberg pour un carrefour*)
 
 let refuse c e s =
@@ -34,7 +37,7 @@ let onemany att ent sor t =
   with
   |Some(c,d,e,s) ->
     if
-      memq s sor && ent.(0) == e
+      corresp e s ent sor 0
     then
       internasch c d e s 
     else
@@ -49,16 +52,16 @@ let twomany cpm att ent sor t =
   with
   |None,None -> ()
   |Some(c,d,e,s),None -> 
-    if memq s sor && ent.(0) == e
+    if corresp e s ent sor 0
     then internasch c d e s
     else failwith "twomany_error 1: I/O non correspondantes"
   |None,Some(c,d,e,s) ->
-    if memq s sor && ent.(1) == e
+    if corresp e s ent sor 1
     then internasch c d e s
     else failwith "twomany_error 2: I/O"
 (*le cas interessant : deux voitures cherchent a traverser en meme temps*)
   |Some(cp,dp,ep,sp),Some(cl,dl,el,sl) ->
-    if memq sp sor && ent.(0) == ep && memq sl sor && ent.(1) == el
+    if  corresp ep sp ent sor 0 && corresp el sl ent sor 1
     then 
       cpm cp dp ep sp cl dl el sl
     else failwith "prioabs_error 3 :I/O"
@@ -105,18 +108,12 @@ let feux dur1 dur2 ph att ent sor t =
     |None -> ()
     |Some(c,d,e,s) ->
       if
-	memq s sor && ent.(i) == e
+	vert
       then
-	if
-	  vert
-	then
-	  internasch c d e s
-	else
-	  refuse c e s
+	internasch c d e s
       else
-	failwith "feux error : I/O"
+	refuse c e s
   in
-
   passer (t' < dur1) 0;
   passer (t' >= dur1) 1;
   

@@ -12,8 +12,8 @@ let () =
   let ent1 = creer_section 10 3 in
   let sor = creer_section 20 3 in
   let a = creer_spawn () in
-
-  let bottle = creer_inter 2 1 (feux 10 10 0) in
+  
+  let bottle = creer_inter 2 (feux 10 10 0) in
 
   let grcr = [ent0,((20,480),-.pi/.2.,Graphics.red);
               ent1,((20,60),pi/.2.,Graphics.blue);

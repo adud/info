@@ -15,9 +15,9 @@ val dums : section;;
 val creer_section : int -> int -> section;;
 (*creer_section sz ms cree une section vide de taille sz et de vitesse max ms*)
   
-val creer_inter : int -> int -> ( (voiture * int * section * section) option array -> section array -> section array -> int -> unit) -> distr;;
-(*creer_inter e s f cree une intersection a e entrees, s sorties, 
-dont le comportement est decrit par la fonction *)
+val creer_inter : int -> ( (voiture * int * section * section) option array -> section array -> section list array -> int -> unit) -> distr;;
+(*creer_inter n f cree une intersection a n entrees 
+dont le comportement est decrit par la fonction de comportement f*)
   
 val creer_spawn : unit -> distr;;
 (*cree une distribution Spawn*)
@@ -66,9 +66,7 @@ val flot_moy : section list -> float;;
 (*manipuler les objets*)
 
 val lier : distr -> int -> distr -> int -> section -> unit;;
-(*lier d1 p1 d2 p2 sec fait le lien de la distribution d1 a la distribution
-d2 par la route sec en positionant sec comme sortie no p1 de d1 et comme entree no p2
-de d2*)
+(*lier d1 p1 d2 p2 sec fait le lien de la distribution d1 a la distribution d2 par la route sec en positionant sec comme parmi les sorties possibles de d1 et comme entree no p2 de d2*)
   
 val ajcar : section -> voiture -> int -> unit;;
 (*ajcar s c p ajoute la voiture c dans s a la position p s'il n'y en a pas

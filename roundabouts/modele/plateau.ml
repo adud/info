@@ -62,7 +62,7 @@ let rec animer p i f grcr =
       imager p grcr;
       Graphics.synchronize ();
       iterer p i;
-      Graphics.wait_next_event [Graphics.Key_pressed];
+      ignore (Graphics.wait_next_event [Graphics.Key_pressed]);
       animer p (i+1) f grcr;
     end
   else

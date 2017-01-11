@@ -8,8 +8,8 @@ type distr =
 	|Quit of string
 	|Int of intersection
 
- and intersection = {mutable ent:section array;mutable sor:section array;
- 		     mutable att:(voiture*int*section*section) option array; transf: (voiture*int*section*section) option array-> section array -> section array -> int -> unit}
+ and intersection = {mutable ent:section array;mutable sor:section list array;
+ 		     mutable att:(voiture*int*section*section) option array; transf: (voiture*int*section*section) option array-> section array -> section list array -> int -> unit}
 
 (*si att.(x) contient (v,d,e,s) c'est qu'une voiture v se trouvant a d (d>0 
 de l'intersection, venant de e, allant vers s ou x est la case de att reservee a e*)
@@ -32,7 +32,7 @@ let dums = creer_section 0 0
 ;;
  
 
-let creer_inter e s f = Int({ent=Array.make e dums;sor=Array.make s dums;att=Array.make e None;transf=f})
+let creer_inter n f = Int({ent=Array.make n dums;sor=Array.make n [];att=Array.make n None;transf=f})
 ;;
 
 let creer_spawn () = Spawn
@@ -148,9 +148,6 @@ let flot_moy lsec =
 
 (*manipuler les objets*)
 
-(*lier : distr -> distr -> section -> unit
-lier d1 d2 sec fait le lien de la distribution d1 à la distribution
-d2 par la route sec*)
 
 let lier d1 p1 d2 p2 sec =
 	sec.pre <- d1;
@@ -159,7 +156,7 @@ let lier d1 p1 d2 p2 sec =
 	  match d1 with
 	  |Spawn -> ()
 	  |Quit(_) -> failwith "lier : entrer par une sortie"
-	  |Int(i1) -> i1.sor.(p1) <- sec
+	  |Int(i1) -> i1.sor.(p1) <- sec::i1.sor.(p1)
 	end
 	;
 	begin
@@ -302,23 +299,4 @@ let traverser dst t =
 	  isec.transf isec.att isec.ent isec.sor t;
 	  Array.fill isec.att 0 (Array.length isec.att) None;
 	|_-> failwith "traverser : passer a travers d'un debut ou d'une fin"
-;;
-
-
-  
-(*useless ?*)
-let faire_sorties d n = 
-  match
-    d
-  with
-  |Spawn|Quit(_) -> failwith "ajouter_sorties : debut ou fin n'en a pas"
-  |Int(isec) -> isec.sor <- Array.make n dums 
-;;
-
-let faire_entrees d n =
-  match
-    d
-  with
-  |Spawn|Quit(_) -> failwith "ajouter_sorties : debut ou fin n'en a pas"
-  |Int(isec) -> isec.ent <- Array.make n dums
 ;;
