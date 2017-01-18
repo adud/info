@@ -134,13 +134,20 @@ let somme_vitesses sec =
 let densite lsec =
   let nb = somme nombre_voitures lsec in
   let taille = somme tsec lsec in
-  (float_of_int nb) /. (float_of_int taille)
+  if taille = 0
+  then 0.
+  else
+    (float_of_int nb) /. (float_of_int taille)
 ;;
 
 let vitesse_moy lsec =
   let nb = somme nombre_voitures lsec in
   let vts = somme somme_vitesses lsec in
-  (float_of_int vts) /. (float_of_int nb)
+  if nb = 0
+  then
+    0.
+  else
+    (float_of_int vts) /. (float_of_int nb)
 ;;
   
 let flot_moy lsec =

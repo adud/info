@@ -25,6 +25,11 @@ fait apparaitre une voiture dans sec a la vitesse v position pos
 d'itineraire itin si c'est le moment de faire apparaitre une voiture
 i.e. t == ph mod per*)
 
+
+val faire : plateau -> int -> int -> (plateau -> unit) -> (plateau -> unit) -> (plateau -> unit) -> (plateau -> unit) -> unit;;
+(*faire p i f dbt bent bsor fin : trivial par induction sur les termes du lambda calcul
+*)
+  
 val jouer : plateau -> int -> int -> unit;;
   (*jouer p i f joue (f-i) iterations de l'automate
    en les affichant a chaque tour, l'horloge
@@ -33,7 +38,6 @@ commencant a i inclus et finissant a f exclus*)
 val animer : plateau -> int -> int -> (Objets.section*((int*int)*float*Graphics.color)) list -> unit;;
   (*animer p i f gr anime a l'aide du module Graphics en representant le plateau decrit par gr*)
 
-val modeliser : plateau -> int -> int -> (Objets.section list -> float) list -> unit;;
-  (*modeliser p i f [i1;...;in] joue (f-i) iterations de l'automate, en affichant un fichier csv :
-la ligne k correspond a la kieme iteration de l'automate (en partant de i) et la colonne m correspond
-a l'information im *)
+val modeliser : plateau -> int -> int -> (unit -> unit) -> unit;;
+  (*modeliser p i f info joue (f-i) iterations de l'automate, appliquant
+info a chaque tour*)

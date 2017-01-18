@@ -47,28 +47,43 @@ let spawn_car per ph v pos sec itin t =
     ()
 ;;
 
-let jouer p i f =
+let faire p i f dbt bent bsor fin =
+  dbt p;
   for t = i to (f-1) do
-    afficher p;
+    bent p;
     iterer p t;
-    print_newline ();
+    bsor p;
   done;
-    afficher p;
-;;
-    
-let rec animer p i f grcr =
-  if i <> f then
-    begin
-      Graphics.clear_graph ();
-      imager p grcr;
-      Graphics.synchronize ();
-      iterer p i;
-      ignore (Graphics.wait_next_event [Graphics.Key_pressed]);
-      animer p (i+1) f grcr;
-    end
-  else
-    ()
+  fin p;
 ;;
 
-let modeliser p i f info = ();;
-			     
+let rien (p:plateau) = ();;
+  
+let jouer p i f =
+  let aff p =
+    afficher p;
+    print_newline ()
+  in
+  faire p i f rien aff rien aff
+;;
+
+let animer p i f grcr =
+  let bent p =
+    Graphics.clear_graph ();
+    imager p grcr;
+    Graphics.synchronize ();
+    ignore (Graphics.wait_next_event [Graphics.Key_pressed]);  
+  in
+  faire p i f rien bent rien rien
+;;
+
+
+let modeliser p i f info =
+  let bent p =
+    info();
+    print_newline ();
+  in
+  faire p i f rien bent rien rien
+;;
+  
+
