@@ -31,4 +31,9 @@ val jouer : plateau -> int -> int -> unit;;
 commencant a i inclus et finissant a f exclus*)
 
 val animer : plateau -> int -> int -> (Objets.section*((int*int)*float*Graphics.color)) list -> unit;;
-  (*anime a l'aide du module Graphics*)
+  (*animer p i f gr anime a l'aide du module Graphics en representant le plateau decrit par gr*)
+
+val modeliser : plateau -> int -> int -> (Objets.section list -> float) list -> unit;;
+  (*modeliser p i f [i1;...;in] joue (f-i) iterations de l'automate, en affichant un fichier csv :
+la ligne k correspond a la kieme iteration de l'automate (en partant de i) et la colonne m correspond
+a l'information im *)

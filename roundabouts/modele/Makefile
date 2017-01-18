@@ -14,18 +14,9 @@ test: objets.cmo affichage.cmo comportements.cmo plateau.cmo test.cmo
 %.cmi: %.mli
 	ocamlc -c $<
 
-objets.cmo: objets.ml objets.cmi
+depend:
+	ocamldep *.ml *.mli >.depend
 
-affichage.cmo: objets.cmi affichage.ml affichage.cmi
+sinclude .depend
 
-affichage.cmi: affichage.mli objets.cmi
 
-comportements.cmo : comportements.cmi objets.cmi comportements.ml
-
-comportements.cmi : comportements.mli objets.cmi
-
-plateau.cmo : plateau.ml plateau.cmi objets.cmi affichage.cmi comportements.cmi
-
-plateau.cmi : plateau.ml objets.cmi affichage.cmi comportements.cmi
-
-test.cmo: test.ml objets.cmi affichage.cmi comportements.cmi

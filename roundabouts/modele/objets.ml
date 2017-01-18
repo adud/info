@@ -278,8 +278,8 @@ let increment sec =
 	    |_,Spawn -> failwith "increment : arriver sur un depart"
 	    |_,Quit(s) -> 
 	      begin
-		print_string s;
-		print_newline ();
+		(*print_string s;
+		print_newline ();*)
 		sec.data.(!act) <- None;
 	      end
 	    |[],_ -> failwith "increment : objectiveless car"

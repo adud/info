@@ -69,3 +69,6 @@ let rec animer p i f grcr =
   else
     ()
 ;;
+
+let modeliser p i f info = ();;
+			     
