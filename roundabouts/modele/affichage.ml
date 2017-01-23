@@ -28,13 +28,13 @@ let preview_section sec =
   print_newline ();
 ;;
 
-let virgule () = print_string ","
+let separe () = print_string "\t"
 ;;
     
 let info_fdmal lsec =
   let d = densite lsec in
   let v = vitesse_moy lsec in
-  List.iter (fun x -> (print_float x;virgule ()))
+  List.iter (fun x -> (print_float x;separe ()))
             [d;d*.v]
 ;;
 
