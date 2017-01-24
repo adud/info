@@ -35,7 +35,7 @@ let info_fdmal lsec =
   let d = densite lsec in
   let v = vitesse_moy lsec in
   List.iter (fun x -> (print_float x;separe ()))
-            [d;d*.v]
+            [d;v;d*.v(*J*)]
 ;;
 
 open Graphics

@@ -39,12 +39,19 @@ let spawn_car per ph v pos sec itin t =
   if
     (t-ph) mod per = 0
   then
-    begin
-      let n = [|"jacques";"jules";"jim"|] in
-      ajcar_sil sec (creer_voiture v itin n.(t mod 3)) pos
-    end
+    ajcar_sil sec (creer_voiture v itin "truc") pos
   else
     ()
+;;
+
+let rnd_spawn_car prob v pos sec itin t =
+  let r = Random.float 1. in
+  if
+    prob < r
+  then
+    ajcar_sil sec (creer_voiture v itin "truc") pos
+  ;
+    ignore t
 ;;
 
 let faire p i f dbt bent bsor fin =
@@ -59,6 +66,8 @@ let faire p i f dbt bent bsor fin =
 
 let rien (p:plateau) = ();;
   
+
+
 let jouer p i f =
   let aff p =
     afficher p;

@@ -25,6 +25,10 @@ fait apparaitre une voiture dans sec a la vitesse v position pos
 d'itineraire itin si c'est le moment de faire apparaitre une voiture
 i.e. t == ph mod per*)
 
+val rnd_spawn_car : float -> int -> int -> Objets.section -> Objets.section list ->int -> unit;;
+(*rnd_spawn_car p v pos sec itin t version stochastique de spawn_car : fait apparaitre une voiture
+avec une probabilite de p *)
+                                                                                             
 
 val faire : plateau -> int -> int -> (plateau -> unit) -> (plateau -> unit) -> (plateau -> unit) -> (plateau -> unit) -> unit;;
 (*faire p i f dbt bent bsor fin : trivial par induction sur les termes du lambda calcul
