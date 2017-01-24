@@ -33,6 +33,9 @@ avec une probabilite de p *)
 val faire : plateau -> int -> int -> (plateau -> unit) -> (plateau -> unit) -> (plateau -> unit) -> (plateau -> unit) -> unit;;
 (*faire p i f dbt bent bsor fin : trivial par induction sur les termes du lambda calcul
 *)
+
+val silence : plateau -> int -> int -> unit;;
+  (*joue des iterations de l'automate sans rien afficher*)
   
 val jouer : plateau -> int -> int -> unit;;
   (*jouer p i f joue (f-i) iterations de l'automate

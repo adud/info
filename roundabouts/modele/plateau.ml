@@ -45,9 +45,10 @@ let spawn_car per ph v pos sec itin t =
 ;;
 
 let rnd_spawn_car prob v pos sec itin t =
+  Random.self_init ();
   let r = Random.float 1. in
   if
-    prob < r
+    r < prob
   then
     ajcar_sil sec (creer_voiture v itin "truc") pos
   ;
@@ -66,7 +67,9 @@ let faire p i f dbt bent bsor fin =
 
 let rien (p:plateau) = ();;
   
-
+let silence p i f =
+  faire p i f rien rien rien rien
+;;
 
 let jouer p i f =
   let aff p =

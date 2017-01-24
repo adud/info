@@ -46,7 +46,7 @@ let trc = truncate
 ;;
 let pi = 2. *. asin 1.
 ;;
-let scale = 20. (*pix/m sachant dx = 7m *)  
+let scale = 10. (*pix/m sachant dx = 7m *)  
   
 let init m n =
   open_graph (" "^string_of_int m^"x"^string_of_int n);
