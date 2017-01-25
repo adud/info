@@ -84,12 +84,28 @@ let jouer p i f =
   faire p i f rien aff rien aff
 ;;
 
+let patience d =
+  let tf = (Unix.gettimeofday () )+. d in
+  let rec loop () =
+    let t = (Unix.gettimeofday ()) in
+    if t < tf then loop ()
+      (*begin
+	print_string "dodo";
+	print_newline ();
+	Unix.sleep (max 1 (int_of_float (tf -. t)));
+	print_string "reveil";
+	print_newline ();
+	loop ();
+      end*)
+  in loop ()
+;;
+  
 let animer p i f grcr =
   let bent p =
     Graphics.clear_graph ();
     imager p grcr;
     Graphics.synchronize ();
-    Unix.sleep 1;
+    patience 0.1;
     (*ignore (Graphics.wait_next_event [Graphics.Key_pressed]);  *)
   in
   faire p i f rien bent rien rien
