@@ -1,13 +1,14 @@
 all: test local
-
 #hello: amodule.cmo bmodule.cmo
 #	ocamlc -o hello amodule.cmo bmodule.cmo
 
-test: objets.cmo affichage.cmo comportements.cmo plateau.cmo test.cmo
-	ocamlc -o test graphics.cma objets.cmo affichage.cmo comportements.cmo plateau.cmo test.cmo
+cmo:=objets.cmo affichage.cmo comportements.cmo plateau.cmo test.cmo
 
-local: objets.cmo affichage.cmo comportements.cmo plateau.cmo local.cmo
-	ocamlc -o local graphics.cma objets.cmo affichage.cmo comportements.cmo plateau.cmo local.cmo
+test: ${cmo}
+	ocamlc -o test unix.cma graphics.cma ${cmo}
+
+local: ${cmo}
+	ocamlc -o local unix.cma graphics.cma ${cmo}
 
 %.cmo: %.ml
 	ocamlc -c $<
