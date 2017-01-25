@@ -28,7 +28,10 @@ i.e. t == ph mod per*)
 val rnd_spawn_car : float -> int -> int -> Objets.section -> Objets.section list ->int -> unit;;
 (*rnd_spawn_car p v pos sec itin t version stochastique de spawn_car : fait apparaitre une voiture
 avec une probabilite de p *)
-                                                                                             
+
+val spawn_prog : (int -> float) -> int -> int -> Objets.section -> Objets.section list -> int -> unit ;;
+  (*spawn_prog f ... effectue un rnd_spawn_car avec une proba de (f t) 
+permet de faire une apparition croissante des éléments*)
 
 val faire : plateau -> int -> int -> (plateau -> unit) -> (plateau -> unit) -> (plateau -> unit) -> (plateau -> unit) -> unit;;
 (*faire p i f dbt bent bsor fin : trivial par induction sur les termes du lambda calcul

@@ -8,15 +8,15 @@ open Comportements
 type plateau =
   {mutable sects:section list;
    mutable distrs:distr list;
-   mutable spawns:
+   mutable events:
              (int -> unit) list
   }
 ;;
 
-let construire s d sp = {sects=s;distrs=d;spawns=sp};;
+let construire s d ev = {sects=s;distrs=d;events=ev};;
   
 let iterer p t =
-  List.iter (fun f -> f t) p.spawns;
+  List.iter (fun f -> f t) p.events;
   List.iter increment p.sects;
   List.iter (fun x -> traverser x t) p.distrs;
   
@@ -45,7 +45,6 @@ let spawn_car per ph v pos sec itin t =
 ;;
 
 let rnd_spawn_car prob v pos sec itin t =
-  Random.self_init ();
   let r = Random.float 1. in
   if
     r < prob
@@ -55,7 +54,13 @@ let rnd_spawn_car prob v pos sec itin t =
     ignore t
 ;;
 
+let spawn_prog f v pos sec itin t =
+  rnd_spawn_car (f t) v pos sec itin t
+;;
+  
+
 let faire p i f dbt bent bsor fin =
+  Random.self_init ();
   dbt p;
   for t = i to (f-1) do
     bent p;
@@ -84,7 +89,8 @@ let animer p i f grcr =
     Graphics.clear_graph ();
     imager p grcr;
     Graphics.synchronize ();
-    ignore (Graphics.wait_next_event [Graphics.Key_pressed]);  
+    Unix.sleep 1;
+    (*ignore (Graphics.wait_next_event [Graphics.Key_pressed]);  *)
   in
   faire p i f rien bent rien rien
 ;;
