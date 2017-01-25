@@ -14,11 +14,11 @@ let () =
   let a = creer_spawn () in
   let s = creer_sortie "s" in
   
-  let bottle = creer_inter 2 prioabs in
+  let bottle = creer_inter 2 (feux 10 10 0) in
 
-  let grcr = [ent0,((20,700),-.pi/.2.,Graphics.red);
-              ent1,((20,20),pi/.2.,Graphics.blue);
-              sor, ((20,400),0.,Graphics.black)] in
+  let grcr = [ent0,((20,80),0.,Graphics.red);
+              ent1,((20,20),0.,Graphics.blue);
+              sor, ((20,50),0.,Graphics.black)] in
   
   let itin = [sor;sor] in
   
@@ -28,14 +28,21 @@ let () =
   lier bottle 1 s 0 sor;
   
   let s = [ent0;ent1;sor] in
-  let sp0 = Plateau.rnd_spawn_car (1./.3.) 0 0 ent0 itin in
-  let sp1 = Plateau.rnd_spawn_car (1./.6.) 0 0 ent1 itin in
+  let gr t = (float_of_int t) /. 1000. in
+  let sp0 = Plateau.spawn_prog gr 0 0 ent0 itin in
+  let sp1 = Plateau.spawn_prog gr 0 0 ent1 itin in
   let p = Plateau.construire s [bottle] [sp0;sp1] in
-
-  (*Plateau.jouer p 0 20;*)
   let info () = info_fdmal [ent0]; info_fdmal [ent1] in
 
-  Plateau.silence p 0 100;
-  Plateau.modeliser p 0 1000 info;
+  let deb = false in
+  if
+    deb 
+  then
+    begin
+      init 800 100;
+      Plateau.animer p 0 1000 grcr;
+    end
+  else
+    Plateau.modeliser p 0 1000 info;
 
 ;;
