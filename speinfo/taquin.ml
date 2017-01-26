@@ -287,11 +287,16 @@ let (appartient : 'a -> 'a ensemble -> bool) =
 
 let test f =
   for i = 0 to (vect_length exemple) - 1 do
-    f exemple.(i);
+    let _ = (f exemple.(i)) in
     print_int i;
     print_newline ();
   done
 ;;
+
+let afficher_chemin ch =
+  do_list (fun t -> (affiche_taquin t;print_newline ())) ch
+;;
+  
   
 (************* Fonctions de recherche à implanter **********)
 
@@ -316,9 +321,68 @@ let test f =
  *)
 
 let rech_largeur s_initial =
+  let vus = ensemble_vide () in
+  let q = queue__new () in
+  let rec loop () =
+    let s,d,c = queue__take q in
+    let voir_voisin s2 =
+      if
+	not (appartient s2 vus)
+      then
+	begin
+	  ajoute vus s2;
+	  queue__add (s2,d+1,s::c) q
+	end
+    in
+    if
+      s = taquin_solution
+    then
+      rev c
+    else
+      begin
+      do_list voir_voisin (voisins s);
+      loop ();
+      end
+  in
+  queue__add (s_initial,0,[]) q;
+  ajoute vus s_initial;
+  loop ()
 ;;
 
+let rech_largeur_2 s_initial =
+  let pred = hashtbl__new 1997 in
+  let q = queue__new () in
+  queue__add s_initial q;
+  let intbl t tbl =
+    (hashtbl__find_all tbl t) <> []
+  in
+  while not (intbl taquin_solution pred) do
+    let s = queue__take q in
+    let ajvois s2 =
+      if not (intbl s2 pred)
+      then
+	begin
+	  hashtbl__add pred s2 s;
+	  queue__add s2 q
+	end
+    in
+    do_list ajvois (voisins s)
+  done;
+  (*reconstruire*)
+  let rec conssol k =
+    if k = s_initial
+    then []
+    else k::(conssol (hashtbl__find pred k))
+  in
+  rev (conssol taquin_solution)
+;;
+  
+  
+  
+  afficher_chemin (rech_largeur_2 exemple.(12));;
 
+  test rech_largeur_2;;
+    
 (* Sur mon PC, la recherche en largeur marche pour taquin13 (même si
    la réponse n'est pas immédiate. En revanche, pour taquin16, elle
    consomme trop de mémoire et échoue avec l'erreur Out_of_memory.
