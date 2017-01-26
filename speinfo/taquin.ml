@@ -284,6 +284,15 @@ let (appartient : 'a -> 'a ensemble -> bool) =
 
 (************* Fin ensembles impératifs ***********)
 
+
+let test f =
+  for i = 0 to (vect_length exemple) - 1 do
+    f exemple.(i);
+    print_int i;
+    print_newline ();
+  done
+;;
+  
 (************* Fonctions de recherche à implanter **********)
 
 (* On veut étant donné un taquin t, trouver un chemin vers la solution
@@ -387,6 +396,7 @@ let rec rech_par_approfondissement t =
    s(0)] (on pourra utiliser la fonction mem).
  *)
 (* À VOUS DE JOUER *)
+  
 let rec rech_chemin_simple_borne t b n c =
 ;;
 
