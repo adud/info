@@ -284,11 +284,20 @@ let (appartient : 'a -> 'a ensemble -> bool) =
 
 (************* Fin ensembles impératifs ***********)
 
-
+  
 let test f =
   for i = 0 to (vect_length exemple) - 1 do
-    let _ = (f exemple.(i)) in
-    print_int i;
+    let debut = sys__time () in
+    let suc = (f exemple.(i)) in
+    if suc
+    then
+      begin
+        printf__printf "solution au taquin %d trouvée en %f seconde(s)" i (sys__time() -. debut)
+      end
+    else
+      begin
+        printf__printf "echec au taquin %d au bout de %f seconde(s)" i (sys__time() -. debut);
+      end;
     print_newline ();
   done
 ;;
@@ -378,11 +387,10 @@ let rech_largeur_2 s_initial =
 ;;
   
   
-  
-  afficher_chemin (rech_largeur_2 exemple.(12));;
-
-  test rech_largeur_2;;
-    
+let _ =   
+  afficher_chemin (rech_largeur_2 exemple.(12));
+  test (fun t -> (rech_largeur_2 t;true))
+;;  
 (* Sur mon PC, la recherche en largeur marche pour taquin13 (même si
    la réponse n'est pas immédiate. En revanche, pour taquin16, elle
    consomme trop de mémoire et échoue avec l'erreur Out_of_memory.
@@ -422,8 +430,41 @@ let rech_largeur_2 s_initial =
 
 (* À VOUS DE JOUER *)
 let rec rech_chemin_borne t b n c =
+  if
+    n > b
+  then
+    None
+  else
+    if
+      t = taquin_solution
+    then
+      Some(c)
+    else
+      let rec loop v =
+        match v with
+        |[] -> None
+        |tv::r ->
+          match
+            rech_chemin_borne tv b (n+1) (t::c)
+          with
+          |None -> loop r
+          |Some(c) -> Some(c)
+      in
+      loop (voisins t)
 ;;
 
+let succ s =
+  match
+    s
+  with
+  |None -> false
+  |Some(_) -> true
+;;
+  
+let _ = test (fun t -> succ (rech_chemin_borne t 10 0 []))
+;;
+  
+  
 (* On peut vérifier que rech_chemin_borne permet par exemple de
   résoudre jusqu'à taquin12 (au prix d'un peu de patience cependant).
 
@@ -443,8 +484,14 @@ let rec rech_chemin_borne t b n c =
  *)
 (* À VOUS DE JOUER *)
 let rec rech_par_approfondissement t =
+  let rec loop i =
+    match rech_chemin_borne t i 0 [] with
+    |None -> loop (i+1)
+    |Some(c) -> c
+  in
+  loop 0
 ;;
-
+  
 (* Pour améliorer cette recherche, on pourrait simplement éliminer de
    notre recherche les chemins non-simples : on va donc écrire une fonction
    rech_chemin_simple_borne :
@@ -462,6 +509,27 @@ let rec rech_par_approfondissement t =
 (* À VOUS DE JOUER *)
   
 let rec rech_chemin_simple_borne t b n c =
+  if
+    (mem t c) || (n > b)
+  then
+    None
+  else
+    if
+      t = taquin_solution
+    then
+      Some(c)
+    else
+      let rec loop v =
+        match v with
+        |[] -> None
+        |tv::r ->
+          match
+            rech_chemin_simple_borne tv b (n+1) (t::c)
+          with
+          |None -> loop r
+          |Some(c) -> Some(c)
+      in
+      loop (voisins t)
 ;;
 
 
@@ -477,7 +545,17 @@ let rec rech_chemin_simple_borne t b n c =
  *)
 (* À VOUS DE JOUER *)
 let rec rech_par_approfondissement2 t =
+  let rec loop i =
+    match rech_chemin_simple_borne t i 0 [] with
+    |None -> loop (i+1)
+    |Some(c) -> c
+  in
+  loop 0
+
 ;;
+
+let _ = test (fun t -> let _ = rech_par_approfondissement t in true);;
+let _ = test (fun t -> let _ = rech_par_approfondissement2 t in true);;
 
 (* Remarquez que rech_par_approfondissement2 donne les mêmes solutions
    que rech_par_approfondissement mais les donne plus vite.
@@ -578,7 +656,40 @@ type resultat =
   
 (* À VOUS DE JOUER *)
 let rec rech_chemin_borne_heuristique h t b n c =
+  if
+    mem t c
+  then
+    Echec(max_int)
+  else if n + h t > b
+  then
+    Echec(n + h t)
+  else if
+    t = taquin_solution
+  then
+    Solution(c)
+  else
+    let rec loop v n =
+      match v with
+      |[] -> Echec(n)
+      |tv::r ->
+        match
+          rech_chemin_borne_heuristique h tv b (n+1) (t::c)
+        with
+        |Echec(n') -> loop r (min n n')
+        |Solution(c) -> Solution(c)
+    in
+    loop (voisins t) max_int
+         
 ;;
+let succ2 s =
+  match
+    s
+  with
+  |Echec(_) -> false
+  |Solution(_) -> true
+;;
+
+let _ = test (fun t -> succ2 (rech_chemin_borne_heuristique h1 t 2 0 [] ));;
 
 (* Essayez cette fonction avec h1 et h2 pour résoudre des taquins
    Regardez jusqu'à quelles profondeurs vous arrivez avec l'une et
