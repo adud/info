@@ -657,29 +657,27 @@ type resultat =
 (* À VOUS DE JOUER *)
 let rec rech_chemin_borne_heuristique h t b n c =
   if
-    mem t c
+    (mem t c) || (n + h t > b)
   then
-    Echec(max_int)
-  else if n + h t > b
-  then
-    Echec(n + h t)
-  else if
-    t = taquin_solution
-  then
-    Solution(c)
+    Echec(n+ h t)
   else
-    let rec loop v n =
-      match v with
-      |[] -> Echec(n)
-      |tv::r ->
-        match
-          rech_chemin_borne_heuristique h tv b (n+1) (t::c)
-        with
-        |Echec(n') -> loop r (min n n')
-        |Solution(c) -> Solution(c)
-    in
-    loop (voisins t) max_int
-         
+    if
+      t = taquin_solution
+    then
+      Solution(c)
+    else
+      let rec loop v k =
+        match v with
+        |[] -> Echec(k)
+        |tv::r ->
+          match
+            rech_chemin_borne_heuristique h tv b (n+1) (t::c)
+          with
+          |Echec(k') -> loop r (min k k')
+          |Solution(c) -> Solution(c)
+      in
+      loop (voisins t) max_int
+;;       
 ;;
 let succ2 s =
   match
@@ -689,7 +687,7 @@ let succ2 s =
   |Solution(_) -> true
 ;;
 
-let _ = test (fun t -> succ2 (rech_chemin_borne_heuristique h1 t 2 0 [] ));;
+let _ = test (fun t -> succ2 (rech_chemin_borne_heuristique h2 t 70 0 [] ));;
 
 (* Essayez cette fonction avec h1 et h2 pour résoudre des taquins
    Regardez jusqu'à quelles profondeurs vous arrivez avec l'une et
@@ -717,4 +715,20 @@ let _ = test (fun t -> succ2 (rech_chemin_borne_heuristique h1 t 2 0 [] ));;
 
 (* À VOUS DE JOUER *)
 let ida_star h t =
+  let rec loop b =
+    match rech_chemin_borne_heuristique h t b 0 [] with
+    |Echec(k) -> let v = max k (b+1) in
+                 begin
+                   print_int v;
+                   print_newline ();
+                   loop v;
+                 end
+    |Solution(c) -> c
+  in
+  loop 0
 ;;
+
+let _ = test (fun t -> (let _ = ida_star h2 t;true));;
+
+
+let _ = ida_star h2 taquin_difficile;;
