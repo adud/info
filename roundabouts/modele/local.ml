@@ -5,6 +5,22 @@ open Affichage
 ;;
 open Comportements
 ;;
+
+(*infos :
+d_p | v_p | J_p | d_np | v_np | J_np
+
+dessin :
+
+./local > truc.dat
+gnuplot
+
+set xlabel "<d_np>"
+set ylabel "<d_p>"
+set zlabel "<J_np>"
+set xyplane at 0
+plot "truc.dat" using 4:1:6
+*)
+  
   
 (*test two_one*)
 let () = 
@@ -29,13 +45,13 @@ let () =
   
   let s = [ent0;ent1;sor] in
   let croiss t = (float_of_int t) /. 1000. in
-  let stable p t = p in
+  (*let stable p t = p in*)
   let sp0 = Plateau.spawn_prog croiss (panneau ent0) 0 ent0 itin in
   let sp1 = Plateau.spawn_car 5 0 (panneau ent1) 0 ent1 itin in
   let p = Plateau.construire s [bottle] [sp0;sp1] in
   let info () = info_fdmal [ent0]; info_fdmal [ent1] in
 
-  let deb = true in
+  let deb = false in
   if
     deb 
   then

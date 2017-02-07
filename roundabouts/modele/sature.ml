@@ -34,7 +34,6 @@ let () =
   
   let deb = false in
 
-  ignore gr;
   Plateau.silence p 0 100;
   if
     deb 

@@ -1,4 +1,4 @@
-all: test local
+all: test local sature
 #hello: amodule.cmo bmodule.cmo
 #	ocamlc -o hello amodule.cmo bmodule.cmo
 
