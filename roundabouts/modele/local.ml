@@ -11,14 +11,10 @@ d_p | v_p | J_p | d_np | v_np | J_np
 
 dessin :
 
-./local > truc.dat
+./local > local.dat
 gnuplot
 
-set xlabel "<d_np>"
-set ylabel "<d_p>"
-set zlabel "<J_np>"
-set xyplane at 0
-plot "truc.dat" using 4:1:6
+load "plotlocal"
 *)
   
   

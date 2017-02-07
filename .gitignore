@@ -32,3 +32,14 @@ info-pour-tous/labyrinthe/labytoto.aux
 info-pour-tous/labyrinthe/labytoto.log
 info-pour-tous/labyrinthe/labytoto.pdf
 info-pour-tous/labyrinthe/labytoto.synctex.gz
+
+roundabouts/modele/.depend
+roundabouts/modele/local
+roundabouts/modele/local.cmi
+roundabouts/modele/local.cmo
+roundabouts/modele/sature
+roundabouts/modele/sature.cmi
+roundabouts/modele/sature.cmo
+roundabouts/modele/truc.dat
+
+aucune modification n'a été ajoutée à la validation (utilisez "git add" ou "git commit -a")
