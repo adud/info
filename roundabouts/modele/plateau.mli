@@ -1,8 +1,21 @@
+open Objets
+
 type plateau;;
 (*un plateau de jeu contenant sections et distributions
 i.e. un automate*)
 
-val construire: Objets.section list -> Objets.distr list -> (int -> unit) list -> plateau;;
+type rond_point;;
+  
+val creer_rond_point: int -> int -> int -> int -> int -> ( (voiture * int * section * section) option array -> section array -> section list array -> int -> unit)
+                      -> rond_point ;;
+(*creer_rond_point n l p vmi vme cmp cree un rond-point a n entrees/sorties
+de comportement cmp, avec une vitesse max interne(resp externe) de vmi (resp vma)*)
+
+
+val pl_add_rp : plateau -> rond_point -> unit;;
+(*pl_add_rp pl rp ajoute le rond-point rp au plateau pl*)
+  
+val construire: section list -> distr list -> (int -> unit) list -> plateau;;
 (*construire s d sp construit le plateau p avec
 une liste de sections s
 une liste de distributions d
@@ -17,19 +30,19 @@ val iterer : plateau -> int -> unit;;
 val afficher : plateau -> unit;;
   (*affiche toutes les sections du plateau*)
 
-val imager : plateau -> (Objets.section*((int*int)*float*Graphics.color)) list -> unit;;
+val imager : plateau -> (section*((int*int)*float*Graphics.color)) list -> unit;;
    
-val spawn_car : int -> int -> int -> int -> Objets.section -> Objets.section list ->int -> unit
+val spawn_car : int -> int -> int -> int -> section -> section list ->int -> unit
 (*spawn_car per ph v pos sec itin t 
 fait apparaitre une voiture dans sec a la vitesse v position pos 
 d'itineraire itin si c'est le moment de faire apparaitre une voiture
 i.e. t == ph mod per*)
 
-val rnd_spawn_car : float -> int -> int -> Objets.section -> Objets.section list ->int -> unit;;
+val rnd_spawn_car : float -> int -> int -> section -> section list ->int -> unit;;
 (*rnd_spawn_car p v pos sec itin t version stochastique de spawn_car : fait apparaitre une voiture
 avec une probabilite de p *)
 
-val spawn_prog : (int -> float) -> int -> int -> Objets.section -> Objets.section list -> int -> unit ;;
+val spawn_prog : (int -> float) -> int -> int -> section -> section list -> int -> unit ;;
   (*spawn_prog f ... effectue un rnd_spawn_car avec une proba de (f t) 
 permet de faire une apparition croissante des éléments*)
 
@@ -45,7 +58,7 @@ val jouer : plateau -> int -> int -> unit;;
    en les affichant a chaque tour, l'horloge
 commencant a i inclus et finissant a f exclus*)
 
-val animer : plateau -> int -> int -> (Objets.section*((int*int)*float*Graphics.color)) list -> unit;;
+val animer : plateau -> int -> int -> (section*((int*int)*float*Graphics.color)) list -> unit;;
   (*animer p i f gr anime a l'aide du module Graphics en representant le plateau decrit par gr*)
 
 val modeliser : plateau -> int -> int -> (unit -> unit) -> unit;;

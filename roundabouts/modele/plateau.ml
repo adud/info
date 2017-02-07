@@ -13,6 +13,53 @@ type plateau =
   }
 ;;
 
+type rond_point =
+  {ents: section list; sors : section list; rond: section list;
+   diss: distr list}
+    
+let creer_rond_point n l p vmi vme cmp =
+  
+  let sp = creer_spawn () in
+  let dumi = creer_inter 0 passif in
+  let isec = Array.make n dumi in
+  
+  let dums = creer_section 0 0 in
+  let ent = Array.make n dums in
+  let sor = Array.make n dums in
+  let ron = Array.make n dums in
+
+  (*creation des sections et des intersections*)
+  for i=0 to (n-1) do
+    ent.(i) <- creer_section l vme;
+    sor.(i) <- creer_section l vme;
+    ron.(i) <- creer_section p vmi;
+    isec.(i) <- creer_inter 2 cmp;    
+  done;
+
+(*liaisons internes*)
+  for i=0 to n-2 do
+    lier isec.(i) 0 isec.(i+1) 0 ron.(i)
+  done;
+  lier isec.(n-1) 0 isec.(0) 0 ron.(n-1);
+
+(*liaisons externes*)
+  for i=0 to n-1 do
+    lier isec.(i) 0 (creer_sortie "") 1 sor.(i) ;
+    lier sp 1 isec.(i) 1 ent.(i);
+    ajouter_sortie isec.(i) 1 ron.(i)
+  done;
+
+    {ents=Array.to_list ent;
+     sors=Array.to_list sor;
+     rond=Array.to_list ron;
+     diss=Array.to_list isec}
+;;
+
+let pl_add_rp pl rp =
+  pl.sects <- rp.ents @ rp.sors @ rp.rond @ pl.sects;
+  pl.distrs <- rp.diss @ pl.distrs;
+;;
+  
 let construire s d ev = {sects=s;distrs=d;events=ev};;
   
 let iterer p t =
