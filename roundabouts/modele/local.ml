@@ -8,13 +8,13 @@ open Comportements
   
 (*test two_one*)
 let () = 
-  let ent0 = creer_section 30 3 in
-  let ent1 = creer_section 30 3 in
-  let sor = creer_section 10 3 in
+  let ent0 = creer_section 50 5 in
+  let ent1 = creer_section 50 5 in
+  let sor = creer_section 30 5 in
   let a = creer_spawn () in
   let s = creer_sortie "s" in
   
-  let bottle = creer_inter 2 (feux 10 10 0) in
+  let bottle = creer_inter 2 prioabs in
 
   let grcr = [ent0,((20,80),0.,Graphics.red);
               ent1,((20,20),0.,Graphics.blue);
@@ -28,13 +28,14 @@ let () =
   lier bottle 1 s 0 sor;
   
   let s = [ent0;ent1;sor] in
-  let gr t = (float_of_int t) /. 1000. in
-  let sp0 = Plateau.spawn_prog gr 0 0 ent0 itin in
-  let sp1 = Plateau.spawn_prog gr 0 0 ent1 itin in
+  let croiss t = (float_of_int t) /. 1000. in
+  let stable p t = p in
+  let sp0 = Plateau.spawn_prog croiss (panneau ent0) 0 ent0 itin in
+  let sp1 = Plateau.spawn_car 5 0 (panneau ent1) 0 ent1 itin in
   let p = Plateau.construire s [bottle] [sp0;sp1] in
   let info () = info_fdmal [ent0]; info_fdmal [ent1] in
 
-  let deb = false in
+  let deb = true in
   if
     deb 
   then
