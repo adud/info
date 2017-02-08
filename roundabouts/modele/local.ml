@@ -7,22 +7,24 @@ open Comportements
 ;;
 
 (*infos :
-d_p | v_p | J_p | d_np | v_np | J_np
+
+t | d_p | v_p | J_p | d_np | v_np | J_np
 
 dessin :
 
 ./local > local.dat
 gnuplot
-
 load "plotlocal"
+
+faire dynamique et absolu
 *)
   
   
 (*test two_one*)
 let () = 
   let ent0 = creer_section 50 5 in
-  let ent1 = creer_section 50 5 in
-  let sor = creer_section 30 5 in
+  let ent1 = creer_section 10 5 in
+  let sor = creer_section 50 5 in
   let a = creer_spawn () in
   let s = creer_sortie "s" in
   
@@ -45,7 +47,7 @@ let () =
   let sp0 = Plateau.spawn_prog croiss (panneau ent0) 0 ent0 itin in
   let sp1 = Plateau.spawn_car 5 0 (panneau ent1) 0 ent1 itin in
   let p = Plateau.construire s [bottle] [sp0;sp1] in
-  let info () = info_fdmal [ent0]; info_fdmal [ent1] in
+  let info t = Printf.printf "%d " t;info_fdmal [ent0]; info_fdmal [ent1] in
 
   let deb = false in
   if

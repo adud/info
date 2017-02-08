@@ -13,7 +13,6 @@ sature: ${cmo} sature.cmo
 local: ${cmo} local.cmo
 	ocamlc -o local unix.cma graphics.cma ${cmo} local.cmo
 
-
 %.cmo: %.ml
 	ocamlc -c $<
 

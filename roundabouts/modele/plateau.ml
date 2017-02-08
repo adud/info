@@ -110,21 +110,22 @@ let faire p i f dbt bent bsor fin =
   Random.self_init ();
   dbt p;
   for t = i to (f-1) do
-    bent p;
+    bent p t;
     iterer p t;
-    bsor p;
+    bsor p t;
   done;
-  fin p;
+  fin p f;
 ;;
 
-let rien (p:plateau) = ();;
+let rien (p:plateau) t = ();;
   
 let silence p i f =
   faire p i f rien rien rien rien
 ;;
 
 let jouer p i f =
-  let aff p =
+  let aff p t =
+    ignore t;
     afficher p;
     print_newline ()
   in
@@ -148,7 +149,8 @@ let patience d =
 ;;
   
 let animer p i f grcr =
-  let bent p =
+  let bent p t =
+    ignore t;
     Graphics.clear_graph ();
     imager p grcr;
     Graphics.synchronize ();
@@ -160,8 +162,8 @@ let animer p i f grcr =
 
 
 let modeliser p i f info =
-  let bent p =
-    info();
+  let bent p t=
+    info t;
     print_newline ();
   in
   faire p i f rien bent rien rien

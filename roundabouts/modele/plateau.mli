@@ -46,7 +46,7 @@ val spawn_prog : (int -> float) -> int -> int -> section -> section list -> int 
   (*spawn_prog f ... effectue un rnd_spawn_car avec une proba de (f t) 
 permet de faire une apparition croissante des éléments*)
 
-val faire : plateau -> int -> int -> (plateau -> unit) -> (plateau -> unit) -> (plateau -> unit) -> (plateau -> unit) -> unit;;
+val faire : plateau -> int -> int -> (plateau -> int -> unit) -> (plateau -> int -> unit) -> (plateau -> int -> unit) -> (plateau -> int -> unit) -> unit;;
 (*faire p i f dbt bent bsor fin : trivial par induction sur les termes du lambda calcul
 *)
 
@@ -61,6 +61,6 @@ commencant a i inclus et finissant a f exclus*)
 val animer : plateau -> int -> int -> (section*((int*int)*float*Graphics.color)) list -> unit;;
   (*animer p i f gr anime a l'aide du module Graphics en representant le plateau decrit par gr*)
 
-val modeliser : plateau -> int -> int -> (unit -> unit) -> unit;;
+val modeliser : plateau -> int -> int -> (int -> unit) -> unit;;
   (*modeliser p i f info joue (f-i) iterations de l'automate, appliquant
 info a chaque tour*)
