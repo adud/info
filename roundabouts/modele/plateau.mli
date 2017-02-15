@@ -5,12 +5,25 @@ type plateau;;
 i.e. un automate*)
 
 type rond_point;;
+
+val rp_ent : rond_point -> section array;;
+
+val rp_sor : rond_point -> section array;;
+
+val rp_ron : rond_point -> section array;;
+
+val rp_dis : rond_point -> distr array;;
+(*acceder aux composantes de l'enregistrement*)
   
 val creer_rond_point: int -> int -> int -> int -> int -> ( (voiture * int * section * section) option array -> section array -> section list array -> int -> unit)
                       -> rond_point ;;
 (*creer_rond_point n l p vmi vme cmp cree un rond-point a n entrees/sorties
+de taille l, un anneau interne de taille n*p, des intersection de comportement
 de comportement cmp, avec une vitesse max interne(resp externe) de vmi (resp vma)*)
 
+val faire_itin: rond_point -> int -> int -> section list -> section list;;
+(*faire itin rp ne ns fin
+complete l'itineraire fin en lui ajoutant devant l'itineraire de l'entree ne a la sortie ns*)
 
 val pl_add_rp : plateau -> rond_point -> unit;;
 (*pl_add_rp pl rp ajoute le rond-point rp au plateau pl*)

@@ -14,8 +14,21 @@ type plateau =
 ;;
 
 type rond_point =
-  {ents: section list; sors : section list; rond: section list;
-   diss: distr list}
+  {ents: section array; sors : section array; rond: section array;
+   diss: distr array}
+
+let rp_ent rp = rp.ents
+;;
+
+let rp_sor rp = rp.sors
+;;
+
+let rp_ron rp = rp.rond
+;;
+
+let rp_dis rp = rp.diss
+;;
+
     
 let creer_rond_point n l p vmi vme cmp =
   
@@ -49,15 +62,28 @@ let creer_rond_point n l p vmi vme cmp =
     ajouter_sortie isec.(i) 1 ron.(i)
   done;
 
-    {ents=Array.to_list ent;
-     sors=Array.to_list sor;
-     rond=Array.to_list ron;
-     diss=Array.to_list isec}
+    {ents=ent;
+     sors=sor;
+     rond=ron;
+     diss=isec}
 ;;
 
+let faire_itin rp ne ns fin =
+  let inner = rp.rond in
+  let n = Array.length inner in
+  let rec boucle e s li =
+    if e == s
+    then li
+    else if e == n
+    then boucle 0 s li
+    else
+      inner.(e)::boucle (e+1) s li
+  in
+  rp.ents.(ne)::boucle ne ns (rp.sors.(ns)::fin)
+  
 let pl_add_rp pl rp =
-  pl.sects <- rp.ents @ rp.sors @ rp.rond @ pl.sects;
-  pl.distrs <- rp.diss @ pl.distrs;
+  pl.sects <- List.flatten (List.map Array.to_list [rp.ents;rp.sors;rp.rond]) @ pl.sects;
+  pl.distrs <- Array.to_list rp.diss @ pl.distrs;
 ;;
   
 let construire s d ev = {sects=s;distrs=d;events=ev};;
