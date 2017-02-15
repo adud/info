@@ -125,3 +125,9 @@ let feux dur1 dur2 ph att ent sor t =
 
 let passif att ent sor t= ()
 ;;
+
+
+  (*comportements d'apparition de voitures*)
+
+let pente b e s t =
+  b +. float_of_int t *. (e -. b) /. float_of_int s 
