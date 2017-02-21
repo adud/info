@@ -1,0 +1,49 @@
+\begin{thebibliography}{1}
+
+\bibitem{AppSan}
+C{\'e}cile Appert and Ludger Santen.
+\newblock {Mod{\'e}lisation du trafic routier par des automates cellulaires}.
+\newblock {\em Actes INRETS}, 100, 2002.
+
+\bibitem{dlab}
+Carlo Colussi, Bruno Druille, V{\'e}ronique Paquel, and S{\'e}bastien Picard.
+\newblock {Chiffres cl{\'e} du transport}.
+\newblock Technical report, 2017.
+
+\bibitem{posstur}
+M.~Ebrahim Foulaadvand and Somayyeh Belbasi.
+\newblock {Vehicular traffic flow at an intersection with the possibility of
+  turning}.
+\newblock {\em J. Phys. A: Math. Theor. 44 (2011) 105001}, May 2011.
+
+\bibitem{tflr}
+M.~Ebrahim Fouladvand, Zeinab Sadjadi, and M.~Reza Shaebani.
+\newblock {Characteristics of Vehicular Traffic Flow at a Roundabout}.
+\newblock {\em Phys. Rev. E 70, 046132 (2004)}, March 2012.
+
+\bibitem{cbrd}
+Chris Marshall.
+\newblock {Chris's British Road Directory}.
+
+\bibitem{NaSch}
+Kai Nagel and Michael Schreckenberg.
+\newblock {A cellular automaton model for freeway traffic}.
+\newblock {\em Journal de physique I}, 2(12):2221--2229, 1992.
+
+\bibitem{ChPh}
+Chen Rui-Xiong, Bai Ke-Zhao, and Liu Mu-Ren.
+\newblock {The CA model for traffic-flow at the grade roundabout crossing}.
+\newblock {\em Chinese Physics}, 15, 2006.
+
+\bibitem{WhNeEs}
+Joachim Wahle, L~Neubert, J~Esser, and Michael Schreckenberg.
+\newblock {A cellular automaton traffic flow model for online simulation of
+  traffic}.
+\newblock {\em Parallel Computing}, 27(5):719--735, 2001.
+
+\bibitem{wang2002modeling}
+Ruili Wang and Heather~J Ruskin.
+\newblock {Modeling traffic flow at a single-lane urban roundabout}.
+\newblock {\em Computer Physics Communications}, 147(1-2):570--576, 2002.
+
+\end{thebibliography}
