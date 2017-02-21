@@ -12,11 +12,13 @@ t | d_p | v_p | J_p | d_np | v_np | J_np
 
 dessin :
 
-./local > local.dat
-gnuplot
-load "plotlocal"
+./local > local*.dat
+gnuplot -p local.plot
 
 faire dynamique et absolu
+graphes interessants :
+pente 0. 1. 
+pente .2 .5
 *)
   
   
@@ -41,13 +43,13 @@ let () =
   lier bottle 0 s 0 sor;
   lier bottle 1 s 0 sor;
   
-  let s = [ent0;ent1;sor] in
-  let croiss t = (float_of_int t) /. 1000. in
+  let s = [ent0;ent1;sor] in 
+    
   (*let stable p t = p in*)
-  let sp0 = Plateau.spawn_prog croiss (panneau ent0) 0 ent0 itin in
+  let sp0 = Plateau.spawn_prog (pente 0.2 0.5 1000) (panneau ent0) 0 ent0 itin in
   let sp1 = Plateau.spawn_car 5 0 (panneau ent1) 0 ent1 itin in
   let p = Plateau.construire s [bottle] [sp0;sp1] in
-  let info t = Printf.printf "%d " t;info_fdmal [ent0]; info_fdmal [ent1] in
+  let info t = Printf.printf "%d\t" t;info_fdmal [ent0]; info_fdmal [ent1] in
 
   let deb = false in
   if

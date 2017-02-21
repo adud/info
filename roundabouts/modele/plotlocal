@@ -1,7 +1,0 @@
-set xlabel "<d_{np}> (veh/case)"
-set ylabel "<d_p> (veh/case)"
-set zlabel "<J_{np}> (veh/tps)"
-set xyplane at 0
-
-splot "localabs.dat" using 5:2:7
-replot "localdyn.dat" using 5:2:7
