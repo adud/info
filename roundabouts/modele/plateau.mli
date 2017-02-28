@@ -74,6 +74,10 @@ commencant a i inclus et finissant a f exclus*)
 val animer : plateau -> int -> int -> (section*((int*int)*float*Graphics.color)) list -> unit;;
   (*animer p i f gr anime a l'aide du module Graphics en representant le plateau decrit par gr*)
 
-val modeliser : plateau -> int -> int -> (int -> unit) -> unit;;
-  (*modeliser p i f info joue (f-i) iterations de l'automate, appliquant
-info a chaque tour*)
+
+val modeliser : plateau -> int -> int -> (plateau -> float list) -> unit;;
+  (*modeliser p i f info joue (f-i) iterations de l'automate, et affiche les informations collectees par info a chaque tour, espacees d'un retour a la ligne*)
+
+val sauvegarder : plateau -> int -> int -> (plateau -> float list) -> string -> unit;;
+  (*idem modeliser, mais au lieu de les afficher, les sauve dans le fichier donne en dernier argument*)
+

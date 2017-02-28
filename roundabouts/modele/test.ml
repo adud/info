@@ -24,5 +24,8 @@ let () =
   
   pl_add_rp pl rond;
   
-  jouer pl 0 10 
+
+  jouer pl 0 10;
+  ignore sor
+
 ;;

@@ -28,14 +28,24 @@ let preview_section sec =
   print_newline ();
 ;;
 
-let separe () = print_string "\t"
+let sep = "\t"
 ;;
     
 let info_fdmal lsec =
   let d = densite lsec in
   let v = vitesse_moy lsec in
-  List.iter (fun x -> (print_float x;separe ()))
-            [d;v;d*.v(*J*)]
+  [d;v;d*.v(*J*)]
+;;
+
+let print_info data =
+  List.iter (fun x -> print_float x; print_string sep) data
+
+;;
+            
+let save_info data out =
+  List.iter
+    (fun x -> output_string out (string_of_float x); output_string out sep)
+    data
 ;;
 
 open Graphics

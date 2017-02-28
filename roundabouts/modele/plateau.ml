@@ -189,10 +189,16 @@ let animer p i f grcr =
 
 let modeliser p i f info =
   let bent p t=
-    info t;
+    print_info (info p);
     print_newline ();
   in
   faire p i f rien bent rien rien
 ;;
-  
 
+let sauvegarder p i f info fout =
+  let out = open_out fout in
+  let bent p t =
+    save_info (info p) out;
+    output_string out "\n";
+  in
+  faire p i f rien bent rien (fun p f -> close_out out)
