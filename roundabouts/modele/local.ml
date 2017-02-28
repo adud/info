@@ -65,6 +65,6 @@ let modele fout tint =
 ;;
 
 let () =
-  modele "localabs2.txt" prioabs;
-  modele "localdyn2.txt" priodyn;
+  modele "localabs.dat" prioabs;
+  modele "localdyn.dat" priodyn;
 ;;
