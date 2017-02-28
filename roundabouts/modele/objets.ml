@@ -157,17 +157,19 @@ let flot_moy lsec =
 
 (*manipuler les objets*)
 
-
+let ajouter_sortie d p sec =
+  match
+    d
+  with
+  |Spawn -> ()
+  |Quit(_) -> failwith "ajouter_sortie : entrer par une sortie"
+  |Int(i1) -> i1.sor.(p) <- sec::i1.sor.(p)
+;;
+  
 let lier d1 p1 d2 p2 sec =
 	sec.pre <- d1;
 	sec.post <- d2;
-	begin
-	  match d1 with
-	  |Spawn -> ()
-	  |Quit(_) -> failwith "lier : entrer par une sortie"
-	  |Int(i1) -> i1.sor.(p1) <- sec::i1.sor.(p1)
-	end
-	;
+	ajouter_sortie d1 p1 sec;
 	begin
 	  match d2 with
 	  |Spawn -> failwith "lier : sortir par une entree"

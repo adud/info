@@ -30,7 +30,7 @@ let () =
   
   let sp = Plateau.spawn_prog gr (panneau ent) 0 ent itin in
   let p = Plateau.construire s [] [sp] in
-  let info () = info_fdmal [ent] in
+  let info t = ignore t; (info_fdmal [ent]) in
   
   let deb = false in
 

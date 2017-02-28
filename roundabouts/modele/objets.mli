@@ -67,6 +67,9 @@ val flot_moy : section list -> float;;
   
 (*manipuler les objets*)
 
+val ajouter_sortie : distr -> int -> section -> unit;;
+(*ajouter sortie d p sec si d est une intersection i : autorise les voitures venant de i.ent.(p) a sortir par sec*)
+  
 val lier : distr -> int -> distr -> int -> section -> unit;;
 (*lier d1 p1 d2 p2 sec fait le lien de la distribution d1 a la distribution d2 par la route sec en positionant sec comme parmi les sorties possibles de d1 et comme entree no p2 de d2*)
   

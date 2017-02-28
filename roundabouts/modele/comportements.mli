@@ -27,3 +27,9 @@ val priodyn : (voiture * int * section * section) option array -> section array 
 
 val feux : int -> int -> int ->  (voiture * int * section * section) option array -> section array -> section list array -> int -> unit;;
 (*feux dur1 dur2 ph retourne un comportement de feux : att.(0) passe pendant dur1, puis att.(1) pendant dur2 en commencant par ph*)
+
+
+(*comportements d'apparition : fonctions gerant la frequence d'apparition des voitures*)
+
+val pente : float -> float -> int -> int -> float;;
+  (*pente b e s t retourne pour un automate pendant s etapes, une apparition de voitures croissante en fonction de t allant de b a e*)
