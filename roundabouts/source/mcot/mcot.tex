@@ -1,0 +1,64 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+
+
+\documentclass[11pt,a4paper,french]{article}
+
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath,amsfonts,amssymb}
+
+\usepackage{geometry}
+\geometry{margin=75pt}
+
+\usepackage[upright]{fourier}
+
+\usepackage{shadethm}
+
+\usepackage{pgf,tikz}
+\usetikzlibrary{arrows}
+
+\title{Ronds-points}
+
+\date{}
+\author{Antonin Dudermel}
+
+\begin{document}
+
+
+\newshadetheorem{defin}{Définition}
+\newshadetheorem{theo}{Théorème}
+
+\maketitle
+
+\section*{Positionnement thématique}
+Informatique pratique (Modélisation informatique, simulation informatique), Génie Mécanique (génie civil)
+
+\section*{Mots-clefs}
+Mots-clefs : {\it intersection routière, automate cellulaire, circulation routière, auto-organisation, modélisation} \par
+Keywords : {\it crossroad, cellular automaton, traffic flow, self-organization, modelling}
+
+\section*{Bibliographie commentée}
+Le réseau routier français, en plein développement, représente une large part des dépenses liées aux transports : il faut en effet assurer des infrastructures efficaces, pour assurer un bon rendement, et fiables, pour limiter le nombre d'accidents\cite{dlab}.\par
+Pour étudier ces infrastructures, la modélisation par automates cellulaires a été envisagée par Nagel et Schreckenberg dès les années 90\cite{NaSch}. Même si ce modèle est extrêmement simple (une voie, freinage instantané\dots), il permet déjà diverses observations, comme la vitesse de remontée d'un embouteillage. De nombreuses améliorations ont été proposées à ce modèle, comme ajouter un temps de démarrage, adapter la réactivité du chauffeur à la vitesse du véhicule (VDR : velocity dependant randomisation), ou encore faire anticiper aux voitures le comportement de la voiture de tête (BLM Back Light Model)\cite{AppSan}. Ce modèle peut s'adapter à diverses structures, comme une autoroute à plusieurs voies\cite{WhNeEs}, mais l'adapter à des intersections demande un peu plus de travail. \par
+En effet, lorsqu'on modélise une intersection, il faut décider de la manière dont passent les voitures, mais aussi quelle direction leur donner. Le modèle Nagel-Schreckenberg s'adapte assez bien aux intersection avec feux de croisements\cite{posstur}, mais une plus grande diversité se retrouve dans le cas des ronds-points : il faut déterminer comment se comporte la voiture qui cède le passage. Les mêmes auteurs proposent un modèle où chaque voiture anticipe le mouvement des autres, puis déterminent une distance de sécurité\cite{tflr}. Une autre possibilité est de considérer la temporalité des actions : en cas d'intersection, on détermine quelle voiture la franchira la première, et on animera les voitures dans l'ordre d'arrivée à l'intersection\cite{ChPh}. \par
+Notons qu'il n'est pas nécessaire de se baser sur le modèle Nagel-Schreckenberg pour modéliser un rond-point : Wang et Ruskin proposent un modèle dans lequel le comportement des voitures sur les routes est simplifié à l'extrême au profit du comportement d'entrée-sortie du rond-point\cite{wang2002modeling}. \par
+Ces modèles sont utiles pour adapter et optimiser les ronds-points, en donnant, par exemple une taille optimale de l'îlot en fonction de la densité du trafic\cite{tflr}. Il peuvent aussi servir à l'étude de ronds-points moins classiques, comme celui de la place de l'Étoile à Paris, ou encore le \guillemotleft ~ Manège enchanté \guillemotright ~ de Swindon, en Angleterre, qui, bien que rebutant à première vue, fait preuve d'une efficacité sans conteste\cite{cbrd}.
+
+\section*{Problématique retenue}
+
+Les rond-points semblent être une alternative efficace et à privilégier par rapport aux intersections à feux. À l'aide d'automates cellulaires, dans quelle mesure pouvons-nous justifier cette efficacité et développer des infrastructures innovantes comme le rond-point de Swindon ?
+
+\section*{Objectifs du travail}
+Je propose de développer un automate cellulaire modélisant le comportement de voitures aux alentours d'un rond-point, basé sur le modèle de Nagel-Schreckenberg et adaptable au rond-point de Swindon. \par
+Après avoir étudié quelques variations de ce modèle, il serait intéressant de faire une étude comparée d'une intersection à feux et d'un rond-point pour diverses densités de trafic, puis d'étudier des facteurs permettant d'optimiser un rond-point, et enfin étudier à l'aide du modèle et de manière plus globale les caractéristiques du Manège enchanté.
+
+
+\renewcommand{\refname}{Bibliographie}
+\bibliographystyle{plain-fr}
+\bibliography{./../biblio}
+
+\end{document}
