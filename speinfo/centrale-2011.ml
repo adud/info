@@ -88,22 +88,111 @@ let sous_facteurs m k =
   done;
   sub_string m !beg (p + 2 - !beg)::!li
 ;;
-  
-let dans_L_etoile dans_L m =
-  let p = string_length m - 2 in
-  let rec existe f k l =
+
+(*existe : (int -> bool) -> int -> int 
+existe f k l renvoie true ssi il existe n dans [|k;l|] tq
+f n soit vrai*)
+let rec existe f k l =
     if
       k > l
     then
       false
     else
       f k || existe f (k+1) l
-  in
+;;
+  
+let dans_L_etoile dans_L m =
+  let p = string_length m - 2 in
   let conc_L k =
     let sf = sous_facteurs m k in
     for_all dans_L sf
   in
   existe conc_L 0 (puiss2 (p+1))
 ;;
-      
- 
+
+(*decoupe : string -> int -> string * string :
+decoupe k m retourne le couple m[:k] et m[k:]*)  
+
+let decoupe m k =
+  let n = string_length m in
+  sub_string m 0 k, sub_string m k (n-k)
+;;  
+let rec dans_L_etoile2 dans_L m =
+  let n = string_length m in
+  let bonne_decoupe k =
+    let deb,fin = decoupe m k in
+    dans_L deb && dans_L_etoile2 dans_L fin
+  in
+  dans_L m || existe bonne_decoupe 1 (n-1)
+;;
+
+let dans_L_etoile3 dans_L m =
+  let n = string_length m in
+  let t = make_matrix n n false in
+  for j = 0 to n-1 do
+    for i = j downto 0 do
+      t.(i).(j) <-
+        dans_L (sub_string m i (j-i+1)) ||
+          existe (fun k -> t.(i).(k) &&t.(k+1).(j)) i (j-1)
+    done;
+  done;
+  t.(0).(n-1)
+;;
+
+let dsaaoub m = (m = "aa" || m = "b")
+;;
+
+  
+  (*EN FILE*)
+type fifo = {contenu:int vect;
+             mutable debut:int;
+             mutable fin:int}
+;;
+
+let creer_file n = {contenu = make_vect n 0;debut=0;fin=(-1)}
+;;
+
+let est_vide f = f.fin = f.debut - 1
+;;
+
+let put a f =
+  let n = vect_length f.contenu in
+  
+  begin
+    f.fin  <- (f.fin + 1) mod n;
+    f.contenu.(f.fin) <- a;
+  end
+;;
+
+let get f =
+  let n = vect_length f.contenu in
+  if f.debut = f.fin + 1
+  then failwith "file vide"
+  else
+    begin
+      let a = f.contenu.(f.debut) in
+      f.debut <- (f.debut + 1) mod n;
+      a
+    end
+;;
+                        
+let dans_L_etoile3 dans_L m =
+  let n = string_length m in
+  let vus = make_vect n false in
+  let q = creer_file (n+1) in
+  put (-1) q;
+  while not est_vide q && not vus.(n-1) do
+    let s = get q in
+    for i = s + 1 to (n-1) do
+      if not vus.(i) && dans_L (sub_string m (s+1) (i-s))
+      then
+        begin
+          vus.(i) <- true;
+          put i q;
+        end
+    done
+  done;
+  vus.(n-1)
+;;
+
+dans_L_etoile3 dsaaoub "aaaaaabbbbbbaa";;
