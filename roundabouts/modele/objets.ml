@@ -14,7 +14,10 @@ type distr =
 (*si att.(x) contient (v,d,e,s) c'est qu'une voiture v se trouvant a d (d>0 
 de l'intersection, venant de e, allant vers s ou x est la case de att reservee a e*)
 
- and voiture = {mutable spd:int;mutable dir:section list;nom:string}
+ and voiture = {mutable spd:int;
+                mutable dir:section list;
+                nom:string;
+                mutable arret: bool}
   
  and section = {mutable pre:distr;data:voiture option array;
 			   maxspd:int;mutable post:distr}
@@ -41,7 +44,7 @@ let creer_spawn () = Spawn
 let creer_sortie s = Quit(s)
 ;;
   
-let creer_voiture s d n = {spd=s;dir=d;nom=n}
+let creer_voiture s d n = {spd=s;dir=d;nom=n;arret=(s=0)}
 ;;
 
 let itere_voitures f sec =
@@ -195,18 +198,29 @@ let ajcar_sil sec c pos =
 (*iterations de l'automate*)
 
 let brake c =
-  c.spd <- 0
+  c.spd <- 0;
+  c.arret <- true;
 ;;
 let accel c vmax =
-  c.spd <- min (c.spd + 1) vmax
+  if c.arret
+  then c.arret <- false
+  else c.spd <- min (c.spd + 1) vmax
 ;;
 let desc c dsec =
-  c.spd <- min c.spd (dsec - 1)
+  let vo = c.spd in
+  c.spd <- min c.spd (dsec - 1);
+  if c.spd = 0 && vo > 0
+  then c.arret <- true
+                 
 ;;
 let descrand c p =
+  let vo = c.spd in
   if Random.float 1. <= p
-  then c.spd <- max 0 (c.spd - 1)
+  then c.spd <- max 0 (c.spd - 1);
+  if c.spd = 0 && vo > 0
+  then c.arret <- true
 ;;
+  
 let move p sec =
   match sec.data.(p) with
   |None -> failwith "move :trying to move no car"

@@ -49,7 +49,7 @@ let modele fout tint =
   let s = [ent0;ent1;sor] in 
     
   (*let stable p t = p in*)
-  let sp0 = Plateau.spawn_prog (pente 0.2 0.5 nit) (panneau ent0) 0 ent0 itin in
+  let sp0 = Plateau.spawn_prog (pente 0. 1. nit) (panneau ent0) 0 ent0 itin in
   let sp1 = Plateau.spawn_car 5 0 (panneau ent1) 0 ent1 itin in
   let p = Plateau.construire s [bottle] [sp0;sp1] in
   let info t = ignore t;info_fdmal [ent0] @ info_fdmal [ent1] in

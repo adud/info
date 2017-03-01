@@ -34,7 +34,7 @@ let () =
   let info t = ignore t; (info_fdmal [ent]) in
 
   
-  let deb = false in
+  let deb = true in
 
   Plateau.silence p 0 100;
   if
