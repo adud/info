@@ -22,7 +22,7 @@ de taille l, un anneau interne de taille n*p, des intersection de comportement
 de comportement cmp, avec une vitesse max interne(resp externe) de vmi (resp vma)*)
 
 val faire_itin: rond_point -> int -> int -> section list -> section list;;
-(*faire itin rp ne ns fin
+(*faire_itin rp ne ns fin
 complete l'itineraire fin en lui ajoutant devant l'itineraire de l'entree ne a la sortie ns*)
 
 val pl_add_rp : plateau -> rond_point -> unit;;

@@ -23,9 +23,12 @@ pente .2 .5
   
   
 (*test two_one*)
+let nit = 10000
+;;
+  
 let modele fout tint =
   let ent0 = creer_section 50 5 in
-  let ent1 = creer_section 10 5 in
+  let ent1 = creer_section 50 5 in
   let sor = creer_section 50 5 in
   let a = creer_spawn () in
   let s = creer_sortie "s" in
@@ -46,7 +49,7 @@ let modele fout tint =
   let s = [ent0;ent1;sor] in 
     
   (*let stable p t = p in*)
-  let sp0 = Plateau.spawn_prog (pente 0.2 0.5 1000) (panneau ent0) 0 ent0 itin in
+  let sp0 = Plateau.spawn_prog (pente 0.2 0.5 nit) (panneau ent0) 0 ent0 itin in
   let sp1 = Plateau.spawn_car 5 0 (panneau ent1) 0 ent1 itin in
   let p = Plateau.construire s [bottle] [sp0;sp1] in
   let info t = ignore t;info_fdmal [ent0] @ info_fdmal [ent1] in
@@ -58,10 +61,10 @@ let modele fout tint =
   then
     begin
       init 800 100;
-      Plateau.animer p 0 1000 grcr;
+      Plateau.animer p 0 nit grcr;
     end
   else
-    Plateau.sauvegarder p 0 1000 info fout;
+    Plateau.sauvegarder p 0 nit info fout;
 ;;
 
 let () =
