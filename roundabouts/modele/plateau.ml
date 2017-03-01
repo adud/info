@@ -180,7 +180,7 @@ let animer p i f grcr =
     Graphics.clear_graph ();
     imager p grcr;
     Graphics.synchronize ();
-    patience 0.1;
+    patience 0.05;
     (*ignore (Graphics.wait_next_event [Graphics.Key_pressed]);  *)
   in
   faire p i f rien bent rien rien

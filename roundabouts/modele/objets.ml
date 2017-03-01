@@ -3,7 +3,7 @@
 
 let p = ref 0.
 ;;
-let redm = ref true
+let redm = ref 1
 ;;
   
 type distr = 
@@ -20,7 +20,7 @@ de l'intersection, venant de e, allant vers s ou x est la case de att reservee a
  and voiture = {mutable spd:int;
                 mutable dir:section list;
                 nom:string;
-                mutable arret: bool}
+                mutable arret: int}
   
  and section = {mutable pre:distr;data:voiture option array;
 			   maxspd:int;mutable post:distr}
@@ -47,7 +47,7 @@ let creer_spawn () = Spawn
 let creer_sortie s = Quit(s)
 ;;
   
-let creer_voiture s d n = {spd=s;dir=d;nom=n;arret=(s=0)}
+let creer_voiture s d n = {spd=s;dir=d;nom=n;arret=0}
 ;;
 
 let itere_voitures f sec =
@@ -202,24 +202,21 @@ let ajcar_sil sec c pos =
 
 let brake c =
   c.spd <- 0;
-  c.arret <- true;
+  c.arret <- !redm;
 ;;
   
-let accelr r c vmax =
-  if c.arret && !r
-  then c.arret <- false
+let accel c vmax =
+  if c.arret > 0
+  then c.arret <- c.arret - 1
   else c.spd <- min (c.spd + 1) vmax
 ;;
 
-let accel = accelr redm
-;;
-  
   
 let desc c dsec =
   let vo = c.spd in
   c.spd <- min c.spd (dsec - 1);
   if c.spd = 0 && vo > 0
-  then c.arret <- true
+  then c.arret <- !redm
 ;;
   
 let descrand c p =
@@ -227,7 +224,7 @@ let descrand c p =
   if Random.float 1. <= p
   then c.spd <- max 0 (c.spd - 1);
   if c.spd = 0 && vo > 0
-  then c.arret <- true
+  then c.arret <- !redm
 ;;
   
 let move p sec =
@@ -286,7 +283,7 @@ let increment sec =
 	  |None -> failwith "increment : empty car"
 	  |Some(vder) ->
 	    (*on vient de determiner la voiture actuelle et la voiture de devant*)
-	    accel vder sec.maxspd;
+            accel vder sec.maxspd;
 	    desc vder (!next - !act);
 	    descrand vder !p;
 	    move !act sec;

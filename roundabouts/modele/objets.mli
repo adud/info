@@ -1,6 +1,6 @@
 val p : float ref(*la probabilite de ralentissement de la voiture*);;
 
-val redm : bool ref (*si true : modele ameliore avec temps de redemarrage*);;
+val redm : int ref (*temps de redemarrage apres un arret*);;
   
 type distr (*une entree, une sortie ou une intersection*);;
 
