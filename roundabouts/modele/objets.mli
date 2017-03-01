@@ -1,5 +1,7 @@
-val p : float (*la probabilite de ralentissement de la voiture*);;
+val p : float ref(*la probabilite de ralentissement de la voiture*);;
 
+val redm : bool ref (*si true : modele ameliore avec temps de redemarrage*);;
+  
 type distr (*une entree, une sortie ou une intersection*);;
 
 type intersection (*une intersection entre deux sections d'autoroute*);;

@@ -68,6 +68,8 @@ let modele fout tint =
 ;;
 
 let () =
+  redm := false;
   modele "localabs.dat" prioabs;
-  modele "localdyn.dat" priodyn;
+  redm := true;
+  modele "localabs2.dat" prioabs;
 ;;

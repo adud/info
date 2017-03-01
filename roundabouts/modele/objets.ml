@@ -1,8 +1,11 @@
 (*les divers objets qui seront necessaires pour le programme*)
 
 
-let p = 0.
+let p = ref 0.
 ;;
+let redm = ref true
+;;
+  
 type distr = 
  	|Spawn
 	|Quit of string
@@ -201,18 +204,24 @@ let brake c =
   c.spd <- 0;
   c.arret <- true;
 ;;
-let accel c vmax =
-  if c.arret
+  
+let accelr r c vmax =
+  if c.arret && !r
   then c.arret <- false
   else c.spd <- min (c.spd + 1) vmax
 ;;
+
+let accel = accelr redm
+;;
+  
+  
 let desc c dsec =
   let vo = c.spd in
   c.spd <- min c.spd (dsec - 1);
   if c.spd = 0 && vo > 0
   then c.arret <- true
-                 
 ;;
+  
 let descrand c p =
   let vo = c.spd in
   if Random.float 1. <= p
@@ -279,7 +288,7 @@ let increment sec =
 	    (*on vient de determiner la voiture actuelle et la voiture de devant*)
 	    accel vder sec.maxspd;
 	    desc vder (!next - !act);
-	    descrand vder p;
+	    descrand vder !p;
 	    move !act sec;
 	    (*la voiture suivante devient voiture actuelle*)
 	    act := !next;

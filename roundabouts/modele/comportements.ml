@@ -20,7 +20,7 @@ let refuse c e s =
 let internasch c d e s =
   accel c ( panneau s);
   desc c ( firstcar s + d);
-  descrand c p;
+  descrand c !p;
 
   let pos = radar c - d in
   if
