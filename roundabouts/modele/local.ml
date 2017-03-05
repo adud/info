@@ -29,15 +29,15 @@ let nit = 1000
 let modele fout tint =
   let ent0 = creer_section 50 5 in
   let ent1 = creer_section 50 5 in
-  let sor = creer_section 50 5 in
+  let sor = creer_section 10 5 in
   let a = creer_spawn () in
   let s = creer_sortie "s" in
   
   let bottle = creer_inter 2 tint in
 
   let grcr = [ent0,((20,80),0.,Graphics.red);
-              ent1,((20,20),0.,Graphics.blue);
-              sor, ((20,50),0.,Graphics.black)] in
+              ent1,((30,20),0.08,Graphics.blue);
+              sor, ((550,80),0.,Graphics.black)] in
   
   let itin = [sor;sor] in
   
