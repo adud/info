@@ -176,7 +176,7 @@ let get f =
     end
 ;;
                         
-let dans_L_etoile3 dans_L m =
+let dans_L_etoile4 dans_L m =
   let n = string_length m in
   let vus = make_vect n false in
   let q = creer_file (n+1) in
