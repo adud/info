@@ -31,10 +31,49 @@ let itere_succ f g s =
   done
 ;;
 
+(*implantation de l'algorithme de Floyd-Warshall*)
+
+(*relache graphe -> int -> int -> int -> unit 
+effectue une operation de relaxation elementaire sur w*)
+let relache w a b k =
+  let it = w.(a).(b) in
+  let nit = w.(a).(k) +. w.(k).(b) in
+  if nit < it then
+    w.(a).(b) <- nit
+;;
+
+let floyd_warshall g =
+  let n = taille g in
+  let w = creer_graphe n in
+  (*initialiser w*)
+
+  for i=0 to (n-1) do
+    for j=0 to (n-1) do
+      w.(i).(j) <- g.(i).(j)
+    done
+  done;
+  
+  for i=0 to (n-1) do
+    w.(i).(i) <- 0.
+  done;
+
+  for k = 0 to (n-1) do
+    for i = 0 to (n-1) do
+      for j = 0 to (n-1) do
+        relache w i j k
+      done
+    done
+  done;
+
+  w
+;; 
+
 (*constantes pour les poids des aretes*)  
 let pi = 4. *. atan 1.
 ;;
 
+(* d'apres google maps : 60px = 10m *)
+  
 let r1,r2,r3 = 100.,40.,200.
   
 let lcer = 2.*.pi*.r2/.3.
@@ -53,7 +92,7 @@ let h = 10.
 creer_manege lext lcer lint 
 cree le manege et le rond-point associe pour les tailles de section donnees*)
   
-let creer_manege lext lcer lint =
+let creer_manege lext lcer lint h =
   
   let mag = creer_graphe 20 in
   let rop = creer_graphe 20 in
@@ -82,3 +121,39 @@ let creer_manege lext lcer lint =
   done;
   mag,rop
 ;;
+
+(*info_circ: graphe -> graphe
+extrait d'un graphe de manege les lignes et les colonnes correspondant
+a des entrees-sorties*)
+  
+let info_circ w =
+  let s = creer_graphe 5 in
+  for i=0 to 4 do
+    for j = 0 to 4 do
+      s.(i).(j) <- w.(i*4).(j*4)
+    done
+  done;
+  s
+;;
+
+(*(++) float array array -> float array array -> float array array
+somme de deux matrices de flottants
+precondition : les deux matrices sont de memes dimensions*)
+let ( ++ ) =
+  Array.map2 (fun t1 t2 -> Array.map2 (fun x y -> x +. y) t1 t2)
+;;
+
+let opp  =
+  Array.map (fun t -> Array.map (fun x -> -.x) t) 
+;;
+
+let alp =  [|
+    [|2.;3.|];
+    [|4.;5.|];
+  |]
+;;
+
+let mag,rop = creer_manege lext lcer lint h in
+    info_circ (floyd_warshall mag) ++ opp (info_circ (floyd_warshall rop))
+;;
+  
