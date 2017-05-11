@@ -84,10 +84,6 @@ let lext = 2.*.pi*.r3/.5. -. lcer /. 2.
 ;;
   
 
-(*un poids handicap pour les give-way*)
-let h = 10.
-;;
-
 (*creer_manege : float -> float -> float -> graphe*graphe
 creer_manege lext lcer lint 
 cree le manege et le rond-point associe pour les tailles de section donnees*)
@@ -153,7 +149,58 @@ let alp =  [|
   |]
 ;;
 
-let mag,rop = creer_manege lext lcer lint h in
-    info_circ (floyd_warshall mag) ++ opp (info_circ (floyd_warshall rop))
+(*h est un poids handicap pour les give-way*)
+  
+let res h =
+  let mag,rop = creer_manege lext lcer lint h in
+  opp (info_circ (floyd_warshall mag)) ++ (info_circ (floyd_warshall rop))
+;;
+
+(*somme des elements pour une matrice de flottants*)
+  
+let total m =
+  Array.fold_left
+    (fun x t -> x +. Array.fold_left (fun x y -> x +. y) 0. t) 0. m
+;;
+
+let dep_h i j = 
+  for h=i to j do
+    print_int h; print_char '\t';
+    print_float (total (res (float_of_int h)));
+    print_newline ();
+  done
+;;
+
+(*fin de la partie FW, maintenant notion de section critique*)
+(*transforme le graphe pondere represente par une matrice
+en graphe oriente non-pondere represente par listes d'adjacences*)
+
+let adj_of_mat g =
+  let n = taille g in
+  let s = Array.make n [] in
+  for i=0 to n-1 do
+    for j=n-1 downto 0 do
+      if g.(i).(j) < inf then
+        s.(i) <- j::s.(i)
+    done
+  done;
+  s
+;;
+
+(*pas une tres bonne idee : on a besoin de supprimer des arcs*)
+  
+let parcours g a =
+  let n = taille g in
+  let vus = Array.make n false in
+  let rec loop i =
+    if not vus.(i) then
+      begin
+        vus.(i) <- true;
+        itere_succ loop g i
+      end
+  in
+  loop a;
+  vus
 ;;
   
+      
