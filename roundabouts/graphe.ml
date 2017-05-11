@@ -24,11 +24,22 @@ ne fait rien si l'arc n'existe pas*)
 let suppr g a b = lier g a b inf
 ;;
 
-let itere_succ f g s =
+(* succs : graphe -> int -> int list
+succs g s
+retourne les successeurs du sommet s dans le graphe g*)
+
+let succs g s =
+  let li = ref [] in
   for i=0 to taille g - 1 do
-    if g.(s).(i) < inf
-    then f i
-  done
+    if g.(s).(i) < inf then
+      li := i:: !li
+  done;
+  !li
+;;
+
+  
+let itere_succ f g s =
+  List.iter f (succs g s)
 ;;
 
 (*implantation de l'algorithme de Floyd-Warshall*)
@@ -123,13 +134,8 @@ extrait d'un graphe de manege les lignes et les colonnes correspondant
 a des entrees-sorties*)
   
 let info_circ w =
-  let s = creer_graphe 5 in
-  for i=0 to 4 do
-    for j = 0 to 4 do
-      s.(i).(j) <- w.(i*4).(j*4)
-    done
-  done;
-  s
+  Array.init 5 (fun i -> Array.init 5 (fun j -> w.(i*4).(j*4)))
+
 ;;
 
 (*(++) float array array -> float array array -> float array array
@@ -188,19 +194,47 @@ let adj_of_mat g =
 ;;
 
 (*pas une tres bonne idee : on a besoin de supprimer des arcs*)
+
+(*acces : graphe -> int -> int -> bool
+acces g a b retourne true ssi il existe un chemin de a a b ds g*)
   
-let parcours g a =
+let acces g a b =
   let n = taille g in
   let vus = Array.make n false in
-  let rec loop i =
-    if not vus.(i) then
-      begin
-        vus.(i) <- true;
-        itere_succ loop g i
-      end
+  let rec loop v =
+    let snv = List.filter (fun v -> not vus.(v))  (succs g v) in
+    vus.(v) <- true;
+    v = b || List.exists loop snv
   in
-  loop a;
-  vus
+  loop a
+;;
+
+(*pres_conn graphe -> int -> int
+pres_conn g a b revoie true ssi la suppression de l'arete (a->b) dans g
+preserve les composantes connexes fortes de g
+PREC : l'arete a->b existe 
+cf mail Judi*)
+  
+let pres_conn g a b =
+  let arc = g.(a).(b) in
+  suppr g a b;
+  let s = acces g a b in
+  lier g a b arc;
+  s
+;;
+
+(*arcs_critiques : graphe -> int*int list
+retourne la liste des arcs dont la supression entrainerait la modification
+de la connexite du graphe triee par ordre lexicographique*)
+  
+let arcs_critiques g =
+  let n = taille g in
+  let s = ref [] in
+  for i = n-1 downto 0 do
+    List.iter (fun j -> if not (pres_conn g i j)
+                        then s := (i,j)::!s)
+              (succs g i)
+  done;
+  !s
 ;;
   
-      
