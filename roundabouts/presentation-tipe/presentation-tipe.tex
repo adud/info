@@ -109,7 +109,11 @@ literate=
 	\frametitle{Graphe du rond-point}
 	\begin{figure}
 		\begin{center}
-			\includegraphics[scale=0.3]{../manege-graphe}
+			\subfloat[le manège]{
+				\includegraphics[scale=0.2]{../manege-graphe}
+				}
+			\subfloat[le rond-point]{
+				\includegraphics[scale=0.2]{../rp-graphe}}
 		\end{center}
 		\caption{un graphe adapté au manège}
 	\end{figure}
@@ -120,14 +124,42 @@ literate=
 \begin{frame}
 
 	\frametitle{chemins plus courts}
-	Objectif : appliquer l'algorithme de Floyd-Warshall pour montrer une diminution du trajet
+	Objectif : appliquer l'algorithme de Floyd-Warshall pour montrer une diminution du trajet	\par 
+	Réalisation : création du graphe pour le manège enchanté et un rond-point classique, et comparaison des distances entrées-sorties pour les deux graphes
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Résultats}
+\begin{figure}
+	\caption{Rapport entre la distance entrée-entrée pour le rond-point et le manège (en \%)}
+	\begin{center}
+	\begin{tabular}{ r|c c c c c}
+  entrée & 0 & 4 & 8 & 12 & 16 \\ \hline
+  0 & 100 & 100 & 100 & 60 & 36 \\
+4 & 36 & 100 & 100 & 100 & 60 \\
+8 & 60 & 36 & 100 & 100 & 100 \\
+12 & 100 & 60 & 36 & 100 & 100 \\
+16 & 100 & 100 & 60 & 36 & 100 \\
+	\end{tabular}
+	\end{center}
+\end{figure}
 \end{frame}
 
 	\subsection{Résistance aux accidents}
 
 \begin{frame}
 	\frametitle{résistant aux accidents ?}
-	Supposons qu'il y ait un accident sur une section, le rond-point est-il toujours fonctionnel ?
+	Supposons qu'il y ait un accident sur une section, le rond-point est-il toujours fonctionnel ? Plus formellement, si $G=(V,E)$ est un graphe orienté fortement connexe, $(a,b) \in E $, $G^\prime = (V,E\backslash \{ (a,b) \})$ est-il fortement connexe ?
+\end{frame}
+
+\begin{frame}
+	\begin{theorem}
+		Soit $G=(V,E)$ un graphe orienté fortement connexe, $(a,b) \in E$, alors :
+		$G^\prime = (V,E\backslash \{ (a,b) \})$ est fortement connexe SSI il existe un chemin de $a$ à $b$
+		dans $G^\prime$
+	\end{theorem}
+	Résultat : les seules sections dont un accident bloque le manège sont les sections d'introduction dans le manège (contre toutes pour le rond-point classique)
 \end{frame}
 
 \section{Un Modèle par automate cellulaire}
