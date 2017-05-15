@@ -47,8 +47,8 @@ literate=
   {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1% 
   {û}{{\^u}}1 {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1%
   {Ô}{{\^O}}1 {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1%
-  {Æ}{{\AE}}1 {ç}{{\c c}}1 {Ç}{{\c C}}1 {€}{{\EUR}}1 ,
-morekeywords={len,input,range}}
+  {Æ}{{\AE}}1 {ç}{{\c c}}1 {Ç}{{\c C}}1 {€}{{\EUR}}1%
+  }
 
 \usetheme{Warsaw}
 \usecolortheme{beaver}
@@ -75,9 +75,71 @@ morekeywords={len,input,range}}
 	\tableofcontents
 \end{frame}
 
-\section{Modéliser un rond-point}
+\section{Un Graphe pour le manège}
+	\subsection{Le Manège}
+\begin{frame}
+	\frametitle{Le Manège enchanté}
+	\begin{center}
+		\includegraphics[scale=0.4]{./images/magic}
+	\end{center}
+\end{frame}
 
-	\subsection{Un Automate cellulaire}
+\begin{frame}
+	\frametitle{Fonctionnement}
+	\begin{itemize}
+		\item 1 grand rond-point central tournant dans le sens inverse
+		\item 5 petits ronds-points latéraux
+		\item Des lignes de "cédez le passage" avec de l'espace pour plusieurs voitures
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Comment circuler ?}
+	\begin{figure}
+		\begin{center}
+			\includegraphics[scale=0.3]{./images/itin}
+			\caption{itinéraires possibles}
+		\end{center}
+	\end{figure}
+\end{frame}
+
+
+	\subsection{Modéliser par un graphe}
+\begin{frame}
+	\frametitle{Graphe du rond-point}
+	\begin{figure}
+		\begin{center}
+			\includegraphics[scale=0.3]{../manege-graphe}
+		\end{center}
+		\caption{un graphe adapté au manège}
+	\end{figure}
+\end{frame}
+
+	\subsection{Diminution des distances}
+
+\begin{frame}
+
+	\frametitle{chemins plus courts}
+	Objectif : appliquer l'algorithme de Floyd-Warshall pour montrer une diminution du trajet
+\end{frame}
+
+	\subsection{Résistance aux accidents}
+
+\begin{frame}
+	\frametitle{résistant aux accidents ?}
+	Supposons qu'il y ait un accident sur une section, le rond-point est-il toujours fonctionnel ?
+\end{frame}
+
+\section{Un Modèle par automate cellulaire}
+	\begin{frame}
+		\frametitle{Un Modèle par automate cellulaire}
+		\begin{center}
+			\includegraphics[scale=0.42]{./images/localdebut}\vfill
+			\includegraphics[scale=0.42]{./images/localsature}
+		\end{center}
+	\end{frame}
+
+	\subsection{Automate cellulaire}
 		\begin{frame}
 	\frametitle{Modèle Nagel-Schreckenberg (NaSch)}
 	\begin{enumerate}
@@ -88,30 +150,6 @@ morekeywords={len,input,range}}
 	\end{enumerate}
 \end{frame}
 
-\begin{frame}
-Accélération
-	Avec $v_i$ la vitesse de la voiture $i$, $v_{max}$ la vitesse maximale autorisée : 
-	\begin{equation}
-		v_i \leftarrow \min (v_i+1,v_{max})
-	\end{equation}
-\\
-
-Décélération
-	avec $d_i$ la distance entre les voitures $i$ et $i+1$
-	\begin{equation}
-		v_i \leftarrow \min (v_i,d_i-1)
-	\end{equation}
-
-
-Facteur aléatoire
-	\begin{equation}
-		v_i \leftarrow \max(v_i-1,0) \text{ avec proba } p
-	\end{equation}
-	Mouvement
-	\begin{equation}
-		x_i \leftarrow x_i + v_i
-	\end{equation}
-\end{frame}
 
 
 \begin{frame}
@@ -153,7 +191,7 @@ Facteur aléatoire
 	Expérience simpliste : deux entrées et une sortie \\
 	Objectifs
 	\begin{enumerate}
-		\item Chercher les limites du modèle
+		\item Étudier les modèles dans un cas simple
 	 	\item Chercher les limites du rond-point
 		\item Déterminer les différences entre les deux modèles
 	\end{enumerate}
@@ -181,7 +219,7 @@ Facteur aléatoire
 	$$J = f(\rho)$$
 	\begin{figure}
 		\begin{center}	
-			\includegraphics[scale = 0.7]{./images/dfondcomp}
+			\includegraphics[scale = 0.6]{./images/dfondcomp}
 		\end{center}
 	\caption{Un exemple de diagramme fondamental}
 	\end{figure}
@@ -261,7 +299,7 @@ Facteur aléatoire
 \end{frame}
 
 \begin{frame}
-	\frametitle{Comparaison}
+	\frametitle{Comparaison de divers temps de réaction}
 	\begin{figure}
 		\begin{center}
 			\subfloat[temps 1]{
@@ -273,51 +311,8 @@ Facteur aléatoire
 		\end{center}
 	\end{figure}
 \end{frame}
-\section{Études sur des ronds-points}
-	\subsection{expériences prévues}
-
-\begin{frame}
-	\frametitle{Rond-point et feux de croisement}
-	tests pour :
-	\begin{itemize}
-		\item autant de voitures de chaque coté
-		\item plus de voitures d'un coté
-		\item plus de voitures avec feux adaptés
-		\item feux mal adaptés
-	\end{itemize}
-	
-	\frametitle{Différents ronds-points}
-	Objectif : déterminer l'influence de la circonférence du rond-point (test sur des circonférences différentes \\
-	Problème : géométries très différentes : peut-être étudier des données propres à chaque voiture comme le temps passé dans le rond-point
-\end{frame}
 
 	
-\section{Le Manège enchanté}
-	\subsection{Le Manège}
-\begin{frame}
-	\begin{center}
-		\includegraphics[scale=0.4]{./images/magic}
-	\end{center}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Fonctionnement}
-	\begin{itemize}
-		\item 1 grand rond-point central tournant dans le sens inverse
-		\item 5 petits ronds-points latéraux
-		\item Des lignes de "cédez le passage" avec de l'espace pour plusieurs voitures
-	\end{itemize}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Comment circuler ?}
-	\begin{figure}
-		\begin{center}
-			\includegraphics[scale=0.3]{./images/itin}
-			\caption{itinéraires possibles}
-		\end{center}
-	\end{figure}
-\end{frame}
 
 	\subsection{Limites du modèle pour le manège}
 	
@@ -329,27 +324,7 @@ Facteur aléatoire
 		\item le modèle ne tient pas compte des multiples entrées
 	\end{itemize}
 \end{frame}
-	\subsection{Une Étude avec la théorie des graphes}
 
-\begin{frame}
-	\frametitle{Graphe du rond-point}
-	\begin{figure}
-		\begin{center}
-			\includegraphics[scale=0.3]{../manege-graphe}
-		\end{center}
-		\caption{le graphe du manège}
-	\end{figure}
-\end{frame}
-
-\begin{frame}
-	\frametitle{chemins plus courts}
-	Objectif : appliquer Floyd-Warshall pour montrer une diminution du trajet
-\end{frame}
-
-\begin{frame}
-	\frametitle{résistant aux accidents ?}
-	Supposons qu'il y ait un accident sur une section, le rond-point est-il toujours fonctionnel ?
-\end{frame}
 
 \begin{frame}
 	\includegraphics[scale=3]{./images/highway-engineers-pranks-hz}
