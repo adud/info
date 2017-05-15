@@ -6,6 +6,9 @@ type graphe = float array array
 let inf = 1./.0.
 ;;
 
+let abs x = if x < 0. then -. x else x
+;;
+  
 
 (*crée un graphe pondere a n sommets sous forme matricielle*) 
 let creer_graphe n = Array.make_matrix n n inf
@@ -138,13 +141,35 @@ let info_circ w =
 
 ;;
 
+let print_matrix mx =
+  let u,v = Array.length mx,Array.length mx.(0) in
+  for i = 0 to u-1 do
+    print_int (i*4) ; print_string " & ";
+    for j = 0 to v-2 do
+      print_int (truncate (mx.(i).(j) *. 100.));
+      print_string " & "
+    done;
+    print_int (truncate (mx.(i).(v-1) *. 100.));
+    print_string " \\\\\n";
+  done
+;;
+  
+  
 (*(++) float array array -> float array array -> float array array
 somme de deux matrices de flottants
 precondition : les deux matrices sont de memes dimensions*)
+
+  
+  
 let ( ++ ) =
   Array.map2 (fun t1 t2 -> Array.map2 (fun x y -> x +. y) t1 t2)
 ;;
 
+let ( //.) =
+  Array.map2 (fun t1 t2 -> Array.map2 (fun x y -> if abs y > 1.e-10 then x /. y  else 1.) t1 t2)
+;; 
+
+  
 let opp  =
   Array.map (fun t -> Array.map (fun x -> -.x) t) 
 ;;
@@ -157,11 +182,15 @@ let alp =  [|
 
 (*h est un poids handicap pour les give-way*)
   
-let res h =
+let diff h =
   let mag,rop = creer_manege lext lcer lint h in
   opp (info_circ (floyd_warshall mag)) ++ (info_circ (floyd_warshall rop))
 ;;
 
+let rprt h=
+  let mag,rop = creer_manege lext lcer lint h in
+  (info_circ (floyd_warshall mag)) //. (info_circ (floyd_warshall rop))
+  
 (*somme des elements pour une matrice de flottants*)
   
 let total m =
@@ -172,7 +201,16 @@ let total m =
 let dep_h i j = 
   for h=i to j do
     print_int h; print_char '\t';
-    print_float (total (res (float_of_int h)));
+    print_float (total (diff (float_of_int h)));
+    print_newline ();
+  done
+;;
+
+  
+let dep_h_rprt i j = 
+  for h=i to j do
+    print_int h; print_char '\t';
+    print_float (total (rprt (float_of_int h))/.25.);
     print_newline ();
   done
 ;;
