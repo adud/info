@@ -3,26 +3,19 @@
 type graphe = float array array
 ;;
 
-(*crée un graphe pondere a n sommets sous forme matricielle*) 
 let creer_graphe n = Array.make_matrix n n infinity
 ;;
 
 let taille g = Array.length g
 ;;
   
-(*cree un arc de poids p de a a b dans g*)
 let lier g a b p =
   g.(a).(b) <- p
 ;;
 
-(*supprime l'arc a -> b
-ne fait rien si l'arc n'existe pas*)
+
 let suppr g a b = lier g a b infinity
 ;;
-
-(* succs : graphe -> int -> int list
-succs g s
-retourne les successeurs du sommet s dans le graphe g*)
 
 let succs g s =
   let li = ref [] in
@@ -32,7 +25,6 @@ let succs g s =
   done;
   !li
 ;;
-
   
 let itere_succ f g s =
   List.iter f (succs g s)
@@ -71,7 +63,6 @@ let floyd_warshall g =
       done
     done
   done;
-
   w
 ;; 
 
@@ -225,10 +216,7 @@ let adj_of_mat g =
 ;;
 
 (*pas une tres bonne idee : on a besoin de supprimer des arcs*)
-
-(*acces : graphe -> int -> int -> bool
-acces g a b retourne true ssi il existe un chemin de a a b dans g*)
-  
+ 
 let acces g a b =
   let n = taille g in
   let vus = Array.make n false in
