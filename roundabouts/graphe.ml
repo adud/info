@@ -3,15 +3,8 @@
 type graphe = float array array
 ;;
 
-let inf = 1./.0.
-;;
-
-let abs x = if x < 0. then -. x else x
-;;
-  
-
 (*crée un graphe pondere a n sommets sous forme matricielle*) 
-let creer_graphe n = Array.make_matrix n n inf
+let creer_graphe n = Array.make_matrix n n infinity
 ;;
 
 let taille g = Array.length g
@@ -24,7 +17,7 @@ let lier g a b p =
 
 (*supprime l'arc a -> b
 ne fait rien si l'arc n'existe pas*)
-let suppr g a b = lier g a b inf
+let suppr g a b = lier g a b infinity
 ;;
 
 (* succs : graphe -> int -> int list
@@ -34,7 +27,7 @@ retourne les successeurs du sommet s dans le graphe g*)
 let succs g s =
   let li = ref [] in
   for i=0 to taille g - 1 do
-    if g.(s).(i) < inf then
+    if g.(s).(i) < infinity then
       li := i:: !li
   done;
   !li
@@ -166,7 +159,7 @@ let ( ++ ) =
 ;;
 
 let ( //.) =
-  Array.map2 (fun t1 t2 -> Array.map2 (fun x y -> if abs y > 1.e-10 then x /. y  else 1.) t1 t2)
+  Array.map2 (fun t1 t2 -> Array.map2 (fun x y -> if abs_float y > 1.e-10 then x /. y  else 1.) t1 t2)
 ;; 
 
   
@@ -224,7 +217,7 @@ let adj_of_mat g =
   let s = Array.make n [] in
   for i=0 to n-1 do
     for j=n-1 downto 0 do
-      if g.(i).(j) < inf then
+      if g.(i).(j) < infinity then
         s.(i) <- j::s.(i)
     done
   done;
@@ -234,7 +227,7 @@ let adj_of_mat g =
 (*pas une tres bonne idee : on a besoin de supprimer des arcs*)
 
 (*acces : graphe -> int -> int -> bool
-acces g a b retourne true ssi il existe un chemin de a a b ds g*)
+acces g a b retourne true ssi il existe un chemin de a a b dans g*)
   
 let acces g a b =
   let n = taille g in
@@ -262,8 +255,8 @@ let pres_conn g a b =
 ;;
 
 (*arcs_critiques : graphe -> int*int list
-retourne la liste des arcs dont la supression entrainerait la modification
-de la connexite du graphe triee par ordre lexicographique*)
+retourne la liste des arcs dont la supression entrainerait la 
+modification de la connexite du graphe *)
   
 let arcs_critiques g =
   let n = taille g in
