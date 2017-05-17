@@ -3,7 +3,7 @@
 
 
 
-\documentclass[11pt]{article}
+\documentclass[10pt]{article}
 
 \usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
@@ -118,6 +118,7 @@ Muni de ces deux graphes, on peut dès lors appliquer l'algorithme de Floyd-Wars
 	\end{center}
 \end{figure}
 	\subsection{Résistant aux coupures de section}
+		\subsubsection{arc critique}
 	Un point remarquable du manège est que, comme le montre la figure \ref{itin}, le conducteur dispose de plusieurs itinéraires pour aller d'une entrée à une sortie. Ainsi, si suite à un évènement, certaines sections se trouvent impraticables, le manège reste fonctionnel. Un algorithme permet de trouver quelles sections ne sont pas nécessaires au bon fonctionnement du manège. Défini formellement :
 \begin{defin}
 	Soit $G = (V,E)$ un graphe orienté. L'arc $(a,b) \in E$ est dit critique si le graphe $G^\prime = (V,E\backslash \{(a,b)\})$ n'a pas les mêmes composantes fortement connexes que $G$.
@@ -128,7 +129,22 @@ Un théorème intéressant nous permet de déterminer de tels arcs :
 		$G^\prime = (V,E\backslash \{ (a,b) \})$ est fortement connexe SSI il existe un chemin de $a$ à $b$
 		dans $G^\prime$
 \end{theo}
+Pour savoir si $(a,b)$ est un arc critique, il suffit donc de déterminer si $b$ est atteignable depuis $a$ dans $G\prime$, à l'aide d'un simple parcours du graphe.
+		\subsubsection{implantation et complexité}
+	Considérons un graphe $G=(V,E)$. L'algorithme fonctionne donc sur le principe décrit ci-dessus : On dispose de la liste des arcs critiques, initialement vide. Pour chaque arête $(a,b)$ du graphe, on supprime cette arête (on a $G\prime$), si $b$ n'est pas accessible depuis $a$ dans $G\prime$, alors on ajoute $(a,b)$ à la liste des arcs critiques, puis on rajoute $(a,b)$ à $G\prime$.\par 
+Le besoin de supprimer des arêtes pousse à choisir la structure de matrice d'adjacence (voir \ref{grmli}) pour représenter le graphe, suppression effectuée pour cette structure en temps constant. Dans ce cas, on rappelle la complexité en temps d'un parcours de $G$ : $O(|V|^2)$. \par 
+Lors de l'exécution de l'algorithme, on effectue donc :
+\begin{itemize}
+	\item Des opérations en temps constant
+	\item Un parcours des arêtes de $G$, en un temps $O(|V|^2)$
+	\item $|E|$ fois :
+	\begin{itemize}
+		\item des opérations en temps constant (suppression, ajout…)
+		\item Un parcours d'un graphe à $(|V|)$ sommets, en temps $O(|V|^2$
+	\end{itemize}
+\end{itemize}
 
+La complexité totale de l'algorithme est donc un $O(|V|^2 + |E||V|^2) = O(|E||V|^2)$
 
 \section{Un Modèle par automate cellulaire}
 	\subsection{Automate cellulaire}
@@ -136,11 +152,15 @@ Un théorème intéressant nous permet de déterminer de tels arcs :
 	\subsection{Étude locale}
 	\subsection{Limites du modèle pour le manège}
 	
-\section*{Annexe}
+\section{Annexe}
+	\subsection{Graphe du manège}
 
-\begin{figure}
-	
-\end{figure}
+\label{grmli}
+\verb+ graphe.mli+
+\lstinputlisting{./../graphe.mli}
 
+\verb+ graphe.ml+
+\lstinputlisting{./../graphe.ml}
+	\subsection{Automate cellulaire}
 
 \end{document}
