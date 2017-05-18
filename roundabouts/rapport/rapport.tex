@@ -2,8 +2,8 @@
 % !TEX encoding = UTF-8 Unicode
 
 
-
-\documentclass[10pt]{article}
+\documentclass[10pt,draft]{article}
+%pour avoir les images, enlever draft et commenter l53
 
 \usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
@@ -49,6 +49,8 @@ literate=
   }
 
 \graphicspath{{./} {./../presentation-tipe/}}
+
+\renewcommand{\includegraphics}{\relax}
 
 \title{Autour du Manège Enchanté}
 %\subtitle{intersections routières}
@@ -148,9 +150,35 @@ La complexité totale de l'algorithme est donc un $O(|V|^2 + |E||V|^2) = O(|E||V
 
 \section{Un Modèle par automate cellulaire}
 	\subsection{Automate cellulaire}
+	Le principe de l'automate cellulaire est de décrire le système en discrétisant le temps et l'espace. Dans ces modèles, les voitures évoluent sur des cases, et ont des vitesses entière. Empiriquement, on prend un pas temporel $\Delta t = 1,2~\mathrm{s}$ et un pas spatial $\Delta x = 7.5~\mathrm{m}$. \par
+	Notre automate se base sur celui de Kai Nagel et Michael Schreckenberg \cite{NaSch}, ion deadapté à une section de route, dont nous rappelons brièvement le principe ici : on considère $n$ voitures $c_1, … , c_n$ sur la section. On note $\forall i \in \llbracket 1;n \rrbracket$, $v_{i,t} \in \llbracket 1;v_M \rrbracket$ la vitesse du véhicule $i$, et $x_{i,t}$ sa position au temps $t$. La règle de transition est définie ainsi :
+	\begin{itemize}
+		\item Accélération : toute voiture n'ayant pas atteint la vitesse maximale voit sa vitesse incrémentée de 1 : $v_{i,t'} = \min(v_{i,t} + 1, v_M)$
+		\item Décélération : chaque véhicule freine pour ne pas percuter la voiture de devant : $v_{i,t''} = \min(v_{i,t'},x_{i+1,t}-x_{i,t}-1)$
+		\item Décélération aléatoire (bruit) : chaque véhicule a la probabilité $p \in [ 0;1 ]$ de freiner : $v_{i,t'''} = \max(v_{i,t''},0)$ avec une probabilité $p$, $v_{i,t''}$ sinon
+		\item Avancer : on a déterminé la vitesse de chaque voiture au temps $t+1$, on accède à la position de chaque voiture au temps $t+1$ : $v_{i,t+1} = v_{i,t'''}$ et $x_{i,t+1} = x_{i,t} + v_{i,t+1}$
+	\end{itemize}
 	\subsection{Le Problème des intersections}
-	\subsection{Étude locale}
+	Cependant, ce modèle n'est pas adapté à l'étude d'un rond-point : il faut définir le comportement d'une voiture aux intersections. Par exemple, figure \ref{locdeb}, quelle voiture faire passer ? J'ai donc tenté d'établir un modèle d'automate répondant à cette question, automate que j'ai ensuite comparé à celui proposé par Chen Rui-Xiong, Bai Ke-Zhao et Liu Mu-Ren\cite{ChPh} pour les ronds-points, décrivant les interactions entre une voie prioritaire et une voie non-prioritaire : si deux voitures, une sur la voie prioritaire, une autre sur la voie non-prioritaire (il s'agit nécessairement des voitures de tête sur leur voie) cherchent à atteindre l'intersection, que faire ?
+	\begin{figure}
+		\begin{center}
+			\includegraphics[scale=0.5]{./images/localdebut}
+		\end{center}
+		\caption{\label{locdeb}Un exemple d'intersection 2-1}
+	\end{figure}
+		\subsubsection{Le modèle de priorité dynamique}
+		Ce modèle est plus complexe : il considère le temps nécessaire à chaque voiture pour arriver à l'intersection, puis fait avancer d'abord la voiture arrivant la première, puis la voiture arrivant ensuite, en tenant compte du déplacement de la première. En cas d'égalité, c'est la voiture la plus rapide qui passe, et encore en cas d'égalité, c'est la voiture sur la voie prioritaire qui passe. Ce modèle ne me semblait pas très réaliste : il impliquait en effet que les conducteurs anticipent des temps d'une durée de l'ordre de $\Delta	t / 6 = 0,2 ~\mathrm{s}$. Ce qui m'a poussé à développer le modèle de priorité absolue, aussi plus simple à implanter (pour plus de détails sur le modèle de priorité dynamique, voir \cite{Chph})
+		\subsubsection{Le modèle de priorité absolue}
+		Ce modèle correspond à un conducteur très prudent : il consiste à faire passer la voiture prioritaire, et à faire freiner la voiture non-prioritaire juste devant l'intersection (sur la dernière case de sa voie).
+		
+	\subsection{Étude locale}	
+	
 	\subsection{Limites du modèle pour le manège}
+	
+\renewcommand{\refname}{Bibliographie}
+\bibliographystyle{plain-fr}
+\bibliography{./../source/biblio}
+	
 	
 \section{Annexe}
 	\subsection{Graphe du manège}
