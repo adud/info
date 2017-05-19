@@ -2,8 +2,12 @@
 % !TEX encoding = UTF-8 Unicode
 
 
-\documentclass[10pt,draft]{article}
-%pour avoir les images, enlever draft et commenter l53
+\documentclass[11pt]{article}
+%pour avoir les images, enlever draft et commenter \renewcommand{\includegraphics}{\relax}
+
+\usepackage{geometry}
+
+\geometry{left=20mm,right=20mm}
 
 \usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
@@ -49,8 +53,9 @@ literate=
   }
 
 \graphicspath{{./} {./../presentation-tipe/}}
+%\renewcommand{\includegraphics}{\relax}
 
-\renewcommand{\includegraphics}{\relax}
+
 
 \title{Autour du Manège Enchanté}
 %\subtitle{intersections routières}
@@ -151,13 +156,15 @@ La complexité totale de l'algorithme est donc un $O(|V|^2 + |E||V|^2) = O(|E||V
 \section{Un Modèle par automate cellulaire}
 	\subsection{Automate cellulaire}
 	Le principe de l'automate cellulaire est de décrire le système en discrétisant le temps et l'espace. Dans ces modèles, les voitures évoluent sur des cases, et ont des vitesses entière. Empiriquement, on prend un pas temporel $\Delta t = 1,2~\mathrm{s}$ et un pas spatial $\Delta x = 7.5~\mathrm{m}$. \par
-	Notre automate se base sur celui de Kai Nagel et Michael Schreckenberg \cite{NaSch}, ion deadapté à une section de route, dont nous rappelons brièvement le principe ici : on considère $n$ voitures $c_1, … , c_n$ sur la section. On note $\forall i \in \llbracket 1;n \rrbracket$, $v_{i,t} \in \llbracket 1;v_M \rrbracket$ la vitesse du véhicule $i$, et $x_{i,t}$ sa position au temps $t$. La règle de transition est définie ainsi :
+	Notre automate se base sur celui de Kai Nagel et Michael Schreckenberg \cite{NaSch}, adapté à une section de route, dont nous rappelons brièvement le principe ici : on considère $n$ voitures $c_1, … , c_n$ sur la section. On note $\forall i \in \llbracket 1;n \rrbracket$, $v_{i,t} \in \llbracket 1;v_M \rrbracket$ la vitesse du véhicule $i$, et $x_{i,t}$ sa position au temps $t$. La règle de transition est définie ainsi :
 	\begin{itemize}
 		\item Accélération : toute voiture n'ayant pas atteint la vitesse maximale voit sa vitesse incrémentée de 1 : $v_{i,t'} = \min(v_{i,t} + 1, v_M)$
 		\item Décélération : chaque véhicule freine pour ne pas percuter la voiture de devant : $v_{i,t''} = \min(v_{i,t'},x_{i+1,t}-x_{i,t}-1)$
 		\item Décélération aléatoire (bruit) : chaque véhicule a la probabilité $p \in [ 0;1 ]$ de freiner : $v_{i,t'''} = \max(v_{i,t''},0)$ avec une probabilité $p$, $v_{i,t''}$ sinon
 		\item Avancer : on a déterminé la vitesse de chaque voiture au temps $t+1$, on accède à la position de chaque voiture au temps $t+1$ : $v_{i,t+1} = v_{i,t'''}$ et $x_{i,t+1} = x_{i,t} + v_{i,t+1}$
 	\end{itemize}
+	
+	Pour ne pas avoir un paramètre de plus à étudier, et nous inspirant d'autres études faites sur ce modèle\cite{ChPh}, nous avons supprimé la partie décélération aléatoire.
 	\subsection{Le Problème des intersections}
 	Cependant, ce modèle n'est pas adapté à l'étude d'un rond-point : il faut définir le comportement d'une voiture aux intersections. Par exemple, figure \ref{locdeb}, quelle voiture faire passer ? J'ai donc tenté d'établir un modèle d'automate répondant à cette question, automate que j'ai ensuite comparé à celui proposé par Chen Rui-Xiong, Bai Ke-Zhao et Liu Mu-Ren\cite{ChPh} pour les ronds-points, décrivant les interactions entre une voie prioritaire et une voie non-prioritaire : si deux voitures, une sur la voie prioritaire, une autre sur la voie non-prioritaire (il s'agit nécessairement des voitures de tête sur leur voie) cherchent à atteindre l'intersection, que faire ?
 	\begin{figure}
@@ -167,13 +174,44 @@ La complexité totale de l'algorithme est donc un $O(|V|^2 + |E||V|^2) = O(|E||V
 		\caption{\label{locdeb}Un exemple d'intersection 2-1}
 	\end{figure}
 		\subsubsection{Le modèle de priorité dynamique}
-		Ce modèle est plus complexe : il considère le temps nécessaire à chaque voiture pour arriver à l'intersection, puis fait avancer d'abord la voiture arrivant la première, puis la voiture arrivant ensuite, en tenant compte du déplacement de la première. En cas d'égalité, c'est la voiture la plus rapide qui passe, et encore en cas d'égalité, c'est la voiture sur la voie prioritaire qui passe. Ce modèle ne me semblait pas très réaliste : il impliquait en effet que les conducteurs anticipent des temps d'une durée de l'ordre de $\Delta	t / 6 = 0,2 ~\mathrm{s}$. Ce qui m'a poussé à développer le modèle de priorité absolue, aussi plus simple à implanter (pour plus de détails sur le modèle de priorité dynamique, voir \cite{Chph})
+		Ce modèle est plus complexe : il considère le temps nécessaire à chaque voiture pour arriver à l'intersection, puis fait avancer d'abord la voiture arrivant la première, puis la voiture arrivant ensuite, en tenant compte du déplacement de la première. En cas d'égalité, c'est la voiture la plus rapide qui passe, et encore en cas d'égalité, c'est la voiture sur la voie prioritaire qui passe. Ce modèle ne me semblait pas très réaliste : il impliquait en effet que les conducteurs anticipent des temps d'une durée de l'ordre de $\Delta	t / 6 = 0,2 ~\mathrm{s}$. Ce qui m'a poussé à développer le modèle de priorité absolue, aussi plus simple à implanter (pour plus de détails sur le modèle de priorité dynamique, voir \cite{ChPh})
 		\subsubsection{Le modèle de priorité absolue}
 		Ce modèle correspond à un conducteur très prudent : il consiste à faire passer la voiture prioritaire, et à faire freiner la voiture non-prioritaire juste devant l'intersection (sur la dernière case de sa voie).
 		
 	\subsection{Étude locale}	
-	
+		\subsubsection{Grandeurs étudiées : le diagramme fondamental}
+
+Pour l'étude d'une infrastructure routière, on étudie principalement trois grandeurs : le flux $J$, la vitesse $v$, et la densité $\rho$. Le flux $J$ représente le nombre de voitures passant par unité de temps à travers une surface donnée, c'est une grandeur qu'on cherchera à optimiser. $\rho$ représente le nombre de voitures par unité d'espace, plus $\rho$ est élevé, plus on risquera de se retrouver dans une situation d'embouteillage. On cherchera bien sûr aussi à optimiser $v$. \par
+Une relation de mécanique des fluides (ou par analogie avec l'électromagnétisme) nous donne la relation pour une section $J = \rho * v_m $ où $v_m$ est la vitesse moyenne des véhicules sur la section.\par 
+D'après cette relation, on construit le diagramme fondamental $J=f(\rho)$ de la figure \ref{dgf}.
+\begin{figure}
+	\begin{center}	
+		\includegraphics[scale = 0.6]{./images/dfondcomp}
+	\end{center}
+	\caption{\label{dgf} Un exemple de diagramme fondamental, tiré de \cite{NaSch}}
+\end{figure}
+
+		\subsubsection{Expérience}
+Le but de cette expérience est d'étudier l'influence de la densité de la voie prioritaire, sur la voie non-prioritaire. Pour cela, nous avons simulé grâce à l'automate une intersection à deux voies, avec sur la voie non-prioritaire un flot constant et peu dense de voiture et sur la voie prioritaire, un flot croissant de voitures, ce pour les deux modèles d'intersection. Le graphique obtenu est le diagramme fondamental de la voie non-prioritaire, en fonction de la densité de la voie prioritaire (voir figure \ref{locdeb}, page \pageref{locdeb} l'expérience en cours).
+		
+		\subsubsection{Premiers résultats}
+
+Le graphique de la figure \ref{prres} met déjà en évidence le problème des intersection à priorité : face à une circulation trop dense sur la voie prioritaire, les voitures de la voie non-prioritaire se retrouvent bloquées, et n'avancent plus du tout. Cependant, un résultat surprenant est qu'on observe peu de différence entre le modèle de priorité absolue et de priorité dynamique. Des observations de la simulation ont montré que le trafic sur la voie prioritaire était extrêmement fluide, même sous de très fortes densités, modèle aberrant ne correspondant pas du tout à la réalité, dû à la suppression de la décélération aléatoire dans le modèle de Nagel-Schreckenberg. Il nous fallait donc revenir sur l'automate modélisant les sections.
+
+	\subsubsection{Ajout d'un temps de redémarrage}
+Une amélioration simple à ce modèle est de considérer un temps de redémarrage pour un véhicule à l'arrêt : on se fixe un temps d'arrêt $t_{a} \in \mathbb{N}$, on ajoute à chaque voiture une variable arrêt $a_i$, à qui on attribue la valeur $t_{a}$ à chaque fois que la vitesse de la voiture passe de $1$ à $0$, et ensuite, si une voiture est à l'arrêt, si $a_i = 0$, on passe sa vitesse à $1$, sinon, on décrémente de $1$ $a_i$.\par Cela permet à la voie prioritaire d'être affectée par la voie non-prioritaire comme le montre la figure \ref{rdem}. Face à une densité élevée de voitures sur la voie prioritaire, ces dernières se retrouvent elles aussi embouteillées, ce qui permet à quelques voitures non-prioritaires de s'engager dans l'intersection (comme le montre l'itération de l'automate en figure \ref{dsat}). Ce modèle permet aussi d'établir des différences entre le modèle de priorité absolue et celui de priorité dynamique, les voitures prioritaires ayant une plus forte tendance à l'arrêt dans le second (voir figure \ref{labstr})
+
+
+	\begin{figure}
+		\begin{center}
+			\includegraphics[scale=0.4]{./images/localsature}
+		\end{center}
+		\caption{\label{dsat}début de saturation}
+	\end{figure}
+
+	 
 	\subsection{Limites du modèle pour le manège}
+Le modèle en tant que tel ne nous a pas permis d'étudier le manège, et ce, pour plusieurs raisons. Il faut d'abord déterminer si le modèle est pertinent : les graphes obtenus avec un temps de réaction, pour des densités élevées traduisent-ils une réalité empirique où relèvent-ils des limites du graphe ? Le manège aurait été aussi lourd à implanter (même si le code permet déjà de construire assez simplement des ronds-points). Enfin, les problèmes et les solutions étudiés pour une étude locale ne se retrouveront pas forcément sur un automate de plus grande taille.
 	
 \renewcommand{\refname}{Bibliographie}
 \bibliographystyle{plain-fr}
@@ -181,6 +219,31 @@ La complexité totale de l'algorithme est donc un $O(|V|^2 + |E||V|^2) = O(|E||V
 	
 	
 \section{Annexe}
+	\subsection{Diagrammes fondamentaux}
+	
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[scale=0.4]{./diagrammes-fondamentaux/localabsdyn0w}
+	\end{center}
+\caption{\label{prres}Comparaison absolu (en violet) / dynamique (en vert)}
+\end{figure}	
+	
+\begin{figure}[h]
+	 	\begin{center}
+	 		\includegraphics[scale=0.4]{./diagrammes-fondamentaux/localabs0w1w}
+	 	\end{center}
+	 	\caption{\label{rdem}Étude locale avec temps de démarrage}
+	 	on observe une différence notable entre le modèle de priorité absolue sans temps de redémarrage (violet) et avec (vert)
+	 \end{figure}
+
+\begin{figure}[h]
+		\begin{center}
+			\includegraphics[scale=0.35]{./diagrammes-fondamentaux/localabsdyn1w}
+		\end{center}
+		\caption{\label{labstr}Comparaison absolu-dynamique pour un temps de réaction de 1}
+\end{figure}
+
+
 	\subsection{Graphe du manège}
 
 \label{grmli}
@@ -189,6 +252,41 @@ La complexité totale de l'algorithme est donc un $O(|V|^2 + |E||V|^2) = O(|E||V
 
 \verb+ graphe.ml+
 \lstinputlisting{./../graphe.ml}
-	\subsection{Automate cellulaire}
+	\subsection{Automate cellulaire} 
+	
+			\subsubsection{objets}
+Module définissant les objets de base (section, intersection, voiture…) et implantant le modèle de Nagel-Schreckenberg sur des sections
 
+\verb+ objets.mli+
+\lstinputlisting{./../modele/objets.mli}
+
+\verb+ objets.ml+
+\lstinputlisting{./../modele/objets.ml}
+			\subsubsection{comportements}
+Module pour les comportements aux intersections
+
+\verb+ comportements.mli+
+\lstinputlisting{./../modele/comportements.mli}
+
+\verb+ comportements.ml+
+\lstinputlisting{./../modele/comportements.ml}
+			\subsubsection{plateau}
+Module construisant et itérant les automates
+
+\verb+ plateau.mli+
+\lstinputlisting{./../modele/plateau.mli}
+
+\verb+ plateau.ml+
+\lstinputlisting{./../modele/plateau.ml}
+			\subsubsection{affichage}
+Module donnant des informations sur les sections
+\verb+ affichage.mli+
+\lstinputlisting{./../modele/affichage.mli}
+
+\verb+ affichage.ml+
+\lstinputlisting{./../modele/affichage.ml}
+			\subsubsection{local}
+Module utilisé pour les expériences
+\verb+ local.ml+
+\lstinputlisting{./../modele/local.ml}
 \end{document}

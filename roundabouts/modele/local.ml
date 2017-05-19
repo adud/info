@@ -10,11 +10,6 @@ open Comportements
 
 d_p | v_p | J_p | d_np | v_np | J_np
 
-dessin :
-
-./local > local*.dat
-gnuplot -p local.plot
-
 faire dynamique et absolu
 graphes interessants :
 pente 0. 1. 
