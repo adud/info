@@ -84,7 +84,7 @@ Une telle disposition permet une diversité des itinéraires possibles pour alle
 
 \begin{figure}
 		\begin{center}
-			\includegraphics[scale=0.3]{images/itin}
+			\includegraphics[scale=0.4]{images/itin}
 			\caption{\label{itin} itinéraires possibles}
 		\end{center}
 	\end{figure}
@@ -99,11 +99,11 @@ L'intérêt principal de l'étude étant plus la forme du manège que cet exempl
 		\begin{center}
 			\subfloat[le manège]{%
 				\label{grman}
-				\includegraphics[scale=0.2]{../manege-graphe}
+				\includegraphics[scale=0.4]{../manege-graphe}
 				}
 			\subfloat[le rond-point]{%
 				\label{grrp}
-				\includegraphics[scale=0.2]{../rp-graphe}}
+				\includegraphics[scale=0.4]{../rp-graphe}}
 		\end{center}	
 		\caption{un graphe adapté au manège}
 	\end{figure}
@@ -112,7 +112,6 @@ L'intérêt principal de l'étude étant plus la forme du manège que cet exempl
 Muni de ces deux graphes, on peut dès lors appliquer l'algorithme de Floyd-Warshall pour connaître la distance entre les entrées-sorties, et les comparer entre les deux graphes. Le tableau \ref{rpfw} montre le rapport des distances du manège sur celles du rond-point. Sans surprise, on remarque un gain énorme quand il s'agit de prendre la sortie située immédiatement à gauche de l'entrée, puisqu'il n'est pas nécessaire de faire tout le tour du rond-point. Le manège réduit donc bien les distances par rapport à un rond-point classique.
 
 \begin{figure}
-	\caption{\label{rpfw} Rapport entre la distance entrée-entrée pour le rond-point et le manège (en \%)}
 	\begin{center}
 	\begin{tabular}{ r|c c c c c}
   entrée & 0 & 4 & 8 & 12 & 16 \\ \hline
@@ -123,6 +122,8 @@ Muni de ces deux graphes, on peut dès lors appliquer l'algorithme de Floyd-Wars
 16 & 100 & 100 & 60 & 36 & 100 \\
 	\end{tabular}
 	\end{center}
+	\caption{\label{rpfw} Rapport entre la distance entrée-entrée pour le rond-point et le manège (en \%)}
+
 \end{figure}
 	\subsection{Résistant aux coupures de section}
 		\subsubsection{arc critique}
@@ -169,7 +170,7 @@ La complexité totale de l'algorithme est donc un $O(|V|^2 + |E||V|^2) = O(|E||V
 	Cependant, ce modèle n'est pas adapté à l'étude d'un rond-point : il faut définir le comportement d'une voiture aux intersections. Par exemple, figure \ref{locdeb}, quelle voiture faire passer ? J'ai donc tenté d'établir un modèle d'automate répondant à cette question, automate que j'ai ensuite comparé à celui proposé par Chen Rui-Xiong, Bai Ke-Zhao et Liu Mu-Ren\cite{ChPh} pour les ronds-points, décrivant les interactions entre une voie prioritaire et une voie non-prioritaire : si deux voitures, une sur la voie prioritaire, une autre sur la voie non-prioritaire (il s'agit nécessairement des voitures de tête sur leur voie) cherchent à atteindre l'intersection, que faire ?
 	\begin{figure}
 		\begin{center}
-			\includegraphics[scale=0.5]{./images/localdebut}
+			\includegraphics[scale=0.8]{./images/localdebut}
 		\end{center}
 		\caption{\label{locdeb}Un exemple d'intersection 2-1}
 	\end{figure}
@@ -186,7 +187,7 @@ Une relation de mécanique des fluides (ou par analogie avec l'électromagnétis
 D'après cette relation, on construit le diagramme fondamental $J=f(\rho)$ de la figure \ref{dgf}.
 \begin{figure}
 	\begin{center}	
-		\includegraphics[scale = 0.6]{./images/dfondcomp}
+		\includegraphics[scale = 1]{./images/dfondcomp}
 	\end{center}
 	\caption{\label{dgf} Un exemple de diagramme fondamental, tiré de \cite{NaSch}}
 \end{figure}
@@ -204,7 +205,7 @@ Une amélioration simple à ce modèle est de considérer un temps de redémarra
 
 	\begin{figure}
 		\begin{center}
-			\includegraphics[scale=0.4]{./images/localsature}
+			\includegraphics[scale=0.8]{./images/localsature}
 		\end{center}
 		\caption{\label{dsat}début de saturation}
 	\end{figure}
@@ -244,49 +245,49 @@ Le modèle en tant que tel ne nous a pas permis d'étudier le manège, et ce, po
 \end{figure}
 
 
-	\subsection{Graphe du manège}
-
-\label{grmli}
-\verb+ graphe.mli+
-\lstinputlisting{./../graphe.mli}
-
-\verb+ graphe.ml+
-\lstinputlisting{./../graphe.ml}
-	\subsection{Automate cellulaire} 
-	
-			\subsubsection{objets}
-Module définissant les objets de base (section, intersection, voiture…) et implantant le modèle de Nagel-Schreckenberg sur des sections
-
-\verb+ objets.mli+
-\lstinputlisting{./../modele/objets.mli}
-
-\verb+ objets.ml+
-\lstinputlisting{./../modele/objets.ml}
-			\subsubsection{comportements}
-Module pour les comportements aux intersections
-
-\verb+ comportements.mli+
-\lstinputlisting{./../modele/comportements.mli}
-
-\verb+ comportements.ml+
-\lstinputlisting{./../modele/comportements.ml}
-			\subsubsection{plateau}
-Module construisant et itérant les automates
-
-\verb+ plateau.mli+
-\lstinputlisting{./../modele/plateau.mli}
-
-\verb+ plateau.ml+
-\lstinputlisting{./../modele/plateau.ml}
-			\subsubsection{affichage}
-Module donnant des informations sur les sections
-\verb+ affichage.mli+
-\lstinputlisting{./../modele/affichage.mli}
-
-\verb+ affichage.ml+
-\lstinputlisting{./../modele/affichage.ml}
-			\subsubsection{local}
-Module utilisé pour les expériences
-\verb+ local.ml+
-\lstinputlisting{./../modele/local.ml}
-\end{document}
+%	\subsection{Graphe du manège}
+%
+%\label{grmli}
+%\verb+ graphe.mli+
+%\lstinputlisting{./../graphe.mli}
+%
+%\verb+ graphe.ml+
+%\lstinputlisting{./../graphe.ml}
+%	\subsection{Automate cellulaire} 
+%	
+%			\subsubsection{objets}
+%Module définissant les objets de base (section, intersection, voiture…) et implantant le modèle de Nagel-Schreckenberg sur des sections
+%
+%\verb+ objets.mli+
+%\lstinputlisting{./../modele/objets.mli}
+%
+%\verb+ objets.ml+
+%\lstinputlisting{./../modele/objets.ml}
+%			\subsubsection{comportements}
+%Module pour les comportements aux intersections
+%
+%\verb+ comportements.mli+
+%\lstinputlisting{./../modele/comportements.mli}
+%
+%\verb+ comportements.ml+
+%\lstinputlisting{./../modele/comportements.ml}
+%			\subsubsection{plateau}
+%Module construisant et itérant les automates
+%
+%\verb+ plateau.mli+
+%\lstinputlisting{./../modele/plateau.mli}
+%
+%\verb+ plateau.ml+
+%\lstinputlisting{./../modele/plateau.ml}
+%			\subsubsection{affichage}
+%Module donnant des informations sur les sections
+%\verb+ affichage.mli+
+%\lstinputlisting{./../modele/affichage.mli}
+%
+%\verb+ affichage.ml+
+%\lstinputlisting{./../modele/affichage.ml}
+%			\subsubsection{local}
+%Module utilisé pour les expériences
+%\verb+ local.ml+
+%\lstinputlisting{./../modele/local.ml}
+\end{document} 
