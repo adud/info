@@ -52,9 +52,9 @@ let floyd_warshall g =
     done
   done;
   
-  for i=0 to (n-1) do
+  (*for i=0 to (n-1) do
     w.(i).(i) <- 0.
-  done;
+  done;*)
 
   for k = 0 to (n-1) do
     for i = 0 to (n-1) do
