@@ -1,0 +1,1 @@
+Ce TIPE a pour but d'étudier le rond-point de Swindon, Angleterre, appelé The Magic Roundabout. En premier temps, une étude qualitative du rond-point a été faite à l'aide de la théorie des graphes, puis deux automates cellulaires modélisant le trafic routier ont été implantés, sans avoir réussi cependant à les adapter à l'étude du rond-point
