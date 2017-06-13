@@ -74,16 +74,16 @@ literate=
 Voici la version complète de mon rapport de TIPE de type ENS.  Le résumé s'arrête à la page \pageref{finres}, vient ensuite l'ensemble de mes programmes, puis, page \pageref{figs}, l'ensemble des figures. Le code complet (avec un ~\verb+Makefile+) se trouve à l'adresse ~\url{https://github.com/adud/info/tree/master/roundabouts/}}
 
 \begin{abstract}
-	Ce TIPE a pour but d'étudier le rond-point de Swindon, Angleterre, appelé The Magic Roundabout. En premier temps, une étude qualitative du rond-point a été faite à l'aide de la théorie des graphes, puis deux automates cellulaires modélisant le trafic routier ont été implantés, sans avoir réussi cependant à les adapter à l'étude du rond-point
+	Ce TIPE a pour but d'étudier le rond-point de Swindon, Angleterre, appelé The Magic Roundabout. En premier temps, une étude qualitative du rond-point a été faite à l'aide de la théorie des graphes, puis deux automates cellulaires modélisant le trafic routier ont été implantés, sans que je réussisse à les adapter à l'étude du rond-point.
 
 \end{abstract}
 
 \section{Un Graphe pour le Manège}
 	\subsection{Le Manège}
 	
-Le Manège enchanté est un rond-point assez particulier situé sur une intersection à 5 voies à Swindon en Angleterre : il est composé de 5 petits ronds-points tournant dans le sens anti-horaire (comme les ronds-points anglais) disposés en périphérie d'un grand rond-point central tournant dans le sens inverse, la priorité étant aux voitures situés à l'intérieur des petits ronds-points, comme le montre la figure \ref{rp}.
+Le Manège enchanté est un rond-point assez particulier situé sur une intersection à 5 voies à Swindon en Angleterre : il est composé de 5 petits ronds-points tournant dans le sens horaire (comme les ronds-points anglais) disposés en périphérie d'un grand rond-point central tournant dans le sens inverse, la priorité étant aux voitures situés à l'intérieur des petits ronds-points, comme le montre la figure \ref{rp}.
 
-Une telle disposition permet une diversité des itinéraires possibles pour aller d'une entrée à une sortie (voir figure \ref{itin}). Le manège serait grâce à cela une réponse plus efficace au problème des intersections routières : assurer un trafic le plus fluide possible, des distances plus courtes, des infrastructures plus sûres… L'objectif de ce TIPE est de montrer que le manège enchanté remplit bien de telles conditions. Nous avons pour cela mis en place deux modèles : un utilisé en pratique pour étudier des infrastructures routières, par automates cellulaire, mais face à la complexité de ce modèle, nous nous sommes rabattus sur une étude plus élémentaire {\it via} la théorie des graphes.
+Une telle disposition permet une diversité des itinéraires possibles pour aller d'une entrée à une sortie (voir figure \ref{itin}). Le manège serait grâce à cela une réponse plus efficace au problème des intersections routières : assurer un trafic le plus fluide possible, des distances plus courtes, des infrastructures plus sûres… L'objectif de ce TIPE est de montrer que le manège enchanté remplit bien de telles conditions. Nous avons pour cela mis en place deux modèles : un utilisé en pratique pour étudier des infrastructures routières, par automates cellulaires, mais face à la complexité de ce modèle, nous nous sommes rabattus sur une étude plus élémentaire {\it via} la théorie des graphes.
 
 
 	\subsection{Modéliser par un graphe}
@@ -93,13 +93,13 @@ L'intérêt principal de l'étude étant plus la forme du manège que cet exempl
 
 	
 	\subsection{Réduction des distances}
-Muni de ces deux graphes, on peut dès lors appliquer l'algorithme de Floyd-Warshall pour connaître la distance entre les entrées-sorties, et les comparer entre les deux graphes. Le tableau \ref{rpfw} montre le rapport des distances du manège sur celles du rond-point. Sans surprise, on remarque un gain énorme quand il s'agit de prendre la sortie située immédiatement à gauche de l'entrée, puisqu'il n'est pas nécessaire de faire tout le tour du rond-point. Le manège réduit donc bien les distances par rapport à un rond-point classique.
+Muni de ces deux graphes, on peut dès lors appliquer l'algorithme de Floyd-Warshall pour connaître les distances entre les entrées-sorties, et les comparer entre les deux graphes. Le tableau \ref{rpfw} montre le quotient des distances du manège sur celles du rond-point. Sans surprise, on remarque un gain énorme quand il s'agit de prendre la sortie située immédiatement à gauche de l'entrée, puisqu'il n'est pas nécessaire de faire tout le tour du rond-point. Le manège réduit donc bien les distances par rapport à un rond-point classique.
 
 	\subsection{Résistant aux coupures de section}
 		\subsubsection{arc critique}
 	Un point remarquable du manège est que, comme le montre la figure \ref{itin}, le conducteur dispose de plusieurs itinéraires pour aller d'une entrée à une sortie. Ainsi, si suite à un évènement, certaines sections se trouvent impraticables, le manège reste fonctionnel. Un algorithme permet de trouver quelles sections ne sont pas nécessaires au bon fonctionnement du manège. Défini formellement :
 \begin{defin}
-	Soit $G = (V,E)$ un graphe orienté. L'arc $(a,b) \in E$ est dit critique si le graphe $G^\prime = (V,E\backslash \{(a,b)\})$ n'a pas les mêmes composantes fortement connexes que $G$.
+	Soit $G = (V,E)$ un graphe orienté. L'arc $(a,b) \in E$ est dit critique si le graphe $G^\prime = (V,E\backslash \{(a,b)\})$ n'a pas les mêmes composantes fortement connexes que~$G$.
 \end{defin}
 Un théorème intéressant nous permet de déterminer de tels arcs : 
 \begin{theo}
@@ -109,7 +109,7 @@ Un théorème intéressant nous permet de déterminer de tels arcs :
 \end{theo}
 Pour savoir si $(a,b)$ est un arc critique, il suffit donc de déterminer si $b$ est atteignable depuis $a$ dans $G\prime$, à l'aide d'un simple parcours du graphe.
 		\subsubsection{implantation et complexité}
-	Considérons un graphe $G=(V,E)$. L'algorithme fonctionne donc sur le principe décrit ci-dessus : On dispose de la liste des arcs critiques, initialement vide. Pour chaque arête $(a,b)$ du graphe, on supprime cette arête (on a $G\prime$), si $b$ n'est pas accessible depuis $a$ dans $G\prime$, alors on ajoute $(a,b)$ à la liste des arcs critiques, puis on rajoute $(a,b)$ à $G\prime$.\par 
+	Considérons un graphe $G=(V,E)$. L'algorithme fonctionne donc sur le principe décrit ci-dessus : On dispose de la liste des arcs critiques, initialement vide. Pour chaque arête $(a,b)$ du graphe, on supprime cette arête, si $b$ n'est pas accessible depuis $a$ dans $G\prime$, alors on ajoute $(a,b)$ à la liste des arcs critiques, puis on rajoute $(a,b)$ à $G\prime$.\par 
 Le besoin de supprimer des arêtes pousse à choisir la structure de matrice d'adjacence (voir \ref{grmli}) pour représenter le graphe, suppression effectuée pour cette structure en temps constant. Dans ce cas, on rappelle la complexité en temps d'un parcours de $G$ : $O(|V|^2)$. \par 
 %Lors de l'exécution de l'algorithme, on effectue donc :
 %\begin{itemize}
@@ -126,9 +126,9 @@ La complexité totale de l'algorithme est alors un $O(|V|^2 + |E||V|^2) = O(|E||
 
 \section{Un Modèle par automate cellulaire}
 	\subsection{Automate cellulaire}
-	Le principe de l'automate cellulaire est de décrire le système en discrétisant le temps et l'espace. Dans ces modèles, les voitures évoluent sur des cases, et ont des vitesses entière. Empiriquement, on prend un pas temporel $\Delta t = 1,2~\mathrm{s}$ et un pas spatial $\Delta x = 7.5~\mathrm{m}$. \par
+	Le principe des automates cellulaires est de décrire le système en discrétisant le temps et l'espace. Dans ces modèles, les voitures évoluent sur des cases, et ont des vitesses entières. Empiriquement, on prend un pas temporel $\Delta t = 1,2~\mathrm{s}$ et un pas spatial $\Delta x = 7.5~\mathrm{m}$. \par
 	Notre automate se base sur celui de Kai Nagel et Michael Schreckenberg \cite{NaSch}, adapté à une section de route, 
-dont nous rappelons brièvement le principe ici : on considère $n$ voitures $c_1, … , c_n$ sur la section. On note $\forall i \in \llbracket 1;n \rrbracket$, $v_{i,t} \in \llbracket 1;v_M \rrbracket$ la vitesse du véhicule $i$, et $x_{i,t}$ sa position au temps $t$. La règle de transition est définie ainsi :
+dont nous rappelons brièvement le principe ici : on considère $n$ voitures $c_1, … , c_n$ sur la section. On note pour $i \in \llbracket 1;n \rrbracket$, $v_{i,t} \in \llbracket 1;v_M \rrbracket$ la vitesse du véhicule $i$, et $x_{i,t}$ sa position au temps $t$. La règle de transition est définie ainsi :
 	\begin{itemize}
 		\item Accélération : toute voiture n'ayant pas atteint la vitesse maximale voit sa vitesse incrémentée de 1 : $v_{i,t'} = \min(v_{i,t} + 1, v_M)$
 		\item Décélération : chaque véhicule freine pour ne pas percuter la voiture de devant : $v_{i,t''} = \min(v_{i,t'},x_{i+1,t}-x_{i,t}-1)$
@@ -156,10 +156,10 @@ Le but de cette expérience est d'étudier l'influence de la densité de la voie
 		
 		\subsubsection{Premiers résultats}
 
-Le graphique de la figure \ref{prres} met déjà en évidence le problème des intersection à priorité : face à une circulation trop dense sur la voie prioritaire, les voitures de la voie non-prioritaire se retrouvent bloquées, et n'avancent plus du tout. Cependant, un résultat surprenant est qu'on observe peu de différence entre le modèle de priorité absolue et de priorité dynamique. Des observations de la simulation ont montré que le trafic sur la voie prioritaire était extrêmement fluide, même sous de très fortes densités, modèle aberrant ne correspondant pas du tout à la réalité, dû à la suppression de la décélération aléatoire dans le modèle de Nagel-Schreckenberg. Il nous fallait donc revenir sur l'automate modélisant les sections.
+Le graphique de la figure \ref{prres} met déjà en évidence le problème des intersections à priorité : face à une circulation trop dense sur la voie prioritaire, les voitures de la voie non-prioritaire se retrouvent bloquées, et n'avancent plus du tout. Cependant, un résultat surprenant est qu'on observe peu de différence entre le modèle de priorité absolue et de priorité dynamique. Des observations de la simulation ont montré que le trafic sur la voie prioritaire était extrêmement fluide, même sous de très fortes densités, modèle aberrant ne correspondant pas du tout à la réalité, dû à la suppression de la décélération aléatoire dans le modèle de Nagel-Schreckenberg. Il nous fallait donc revenir sur l'automate modélisant les sections.
 
 	\subsubsection{Ajout d'un temps de redémarrage}
-Une amélioration simple à ce modèle est de considérer un temps de redémarrage pour un véhicule à l'arrêt : on se fixe un temps d'arrêt $t_{a} \in \mathbb{N}$, on ajoute à chaque voiture une variable arrêt $a_i$, à qui on attribue la valeur $t_{a}$ à chaque fois que la vitesse de la voiture passe de $1$ à $0$, et ensuite, si une voiture est à l'arrêt, si $a_i = 0$, on passe sa vitesse à $1$, sinon, on décrémente de $1$ $a_i$.\par Cela permet à la voie prioritaire d'être affectée par la voie non-prioritaire comme le montre la figure \ref{rdem}. Face à une densité élevée de voitures sur la voie prioritaire, ces dernières se retrouvent elles aussi embouteillées, ce qui permet à quelques voitures non-prioritaires de s'engager dans l'intersection (comme le montre l'itération de l'automate en figure \ref{dsat}). Ce modèle permet aussi d'établir des différences entre le modèle de priorité absolue et celui de priorité dynamique, les voitures prioritaires ayant une plus forte tendance à l'arrêt dans le second (voir figure \ref{labstr})
+Une amélioration simple à ce modèle est de considérer un temps de redémarrage pour un véhicule à l'arrêt : on se fixe un temps d'arrêt $t_{a} \in \mathbb{N}$, on ajoute à chaque voiture une variable arrêt $a_i$, à qui on attribue la valeur $t_{a}$ chaque fois que la vitesse de la voiture passe de $1$ à $0$, et ensuite, si une voiture est à l'arrêt, si $a_i = 0$, on passe sa vitesse à $1$, sinon, on décrémente de $1$ $a_i$.\par Cela permet à la voie prioritaire d'être affectée par la voie non-prioritaire comme le montre la figure \ref{rdem}. Face à une densité élevée de voitures sur la voie prioritaire, ces dernières se retrouvent elles aussi embouteillées, ce qui permet à quelques voitures non-prioritaires de s'engager dans l'intersection (comme le montre l'itération de l'automate en figure \ref{dsat}). Ce modèle permet aussi d'établir des différences entre le modèle de priorité absolue et celui de priorité dynamique, les voitures prioritaires ayant une plus forte tendance à l'arrêt dans le second (voir figure \ref{labstr})
 
 	 
 	\subsection{Limites du modèle pour le manège}
