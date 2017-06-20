@@ -18,8 +18,7 @@ val rp_dis : rond_point -> distr array;;
 val creer_rond_point: int -> int -> int -> int -> int -> ( (voiture * int * section * section) option array -> section array -> section list array -> int -> unit)
                       -> rond_point ;;
 (*creer_rond_point n l p vmi vme cmp cree un rond-point a n entrees/sorties
-de taille l, un anneau interne de taille n*p, des intersection de comportement
-de comportement cmp, avec une vitesse max interne(resp externe) de vmi (resp vma)*)
+de taille l, un anneau interne de taille n*p, des intersection de comportement cmp, avec une vitesse max interne(resp externe) de vmi (resp vma)*)
 
 val faire_itin: rond_point -> int -> int -> section list -> section list;;
 (*faire_itin rp ne ns fin
@@ -35,9 +34,9 @@ une liste de distributions d
 une liste d'evenements (pour l'instant spawn) dependant du temps t*)
   
 val iterer : plateau -> int -> unit;;
-  (*gere les evenements
+  (*iterer pl t gere les evenements
    itere l'ensemble des sections 
-   puis des intersections du plateau
+   puis des intersections du plateau pl
    si l'horloge vaut t*)
 
 val afficher : plateau -> unit;;
